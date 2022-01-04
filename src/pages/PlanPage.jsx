@@ -1,13 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 // import PropTypes from "prop-types";
 import { Radio, Checkbox, Select, Input } from "antd";
 import FlexBox from "../component/FlexBox";
 import DarkPad from "../component/DarkPad";
 import InfoCard from "../component/InfoCard";
 import GMap from "../component/GMap";
+import useGetBikeStopInfo from "../hooks/useGetBikeStopInfo";
 import RadioButton from "../component/RadioButton";
 
 function PlanPage(props) {
+  const { getBikeStopInfo, data, loading } = useGetBikeStopInfo();
+
+  useEffect(() => {
+    getBikeStopInfo();
+  }, [getBikeStopInfo]);
+
   return (
     <FlexBox flex>
       <Radio.Group buttonStyle="solid" defaultValue="spot">
@@ -18,8 +25,8 @@ function PlanPage(props) {
         <FlexBox row>
           捷運關渡站站點
           <FlexBox row>
-            <Checkbox value="unidireaction">單向</Checkbox>
-            <Checkbox value="bilateral">雙向</Checkbox>
+            <Checkbox value="unidireaction" >單向</Checkbox>
+            <Checkbox value="bilateral" >雙向</Checkbox>
           </FlexBox>
           <Select>
             <Select.Option>由進到遠</Select.Option>
