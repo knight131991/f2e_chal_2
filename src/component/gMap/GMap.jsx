@@ -1,16 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
 import GMapReact from "google-map-react";
 
-function GMap({ steps, bpoint }) {
-  const getPos = (spot, returnText = true) => {
-    const {
-      StopPosition: { PositionLat, PositionLon },
-    } = spot;
-    return returnText
-      ? `${PositionLat},${PositionLon}`
-      : { lat: PositionLat, lng: PositionLon };
-  };
+function GMap({ steps = [], bpoint, center, ...rest }) {
+  const [gMap, setGMap] = useState();
+  const [gMaps, setGMaps] = useState();
+
+  useEffect(() => {
+    let polylinePath;
+    if (gMap && gMaps) {
+      polylinePath = new gMaps.Polyline({
+        path: steps,
+        geodesic: false,
+        strokeColor: "#008800",
+        strokeOpacity: 0.8,
+        strokeWeight: 8,
+        editable: false,
+        draggable: false,
+      });
+
+      polylinePath.setMap(gMap);
+    }
+
+    return () => {
+      if (polylinePath) polylinePath.setMap(null);
+    };
+  }, [steps, gMaps, gMap]);
+
+  useEffect(() => {
+    if (gMap && center) {
+      gMap.setCenter(center);
+    }
+  }, [center, gMap]);
 
   return (
     <div
@@ -27,7 +48,7 @@ function GMap({ steps, bpoint }) {
           lat: 25.048,
           lng: 121.516,
         }}
-        defaultZoom={7}
+        defaultZoom={15}
         options={{
           styles: [
             { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
@@ -117,50 +138,73 @@ function GMap({ steps, bpoint }) {
           ],
         }}
         onGoogleApiLoaded={({ map, maps }) => {
-          const start = getPos(steps[0]);
-          const end = getPos(steps[steps.length - 1]);
+          setGMap(map);
+          setGMaps(maps);
+          // console.log("steps", steps);
+          // const polylinePath = new maps.Polyline({
+          //   path: steps,
+          //   geodesic: false,
+          //   strokeColor: "#008800",
+          //   strokeOpacity: 0.8,
+          //   strokeWeight: 8,
+          //   editable: false,
+          //   draggable: false,
+          // });
 
-          steps.forEach((item) => {
-            new maps.Marker({
-              position: getPos(item, false),
-              map: map,
-              animation: maps.Animation.DROP, // DROP掉下來、BOUNCE一直彈跳
-              draggable: false, // true、false可否拖拉
-            });
-          });
+          // polylinePath.setMap(map);
 
-          let directionsService = new maps.DirectionsService();
-          var directionsDisplay = new maps.DirectionsRenderer();
-          directionsDisplay.setMap(map);
-
-          directionsService.route(
-            {
-              travelMode: "DRIVING",
-              drivingOptions: {
-                trafficModel: "pessimistic",
-                departureTime: new Date(),
-              },
-              waypoints: steps
-                .slice(1, -1)
-                .filter((item, id) => id % 2)
-                .slice(1, 23)
-                .map((item) => ({ location: getPos(item), stopover: false })),
-
-              //   travelMode: "TRANSIT",
-              //   transitOptions: {
-              //     routingPreference: "LESS_WALKING",
-              //     modes: ["BUS"],
-              //   },
-              origin: start,
-              destination: end,
-            },
-            (DirectionsResult, DirectionsStatus) => {
-              if (DirectionsStatus === "OK") {
-                directionsDisplay.setDirections(DirectionsResult);
-              }
-            }
-          );
+          // const start = getPos(steps[0]);
+          // const end = getPos(steps[steps.length - 1]);
+          // steps.forEach((item) => {
+          //   const marker = new maps.Marker({
+          //     position: getPos(item, false),
+          //     map: map,
+          //     animation: maps.Animation.DROP, // DROP掉下來、BOUNCE一直彈跳
+          //     draggable: false, // true、false可否拖拉
+          //   });
+          //   const infowindow = new maps.InfoWindow({
+          //     content: "wwwwww",
+          //   });
+          //   // 加入地圖標記點擊事件
+          //   marker.addListener("click", function () {
+          //     if (infowindow.anchor) {
+          //       infowindow.close();
+          //     } else {
+          //       infowindow.open(map, marker);
+          //     }
+          //   });
+          // });
+          // let directionsService = new maps.DirectionsService();
+          // var directionsDisplay = new maps.DirectionsRenderer();
+          // directionsDisplay.setMap(map);
+          // directionsService.route(
+          //   {
+          //     travelMode: "DRIVING",
+          //     drivingOptions: {
+          //       trafficModel: "pessimistic",
+          //       departureTime: new Date(),
+          //     },
+          //     waypoints: steps
+          //       .slice(1, -1)
+          //       .filter((item, id) => id % 2)
+          //       .slice(1, 23)
+          //       .map((item) => ({ location: getPos(item), stopover: false })),
+          //     //   travelMode: "TRANSIT",
+          //     //   transitOptions: {
+          //     //     routingPreference: "LESS_WALKING",
+          //     //     modes: ["BUS"],
+          //     //   },
+          //     origin: start,
+          //     destination: end,
+          //   },
+          //   (DirectionsResult, DirectionsStatus) => {
+          //     if (DirectionsStatus === "OK") {
+          //       directionsDisplay.setDirections(DirectionsResult);
+          //     }
+          //   }
+          // );
         }}
+        {...rest}
       />
     </div>
   );

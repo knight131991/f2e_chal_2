@@ -3,47 +3,67 @@ import { useCallback, useState } from "react";
 import useApiAdapter from "./useApiAdapter";
 
 export default function useGetBikeStopInfo() {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const { apiAdapter: getMainInfos } = useApiAdapter([]);
+  const { apiAdapter: getStopInfos } = useApiAdapter([]);
   const { apiAdapter: getAvaInfos } = useApiAdapter([]);
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getBikeStopInfo = useCallback(
-    (lat, lon) => {
-      const query = `$top=30&$spatialFilter=nearby(25.047675,121.517055,500)&$format=JSON`;
-      setLoading(true);
-      Promise.all([
-        getAvaInfos({
-          api: axios.get(
-            `https://ptx.transportdata.tw/MOTC/v2/Bike/Availability/NearBy?${query}`
-          ),
-        }),
-        getMainInfos({
-          api: axios.get(
-            `https://ptx.transportdata.tw/MOTC/v2/Bike/Station/NearBy?${query}`
-          ),
-        }),
-      ]).then((resp) => {
-        const avaInfos = resp[0];
-        const mainInfos = resp[1];
+    ({ lat, lng, city, search = "", noSearchResultCB = () => { }, onSuccess = () => { } }) =>
+      new Promise((resolve, reject) => {
+        const posFilter = `$spatialFilter=nearby(${lat},${lng},600)`;
+        const filters = `$filter=contains(StationName/Zh_tw,'${search}') or contains(StationAddress/Zh_tw,'${search}')`;
 
-        if (avaInfos.length !== mainInfos.length) {
-          console.error("腳踏車站點資訊不如預期");
-          return;
-        }
+        setIsLoading(true);
+        getStopInfos({
+          api: axios.get(
+            `https://ptx.transportdata.tw/MOTC/v2/Bike/Station/${city ? city : "NearBy"
+            }?$top=30&$format=JSON&${filters}${lat !== undefined && lng !== undefined ? `&${posFilter}` : ""
+            }`
+          ),
+          mapper: (resp) => resp.data,
+          onSuccess: (infos) => {
+            const stationFilters = infos
+              .map(({ StationUID }) => StationUID)
+              .reduce((pre, cur) => {
+                if (pre) return `${pre} or contains(StationUID,'${cur}')`;
+                return `contains(StationUID,'${cur}')`;
+              }, "");
 
-        const infos = avaInfos.map((item, id) => {
-          if (item.StationID !== mainInfos[id].StationID) {
-            console.error("腳踏車站點資訊不合");
-          }
-          return { ...item, ...mainInfos[id] };
+            if (stationFilters.length === 0) {
+              noSearchResultCB(true);
+              setData([]);
+              resolve([])
+              return;
+            }
+
+            getAvaInfos({
+              api: axios.get(
+                `https://ptx.transportdata.tw/MOTC/v2/Bike/Availability/${city ? city : "NearBy"
+                }?$top=300&$format=JSON&$filter=${stationFilters}`
+              ),
+              mapper: (resp) => resp.data,
+              onError: (err) => reject(err),
+              onSuccess: (avaInfos) => {
+                const results = infos.map((item, id) => {
+                  if (item.StationUID !== avaInfos[id].StationUID) {
+                    console.error("站點資訊有誤");
+                  }
+                  return { ...item, ...avaInfos[id] };
+                });
+                noSearchResultCB(false);
+                setData(results);
+                setIsLoading(false);
+                resolve(results)
+                onSuccess(results);
+              },
+            });
+          },
         });
-        setData(infos);
-        setLoading(false);
-      });
-    },
-    [getAvaInfos, getMainInfos]
+      })
+    ,
+    [getStopInfos, getAvaInfos]
   );
 
-  return { getBikeStopInfo, data, loading };
+  return { getBikeStopInfo, data, loading: isLoading };
 }

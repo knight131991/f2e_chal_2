@@ -14,7 +14,7 @@ Button.propTypes = {
   type: PropTypes.string,
 };
 
-export default styled(Button)`
+export default styled((props) => <Button {...props} />)`
   ${({ type }) => {
     if (!type) {
       return `
@@ -26,8 +26,8 @@ export default styled(Button)`
        background-color:rgba(138, 138, 138, 0.6);
     }
     `;
-    } else if(type === 'link') {
-        return `
+    } else if (type === "link") {
+      return `
         color: #fff;
         `;
     }

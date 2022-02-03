@@ -1,6 +1,9 @@
 import axios from "axios";
 import jsSHA from "jssha";
 
+let isAxiosInit = false;
+
+export { isAxiosInit };
 export default function initAxios() {
   axios.interceptors.request.use(function (config) {
     var AppID = "ab90c39442fe4cf5b7e7707057a5dd23";
@@ -19,6 +22,7 @@ export default function initAxios() {
       '"';
     config.headers.Authorization = Authorization;
     config.headers["X-Date"] = GMTString;
+    isAxiosInit = true;
 
     return config;
   });

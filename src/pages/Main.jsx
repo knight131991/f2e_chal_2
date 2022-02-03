@@ -9,7 +9,7 @@ import FlexBox from "../component/FlexBox";
 import Footer from "../component/Footer";
 import Bg from "../images/BG.jpg";
 import BikeRoute from "./BikeRoute";
-import PlanPage from "./PlanPage";
+import PlanPage from "./planPage/PlanPage";
 import useGetUserPos from "../hooks/useGetUserPos";
 
 const BG = styled(FlexBox)`
@@ -34,7 +34,7 @@ function Main(props) {
 
   const pages = useMemo(
     () => [
-      { path: "/home", component: Home },
+      { path: "/home", component: () => <Home /> },
       { path: "/plan", component: () => <PlanPage /> },
       { path: "/bike-spot", component: Home },
       { path: "/bike-route", component: () => <BikeRoute /> },
