@@ -11,6 +11,7 @@ import Bg from "../images/BG.jpg";
 import BikeRoute from "./BikeRoute";
 import PlanPage from "./planPage/PlanPage";
 import useGetUserPos from "../hooks/useGetUserPos";
+import BikeSpot from "./BikeSpot";
 
 const BG = styled(FlexBox)`
   width: 100%;
@@ -36,7 +37,7 @@ function Main(props) {
     () => [
       { path: "/home", component: () => <Home /> },
       { path: "/plan", component: () => <PlanPage /> },
-      { path: "/bike-spot", component: Home },
+      { path: "/bike-spot", component: () => <BikeSpot/> },
       { path: "/bike-route", component: () => <BikeRoute /> },
     ],
     []
