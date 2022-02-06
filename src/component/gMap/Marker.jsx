@@ -77,12 +77,13 @@ function Marker({
   showBtn,
   showAvaInfo,
   avaReturn,
+  num,
   ...rest
 }) {
   const [showInfo, setShowInfo] = useState(false);
   return (
     <Container {...rest} showInfo={showInfo}>
-      <TextWrapper>{avaRent}</TextWrapper>
+      <TextWrapper>{num}</TextWrapper>
       {showInfo && (
         <InfoCardContainer onClick={(e) => e.stopPropagation()}>
           <FlexBox flex row justify="space-between" align="center">

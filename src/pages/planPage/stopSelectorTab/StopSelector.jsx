@@ -52,6 +52,7 @@ function StopSelector({
                 key={id}
                 lat={lat}
                 lng={lng}
+                num={AvailableRentBikes}
                 avaRent={AvailableRentBikes}
                 name={name}
                 address={address}

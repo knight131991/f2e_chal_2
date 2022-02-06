@@ -9,7 +9,15 @@ export default function useGetBikeStopInfo() {
   const [isLoading, setIsLoading] = useState(false);
 
   const getBikeStopInfo = useCallback(
-    ({ lat, lng, city, search = "", noSearchResultCB = () => { }, onSuccess = () => { } }) =>
+    ({
+      lat,
+      lng,
+      city,
+      search = "",
+      noSearchResultCB = () => {},
+      onSuccess = () => {},
+      top = "30",
+    }) =>
       new Promise((resolve, reject) => {
         const posFilter = `$spatialFilter=nearby(${lat},${lng},600)`;
         const filters = `$filter=contains(StationName/Zh_tw,'${search}') or contains(StationAddress/Zh_tw,'${search}')`;
@@ -17,8 +25,10 @@ export default function useGetBikeStopInfo() {
         setIsLoading(true);
         getStopInfos({
           api: axios.get(
-            `https://ptx.transportdata.tw/MOTC/v2/Bike/Station/${city ? city : "NearBy"
-            }?$top=30&$format=JSON&${filters}${lat !== undefined && lng !== undefined ? `&${posFilter}` : ""
+            `https://ptx.transportdata.tw/MOTC/v2/Bike/Station/${
+              city ? city : "NearBy"
+            }?$top=${top}&$format=JSON&${filters}${
+              lat !== undefined && lng !== undefined ? `&${posFilter}` : ""
             }`
           ),
           mapper: (resp) => resp.data,
@@ -33,13 +43,14 @@ export default function useGetBikeStopInfo() {
             if (stationFilters.length === 0) {
               noSearchResultCB(true);
               setData([]);
-              resolve([])
+              resolve([]);
               return;
             }
 
             getAvaInfos({
               api: axios.get(
-                `https://ptx.transportdata.tw/MOTC/v2/Bike/Availability/${city ? city : "NearBy"
+                `https://ptx.transportdata.tw/MOTC/v2/Bike/Availability/${
+                  city ? city : "NearBy"
                 }?$top=300&$format=JSON&$filter=${stationFilters}`
               ),
               mapper: (resp) => resp.data,
@@ -54,14 +65,13 @@ export default function useGetBikeStopInfo() {
                 noSearchResultCB(false);
                 setData(results);
                 setIsLoading(false);
-                resolve(results)
+                resolve(results);
                 onSuccess(results);
               },
             });
           },
         });
-      })
-    ,
+      }),
     [getStopInfos, getAvaInfos]
   );
 

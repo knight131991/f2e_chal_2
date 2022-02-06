@@ -88,6 +88,7 @@ function StopSelector({ city, routeInfos, onClickReturn, onSelectStop }) {
               key={id}
               lat={lat}
               lng={lng}
+              num={AvailableRentBikes}
               avaRent={AvailableRentBikes}
               avaReturn={AvailableReturnBikes}
               name={name}
