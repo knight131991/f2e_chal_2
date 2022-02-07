@@ -6,7 +6,7 @@ export default function useGetRoute(defaultVal) {
   const { data, isLoading, apiAdapter } = useApiAdapter(defaultVal);
 
   const getRoute = useCallback(
-    (city, dataMapper = () => {}, searchKey) => {
+    (city, dataMapper = (val) => val, searchKey) => {
       apiAdapter({
         api: axios.get(
           `https://ptx.transportdata.tw/MOTC/v2/Cycling/Shape/${city}?$top=30&$filter=Direction ne null ${

@@ -1,17 +1,14 @@
 import React, { useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import FlexBox from "../../../component/FlexBox";
-import RouteOrderSelector, {
-  routeOrders,
-} from "../../../component/RouteOrderSelector";
-import DirectionCheckBox from "../../../component/DirectionCheckBox";
-import CitySelector from "../../../component/CitySelector";
+import { routeOrders, useOrderChange } from "../../../component/RouteOrderSelector";
 import { Input } from "antd";
 import styled from "styled-components";
 import InfoCard from "../../../component/InfoCard";
 import GMap from "../../../component/gMap/GMap";
 import getCenterPos from "../../../utils/getCenterPos";
 import { useCallback } from "react/cjs/react.development";
+import RouteFilters from "../../../component/RouteFilters";
 
 const Container = styled(FlexBox)`
   height: 0px;
@@ -31,31 +28,23 @@ function RouteSelector({
   const [selectedRoute, setSelectedRoute] = useState([]);
   const [centerPos, setCenterPos] = useState();
   const [dirFilter, setDirFilter] = useState([]);
-  const [sortBy, setSortBy] = useState("distance");
+  const {handleSorterChange, sortBy} = useOrderChange();
 
   const filterdRouteInfos = useMemo(() => {
     if (dirFilter.length === 0) return routeInfos;
     return routeInfos.filter(({ Direction }) => dirFilter.includes(Direction));
   }, [dirFilter, routeInfos]);
 
-  const handleSorterChange = useCallback((val) => {
-    if (val === routeOrders.distance) {
-      setSortBy("Distance");
-    } else if (val === routeOrders.length) {
-      setSortBy("CyclingLength");
-    } else {
-      console.log("非預期的排序值");
-    }
-  }, []);
-
-  console.log("routesss", filterdRouteInfos);
 
   return (
     <FlexBox flex>
       <FlexBox row>
-        <CitySelector value={city} onSelect={onSelectCity} />
-        <RouteOrderSelector onChange={handleSorterChange} />
-        <DirectionCheckBox onChange={setDirFilter} />
+        <RouteFilters
+          city={city}
+          onSelectCity={onSelectCity}
+          onRouterOrderChange={handleSorterChange}
+          onDirectionChange={setDirFilter}
+        />
         <Input.Search onSearch={onSearch} />
       </FlexBox>
       共 {filterdRouteInfos.length} 條路線
