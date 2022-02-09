@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import FlexBox from "./FlexBox";
 import Button from "./Button";
 import PText from "./PText";
+import LimitHeightComponent from "./LimitHeightComponent";
 
 const Container = styled(({ opaque, ...rest }) => <FlexBox {...rest} />)`
   background-color: ${({ opaque }) =>
@@ -39,16 +40,18 @@ function NavHeader({ opaque, pos }) {
     ];
   }, [history, pos]);
   return (
-    <Container align="center" row justify="space-between" opaque={opaque}>
-      <span onClick={() => history.push("/home")}>YouRoad</span>
-      <div>
-        {btnList.map(({ name, onClick }) => (
-          <LinkBtn key={name} opaque={opaque} onClick={onClick}>
-            {name}
-          </LinkBtn>
-        ))}
-        <LinkBtn>登入</LinkBtn>
-      </div>
+    <Container align="center" row justify="center" opaque={opaque}>
+      <LimitHeightComponent>
+        <span onClick={() => history.push("/home")}>YouRoad</span>
+        <div>
+          {btnList.map(({ name, onClick }) => (
+            <LinkBtn key={name} opaque={opaque} onClick={onClick}>
+              {name}
+            </LinkBtn>
+          ))}
+          <LinkBtn>登入</LinkBtn>
+        </div>
+      </LimitHeightComponent>
     </Container>
   );
 }

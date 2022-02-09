@@ -12,6 +12,7 @@ import BikeRoute from "./BikeRoute";
 import PlanPage from "./planPage/PlanPage";
 import useGetUserPos from "../hooks/useGetUserPos";
 import BikeSpot from "./BikeSpot";
+import LimitHeightComponent from "../component/LimitHeightComponent";
 
 const BG = styled(FlexBox)`
   width: 100%;
@@ -21,8 +22,9 @@ const BG = styled(FlexBox)`
   color: #fff;
 `;
 
-const PageContainer = styled(FlexBox)`
+const PageContainer = styled(LimitHeightComponent)`
   overflow: auto;
+  width: 100%;
 `;
 
 function Main(props) {
@@ -37,7 +39,7 @@ function Main(props) {
     () => [
       { path: "/home", component: () => <Home /> },
       { path: "/plan", component: () => <PlanPage /> },
-      { path: "/bike-spot", component: () => <BikeSpot/> },
+      { path: "/bike-spot", component: () => <BikeSpot /> },
       { path: "/bike-route", component: () => <BikeRoute /> },
     ],
     []
@@ -45,14 +47,16 @@ function Main(props) {
   return (
     <BG row={false}>
       <NavHeader opaque={pathname !== "/home"} pos={pos} />
-      <PageContainer flex>
-        <Switch>
-          {pages.map(({ path, component }) => (
-            <Route key={path} path={path} render={component} />
-          ))}
-          <Redirect to="/home" />
-        </Switch>
-      </PageContainer>
+      <FlexBox flex align="center">
+        <PageContainer flex>
+          <Switch>
+            {pages.map(({ path, component }) => (
+              <Route key={path} path={path} render={component} />
+            ))}
+            <Redirect to="/home" />
+          </Switch>
+        </PageContainer>
+      </FlexBox>
       <Footer />
     </BG>
   );
