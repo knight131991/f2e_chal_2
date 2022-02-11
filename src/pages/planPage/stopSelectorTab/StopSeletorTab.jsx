@@ -4,7 +4,6 @@ import StopSelector from "./StopSelector";
 import RouteSelector from "./RouteSelector";
 import FinishPage from "./FinishPage";
 import cityList from "../../../constant/cityList";
-import queryString from "query-string";
 import useGetBikeStopInfo from "../../../hooks/useGetBikeStopInfo";
 
 export default function StopSeletorTab() {
@@ -30,6 +29,7 @@ export default function StopSeletorTab() {
           <StopSelector
             stops={data}
             city={city}
+            loading={loading}
             onSearch={(keywords) =>
               getBikeStopInfo({
                 city, search: keywords, noSearchResultCB: (flag) =>
@@ -65,7 +65,7 @@ export default function StopSeletorTab() {
       default:
     }
     return component;
-  }, [curMode, data, city, stopInfo, routeInfo, getBikeStopInfo, notFoundStop]);
+  }, [curMode, data, city, stopInfo, routeInfo, getBikeStopInfo, notFoundStop, loading]);
 
   return component;
 }

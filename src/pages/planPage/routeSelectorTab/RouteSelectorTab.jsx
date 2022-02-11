@@ -1,10 +1,5 @@
 import React, { useEffect, useMemo } from "react";
-import PropTypes from "prop-types";
-import CitySelector from "../../../component/CitySelector";
-import FlexBox from "../../../component/FlexBox";
-import DirectionCheckBox from "../../../component/DirectionCheckBox";
-import InfoCard from "../../../component/InfoCard";
-import GMap from "../../../component/gMap/GMap";
+// import PropTypes from "prop-types";
 import queryString from "query-string";
 import useGetRoute from "../../../hooks/useGetRoute";
 import { useState } from "react/cjs/react.development";
@@ -52,6 +47,7 @@ function RouteSelectorTab(props) {
             city={city}
             onSelectCity={setCity}
             routeInfos={data}
+            loading={isLoading}
             onSelectRoute={(route) => {
               setRouteInfo(route);
               setCurMode("stop");
@@ -66,7 +62,7 @@ function RouteSelectorTab(props) {
       default:
     }
     return component;
-  }, [curMode, data, city, stopInfo, routeInfo, getRoute]);
+  }, [curMode, data, city, stopInfo, routeInfo, getRoute, isLoading]);
 
   return component;
 }

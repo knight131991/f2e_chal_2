@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import FlexBox from "../component/FlexBox";
 import DarkPad from "../component/DarkPad";
 import CitySelector from "../component/CitySelector";
@@ -11,7 +11,13 @@ import useGetBikeStopInfo from "../hooks/useGetBikeStopInfo";
 import Marker from "../component/gMap/Marker";
 import getPos from "../utils/getPos";
 import getCenterPos from "../utils/getCenterPos";
+import FlexSpin from "../component/FlexSpin";
+import EmptyResultHint from "../component/EmptyResultHint";
+import styled from "styled-components";
 
+const StyledEmptyResultHint = styled(EmptyResultHint)`
+  transform: translate(-50%, -50%);
+`;
 function BikeSpot(props) {
   const { getBikeStopInfo, data, loading } = useGetBikeStopInfo();
   const [city, setCity] = useState(cityList[0].value);
@@ -38,41 +44,49 @@ function BikeSpot(props) {
           </Radio.Group>
           <Input.Search onSearch={setSearchKey} />
         </FlexBox>
-        <GMap
-          center={getCenterPos(
-            data.map(({ StationPosition: { PositionLat, PositionLon } }) => ({
-              lat: PositionLat,
-              lng: PositionLon,
-            }))
-          )}
-        >
-          {data.map((item, id) => {
-            const { lat, lng } = getPos(item);
-            const {
-              AvailableRentBikes,
-              AvailableReturnBikes,
-              StationAddress,
-              StationName,
-            } = item;
-            const name = StationName.Zh_tw;
-            const address = StationAddress.Zh_tw;
-            return (
-              <Marker
-                key={id}
-                lat={lat}
-                lng={lng}
-                num={
-                  curMode === "bike" ? AvailableRentBikes : AvailableReturnBikes
-                }
-                avaRent={AvailableRentBikes}
-                avaReturn={AvailableReturnBikes}
-                name={name}
-                showAvaInfo
-                address={address}
-              />
-            );
-          })}
-        </GMap>
+        <FlexSpin spinning={loading}>
+          <GMap
+            center={getCenterPos(
+              data.map(({ StationPosition: { PositionLat, PositionLon } }) => ({
+                lat: PositionLat,
+                lng: PositionLon,
+              }))
+            )}
+          >
+            {data.length === 0 ? (
+              <StyledEmptyResultHint />
+            ) : (
+              data.map((item, id) => {
+                const { lat, lng } = getPos(item);
+                const {
+                  AvailableRentBikes,
+                  AvailableReturnBikes,
+                  StationAddress,
+                  StationName,
+                } = item;
+                const name = StationName.Zh_tw;
+                const address = StationAddress.Zh_tw;
+                return (
+                  <Marker
+                    key={id}
+                    lat={lat}
+                    lng={lng}
+                    num={
+                      curMode === "bike"
+                        ? AvailableRentBikes
+                        : AvailableReturnBikes
+                    }
+                    avaRent={AvailableRentBikes}
+                    avaReturn={AvailableReturnBikes}
+                    name={name}
+                    showAvaInfo
+                    address={address}
+                  />
+                );
+              })
+            )}
+          </GMap>
+        </FlexSpin>
       </DarkPad>
     </FlexBox>
   );

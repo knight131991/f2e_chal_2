@@ -4,8 +4,10 @@ import { useState } from "react/cjs/react.development";
 import styled from "styled-components";
 import DarkPad from "../component/DarkPad";
 import FlexBox from "../component/FlexBox";
+import FlexSpin from "../component/FlexSpin";
 import GMap from "../component/gMap/GMap";
 import InfoCard from "../component/InfoCard";
+import NoDataHint from "../component/NoDataHint";
 import RouteFilters from "../component/RouteFilters";
 import { useOrderChange } from "../component/RouteOrderSelector";
 import cityList from "../constant/cityList";
@@ -54,43 +56,49 @@ function BikeRoute(props) {
         </FlexBox>
         共 {filterdRouteInfos.length} 條路線
         <Container row flex>
-          <ListConainer flex>
-            {filterdRouteInfos
-              .sort((a, b) => a[sortBy] - b[sortBy])
-              .map(
-                (
-                  {
-                    RouteName,
-                    CyclingLength,
-                    RoadSectionStart,
-                    RoadSectionEnd,
-                    Geometry,
-                    Direction,
-                  },
-                  id
-                ) => (
-                  <InfoCard
-                    key={id}
-                    title={RouteName}
-                    onClick={() => {
-                      setSelectedRoute(Geometry);
-                      setCenterPos(getCenterPos(Geometry));
-                    }}
-                    content={
-                      <>
-                        <span>
-                          {RoadSectionStart} - {RoadSectionEnd}
-                        </span>
-                        <span>
-                          車道長度：{CyclingLength} 公里 {Direction}
-                        </span>
-                      </>
-                    }
-                  />
-                )
+          <FlexSpin spinning={isLoading}>
+            <ListConainer flex>
+              {filterdRouteInfos.length === 0 ? (
+                <NoDataHint />
+              ) : (
+                filterdRouteInfos
+                  .sort((a, b) => a[sortBy] - b[sortBy])
+                  .map(
+                    (
+                      {
+                        RouteName,
+                        CyclingLength,
+                        RoadSectionStart,
+                        RoadSectionEnd,
+                        Geometry,
+                        Direction,
+                      },
+                      id
+                    ) => (
+                      <InfoCard
+                        key={id}
+                        title={RouteName}
+                        onClick={() => {
+                          setSelectedRoute(Geometry);
+                          setCenterPos(getCenterPos(Geometry));
+                        }}
+                        content={
+                          <>
+                            <span>
+                              {RoadSectionStart} - {RoadSectionEnd}
+                            </span>
+                            <span>
+                              車道長度：{CyclingLength} 公里 {Direction}
+                            </span>
+                          </>
+                        }
+                      />
+                    )
+                  )
               )}
-          </ListConainer>
-          <GMap steps={selectedRoute} center={centerPos} />
+            </ListConainer>
+            <GMap steps={selectedRoute} center={centerPos} />
+          </FlexSpin>
         </Container>
       </DarkPad>
     </FlexBox>

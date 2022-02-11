@@ -1,15 +1,13 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import FlexBox from "../../../component/FlexBox";
-import { Input, Select } from "antd";
+import { Input } from "antd";
 import InfoCard from "../../../component/InfoCard";
 import GMap from "../../../component/gMap/GMap";
 import DirectionCheckBox from "../../../component/DirectionCheckBox";
 import useGetRoute from "../../../hooks/useGetRoute";
 import { useState } from "react/cjs/react.development";
 import styled from "styled-components";
-import getDistanceFromLatLon from "../../../utils/getDistanceFromLatLon";
-import directionEnum from "../../../constant/directionEnum";
 import getCenterPos from "../../../utils/getCenterPos";
 import EmptyResultHint from "../../../component/EmptyResultHint";
 import BikeMarker from "../../../component/gMap/BikeMarker";
@@ -18,6 +16,8 @@ import RouteOrderSelector, {
 } from "../../../component/RouteOrderSelector";
 import appendDistanceToRouteInfo from "../../../utils/appendDistanceToRouteInfo";
 import LinkBtn from "../../../component/LinkBtn";
+import NoDataHint from "../../../component/NoDataHint";
+import FlexSpin from "../../../component/FlexSpin";
 
 const Container = styled(FlexBox)`
   height: 0px;
@@ -88,58 +88,64 @@ function RouteSelector({ city, stopInfo, onSelectRoute, onClickReturn }) {
       </FlexBox>
       共{filterdRouteInfos.length}條路線
       <Container row flex>
-        <ListConainer flex>
-          {filterdRouteInfos
-            .sort((a, b) => a[sortBy] - b[sortBy])
-            .map(
-              ({
-                RouteName,
-                CyclingLength,
-                RoadSectionStart,
-                RoadSectionEnd,
-                Geometry,
-                Direction,
-                Distance,
-              }) => {
-                return (
-                  <InfoCard
-                    key={RouteName}
-                    title={RouteName}
-                    btnName="挑戰此路線"
-                    onClickBtn={() =>
-                      onSelectRoute({
-                        name: RouteName,
-                        start: RoadSectionStart,
-                        end: RoadSectionEnd,
-                        length: CyclingLength,
-                        direction: Direction,
-                        geometry: Geometry,
-                      })
-                    }
-                    onClick={() => {
-                      setSelectedRoute(Geometry);
-                      setCenterPos(getCenterPos(Geometry));
-                    }}
-                    content={
-                      <>
-                        <span>車道長度：{CyclingLength} 公里</span>
-                        <span>
-                          {RoadSectionStart} - {RoadSectionEnd}
-                        </span>
-                        <span> 鄰近起點： {Distance} 公里</span>
-                      </>
-                    }
-                  />
-                );
-              }
+        <FlexSpin spinning={gettingRoute}>
+          <ListConainer flex>
+            {filterdRouteInfos.length === 0 ? (
+              <NoDataHint />
+            ) : (
+              filterdRouteInfos
+                .sort((a, b) => a[sortBy] - b[sortBy])
+                .map(
+                  ({
+                    RouteName,
+                    CyclingLength,
+                    RoadSectionStart,
+                    RoadSectionEnd,
+                    Geometry,
+                    Direction,
+                    Distance,
+                  }) => {
+                    return (
+                      <InfoCard
+                        key={RouteName}
+                        title={RouteName}
+                        btnName="挑戰此路線"
+                        onClickBtn={() =>
+                          onSelectRoute({
+                            name: RouteName,
+                            start: RoadSectionStart,
+                            end: RoadSectionEnd,
+                            length: CyclingLength,
+                            direction: Direction,
+                            geometry: Geometry,
+                          })
+                        }
+                        onClick={() => {
+                          setSelectedRoute(Geometry);
+                          setCenterPos(getCenterPos(Geometry));
+                        }}
+                        content={
+                          <>
+                            <span>車道長度：{CyclingLength} 公里</span>
+                            <span>
+                              {RoadSectionStart} - {RoadSectionEnd}
+                            </span>
+                            <span> 鄰近起點： {Distance} 公里</span>
+                          </>
+                        }
+                      />
+                    );
+                  }
+                )
             )}
-        </ListConainer>
-        <GMap steps={selectedRoute} center={centerPos}>
-          {filterdRouteInfos.length === 0 && !gettingRoute && (
-            <StyledEmptyResultHint specificStr="路線" />
-          )}
-          <BikeMarker lat={stopInfo.lat} lng={stopInfo.lng} />
-        </GMap>
+          </ListConainer>
+          <GMap steps={selectedRoute} center={centerPos}>
+            {filterdRouteInfos.length === 0 && !gettingRoute && (
+              <StyledEmptyResultHint specificStr="路線" />
+            )}
+            <BikeMarker lat={stopInfo.lat} lng={stopInfo.lng} />
+          </GMap>
+        </FlexSpin>
       </Container>
       <FlexBox align="flex-end">
         <LinkBtn onClick={onClickReturn}>重新選擇站點</LinkBtn>

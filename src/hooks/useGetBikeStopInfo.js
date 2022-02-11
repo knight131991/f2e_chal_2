@@ -42,6 +42,7 @@ export default function useGetBikeStopInfo() {
 
             if (stationFilters.length === 0) {
               noSearchResultCB(true);
+              setIsLoading(false);
               setData([]);
               resolve([]);
               return;
