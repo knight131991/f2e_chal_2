@@ -25,6 +25,10 @@ const BG = styled(FlexBox)`
 const PageContainer = styled(LimitHeightComponent)`
   overflow: auto;
   width: 100%;
+  padding: 40px 0;
+  background: ${({ darkMode }) => darkMode && "#1e1e1e"};
+  transition: background-color 0.8s ease-out;
+
 `;
 
 function Main(props) {
@@ -48,7 +52,7 @@ function Main(props) {
     <BG row={false}>
       <NavHeader opaque={pathname !== "/home"} pos={pos} />
       <FlexBox flex align="center">
-        <PageContainer flex>
+        <PageContainer flex darkMode={pathname !== "/home"}>
           <Switch>
             {pages.map(({ path, component }) => (
               <Route key={path} path={path} render={component} />

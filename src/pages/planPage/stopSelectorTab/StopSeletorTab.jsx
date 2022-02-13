@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useHistory } from "react-router";
 import StopSelector from "./StopSelector";
 import RouteSelector from "./RouteSelector";
 import FinishPage from "./FinishPage";
@@ -20,7 +19,6 @@ export default function StopSeletorTab() {
     getBikeStopInfo({ city });
   }, [getBikeStopInfo, city]);
 
-
   const component = useMemo(() => {
     let component = null;
     switch (curMode) {
@@ -32,10 +30,10 @@ export default function StopSeletorTab() {
             loading={loading}
             onSearch={(keywords) =>
               getBikeStopInfo({
-                city, search: keywords, noSearchResultCB: (flag) =>
-                  setNotFoundStop(flag)
-              }
-              )
+                city,
+                search: keywords,
+                noSearchResultCB: (flag) => setNotFoundStop(flag),
+              })
             }
             showEmptyHint={notFoundStop}
             onSelectCity={setCity}
@@ -65,7 +63,16 @@ export default function StopSeletorTab() {
       default:
     }
     return component;
-  }, [curMode, data, city, stopInfo, routeInfo, getBikeStopInfo, notFoundStop, loading]);
+  }, [
+    curMode,
+    data,
+    city,
+    stopInfo,
+    routeInfo,
+    getBikeStopInfo,
+    notFoundStop,
+    loading,
+  ]);
 
   return component;
 }

@@ -6,6 +6,14 @@ import DarkPad from "../../component/DarkPad";
 import RadioButton from "../../component/RadioButton";
 import StopSelectorTab from "./stopSelectorTab/StopSeletorTab";
 import RouteSelectorTab from "./routeSelectorTab/RouteSelectorTab";
+import styled from "styled-components";
+
+const StyledRBtn = styled(RadioButton)`
+  width: 248px;
+  height: 62px;
+  font-size: 20px;
+  margin-bottom: 24px;
+`;
 
 function PlanPage(props) {
   const [curMode, setCurMode] = useState("stop");
@@ -32,8 +40,8 @@ function PlanPage(props) {
         defaultValue="stop"
         onChange={(e) => setCurMode(e.target.value)}
       >
-        <RadioButton value="stop">先選擇 Youbike 站點</RadioButton>
-        <RadioButton value="route">先選擇自行車路線</RadioButton>
+        <StyledRBtn value="stop">先選擇 Youbike 站點</StyledRBtn>
+        <StyledRBtn value="route">先選擇自行車路線</StyledRBtn>
       </Radio.Group>
       <DarkPad flex>{mainBlock}</DarkPad>
     </FlexBox>
