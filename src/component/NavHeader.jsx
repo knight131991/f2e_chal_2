@@ -14,6 +14,12 @@ const Container = styled(({ opaque, ...rest }) => <FlexBox {...rest} />)`
   transition: background-color 0.8s ease-out;
 `;
 
+const Logo = styled.span`
+  font-weight: bold;
+  font-size: 24px;
+  cursor: pointer;
+`;
+
 function NavHeader({ opaque, pos }) {
   const history = useHistory();
 
@@ -24,6 +30,10 @@ function NavHeader({ opaque, pos }) {
       </Button>
     );
   }, []);
+
+  const LoginBtn = styled(Button)`
+    min-width: 112px;
+  `;
 
   const btnList = useMemo(() => {
     const search = `lat=${pos.lat}&log=${pos.log}`;
@@ -42,15 +52,15 @@ function NavHeader({ opaque, pos }) {
   return (
     <Container align="center" row justify="center" opaque={opaque}>
       <LimitHeightComponent>
-        <span onClick={() => history.push("/home")}>YouRoad</span>
-        <div>
+        <Logo onClick={() => history.push("/home")}>YouRoad</Logo>
+        <FlexBox row gap="24px">
           {btnList.map(({ name, onClick }) => (
             <LinkBtn key={name} opaque={opaque} onClick={onClick}>
               {name}
             </LinkBtn>
           ))}
-          <LinkBtn>登入</LinkBtn>
-        </div>
+          <LoginBtn type="default">登入</LoginBtn>
+        </FlexBox>
       </LimitHeightComponent>
     </Container>
   );

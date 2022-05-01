@@ -19,7 +19,7 @@ function Footer(props) {
     <FooterContainer>
       <LimitHeightComponent>
         © 2021 F2E All Rights Reserved.
-        <FlexBox row>
+        <FlexBox row gap='24px'>
           <FB />
           <Line />
           <Instagram />

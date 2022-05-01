@@ -15,8 +15,9 @@ Button.propTypes = {
 };
 
 export default styled((props) => <Button {...props} />)`
+  border-radius: 8px;
   ${({ type }) => {
-    if (!type) {
+    if (!type || type === "default") {
       return `
     background-color:rgba(138, 138, 138, 0.6); 
     border: none;
