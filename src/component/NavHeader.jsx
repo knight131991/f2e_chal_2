@@ -6,12 +6,11 @@ import FlexBox from "./FlexBox";
 import Button from "./Button";
 import PText from "./texts/PText";
 import LimitHeightComponent from "./LimitHeightComponent";
-import BlockText from "./texts/BlockText";
+import BlackText from "./texts/BlackText";
 import Logo from "./Logo";
 
 const Container = styled(({ opaque, ...rest }) => <FlexBox {...rest} />)`
-  background-color: ${({ opaque }) =>
-    opaque ? "#fafafa" : "#fafafa"};
+  background-color: ${({ opaque }) => (opaque ? "#fafafa" : "#fafafa")};
   height: 72px;
   transition: background-color 0.8s ease-out;
 `;
@@ -22,7 +21,7 @@ function NavHeader({ opaque, pos }) {
   const LinkBtn = useCallback(({ children, opaque, ...rest }) => {
     return (
       <Button type="link" {...rest}>
-        {opaque ? <PText>{children}</PText> : <BlockText>{children}</BlockText> }
+        {opaque ? <PText>{children}</PText> : <BlackText>{children}</BlackText>}
       </Button>
     );
   }, []);
@@ -44,8 +43,7 @@ function NavHeader({ opaque, pos }) {
   return (
     <Container align="center" row justify="center" opaque={opaque}>
       <LimitHeightComponent>
-        <Logo/>
-        <span onClick={() => history.push("/home")}>YouRoad</span>
+        <Logo type="black-text" onClick={() => history.push("/home")} />
         <div>
           {btnList.map(({ name, onClick }) => (
             <LinkBtn key={name} opaque={opaque} onClick={onClick}>
