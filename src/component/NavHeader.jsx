@@ -4,13 +4,15 @@ import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import FlexBox from "./FlexBox";
 import Button from "./Button";
-import PText from "./PText";
+import PText from "./texts/PText";
 import LimitHeightComponent from "./LimitHeightComponent";
+import BlockText from "./texts/BlockText";
+import Logo from "./Logo";
 
 const Container = styled(({ opaque, ...rest }) => <FlexBox {...rest} />)`
   background-color: ${({ opaque }) =>
-    opaque ? "#1E1E1E" : "rgba(0, 0, 0, 0.3)"};
-  height: 88px;
+    opaque ? "#fafafa" : "#fafafa"};
+  height: 72px;
   transition: background-color 0.8s ease-out;
 `;
 
@@ -20,7 +22,7 @@ function NavHeader({ opaque, pos }) {
   const LinkBtn = useCallback(({ children, opaque, ...rest }) => {
     return (
       <Button type="link" {...rest}>
-        {opaque ? <PText>{children}</PText> : children}
+        {opaque ? <PText>{children}</PText> : <BlockText>{children}</BlockText> }
       </Button>
     );
   }, []);
@@ -42,6 +44,7 @@ function NavHeader({ opaque, pos }) {
   return (
     <Container align="center" row justify="center" opaque={opaque}>
       <LimitHeightComponent>
+        <Logo/>
         <span onClick={() => history.push("/home")}>YouRoad</span>
         <div>
           {btnList.map(({ name, onClick }) => (
