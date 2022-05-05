@@ -95,10 +95,12 @@ function PicandDescBlock() {
   );
   return (
     <Container gap="48px">
-      {items.map((subItems) => (
-        <Row gutter={[24]}>
-          {subItems.map(({ span, component }) => (
-            <Col span={span}>{component}</Col>
+      {items.map((subItems, index) => (
+        <Row key={index} gutter={[24]}>
+          {subItems.map(({ span, component }, id) => (
+            <Col key={id} span={span}>
+              {component}
+            </Col>
           ))}
         </Row>
       ))}

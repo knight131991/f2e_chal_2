@@ -16,7 +16,7 @@ const Container = styled(FlexBox)`
   height: 100%;
 `;
 
-const PageContainer = styled(FlexBox)`
+const PageContainer = styled(({ darkMode, ...rest }) => <FlexBox {...rest} />)`
   overflow: auto;
   width: 100%;
   background: ${({ darkMode }) => darkMode && "#1e1e1e"};
@@ -43,7 +43,7 @@ function Main(props) {
   return (
     <Container>
       <NavHeader opaque={pathname !== "/home"} pos={pos} />
-      <PageContainer flex align darkMode={pathname !== "/home"}>
+      <PageContainer flex darkMode={pathname !== "/home"}>
         <Switch>
           {pages.map(({ path, component }) => (
             <Route key={path} path={path} render={component} />
