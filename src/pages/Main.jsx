@@ -3,32 +3,24 @@ import React, { useMemo, useEffect } from "react";
 import initAxios from "../utils/initAxios";
 import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import Home from "../pages/Home";
+import Home from "./home/Home";
 import NavHeader from "../component/NavHeader";
 import FlexBox from "../component/FlexBox";
-import Footer from "../component/Footer";
-import Bg from "../images/BG.jpg";
 import BikeRoute from "./BikeRoute";
 import PlanPage from "./planPage/PlanPage";
 import useGetUserPos from "../hooks/useGetUserPos";
 import BikeSpot from "./BikeSpot";
-import LimitHeightComponent from "../component/LimitHeightComponent";
 
-const BG = styled(FlexBox)`
+const Container = styled(FlexBox)`
   width: 100%;
   height: 100%;
-  background-position: center;
-  background-image: url("${Bg}");
-  color: #fff;
 `;
 
-const PageContainer = styled(LimitHeightComponent)`
+const PageContainer = styled(FlexBox)`
   overflow: auto;
   width: 100%;
-  padding: 40px 0;
   background: ${({ darkMode }) => darkMode && "#1e1e1e"};
   transition: background-color 0.8s ease-out;
-
 `;
 
 function Main(props) {
@@ -49,20 +41,17 @@ function Main(props) {
     []
   );
   return (
-    <BG row={false}>
+    <Container>
       <NavHeader opaque={pathname !== "/home"} pos={pos} />
-      <FlexBox flex align="center">
-        <PageContainer flex darkMode={pathname !== "/home"}>
-          <Switch>
-            {pages.map(({ path, component }) => (
-              <Route key={path} path={path} render={component} />
-            ))}
-            <Redirect to="/home" />
-          </Switch>
-        </PageContainer>
-      </FlexBox>
-      <Footer />
-    </BG>
+      <PageContainer flex align darkMode={pathname !== "/home"}>
+        <Switch>
+          {pages.map(({ path, component }) => (
+            <Route key={path} path={path} render={component} />
+          ))}
+          <Redirect to="/home" />
+        </Switch>
+      </PageContainer>
+    </Container>
   );
 }
 

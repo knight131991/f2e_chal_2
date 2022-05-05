@@ -9,5 +9,5 @@ function PText(props) {
 // PText.propTypes = {};
 
 export default styled(PText)`
-  color: #5368f0;
+  color: #37cc56;
 `;

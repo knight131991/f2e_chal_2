@@ -28,4 +28,5 @@ Logo.propTypes = {
 
 export default styled(Logo)`
   cursor: ${({ onClick }) => (onClick ? "pointer" : "normal")};
+  flex-shrink: 0;
 `;

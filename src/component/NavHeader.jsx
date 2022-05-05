@@ -5,14 +5,15 @@ import { useHistory } from "react-router-dom";
 import FlexBox from "./FlexBox";
 import Button from "./Button";
 import PText from "./texts/PText";
-import LimitHeightComponent from "./LimitHeightComponent";
 import BlackText from "./texts/BlackText";
 import Logo from "./Logo";
+import styleParam from "../constant/styleParams";
 
 const Container = styled(({ opaque, ...rest }) => <FlexBox {...rest} />)`
   background-color: ${({ opaque }) => (opaque ? "#fafafa" : "#fafafa")};
   height: 72px;
   transition: background-color 0.8s ease-out;
+  padding: 0 96px 0 ${styleParam.padding.xl};
 `;
 
 function NavHeader({ opaque, pos }) {
@@ -41,18 +42,22 @@ function NavHeader({ opaque, pos }) {
     ];
   }, [history, pos]);
   return (
-    <Container align="center" row justify="center" opaque={opaque}>
-      <LimitHeightComponent>
-        <Logo type="black-text" onClick={() => history.push("/home")} />
-        <div>
-          {btnList.map(({ name, onClick }) => (
-            <LinkBtn key={name} opaque={opaque} onClick={onClick}>
-              {name}
-            </LinkBtn>
-          ))}
-          <LinkBtn>登入</LinkBtn>
-        </div>
-      </LimitHeightComponent>
+    <Container
+      align="center"
+      row
+      justify="space-between"
+      noShrink
+      opaque={opaque}
+    >
+      <Logo type="black-text" onClick={() => history.push("/home")} />
+      <div>
+        {btnList.map(({ name, onClick }) => (
+          <LinkBtn key={name} opaque={opaque} onClick={onClick}>
+            {name}
+          </LinkBtn>
+        ))}
+        <LinkBtn>登入</LinkBtn>
+      </div>
     </Container>
   );
 }

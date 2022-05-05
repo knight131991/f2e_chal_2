@@ -1,7 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const FlexBox = ({ flex, row, justify, align, style, wrap, gap, ...rest }) => {
+const FlexBox = ({
+  flex,
+  row,
+  justify,
+  align,
+  style,
+  wrap,
+  gap,
+  noShrink,
+  ...rest
+}) => {
   return (
     <div
       style={{
@@ -12,6 +22,7 @@ const FlexBox = ({ flex, row, justify, align, style, wrap, gap, ...rest }) => {
         gap,
         flexDirection: row ? "row" : "column",
         flexWrap: wrap ? "wrap" : "nowrap",
+        flexShrink: noShrink ? "0" : "1",
         ...style,
       }}
       {...rest}
