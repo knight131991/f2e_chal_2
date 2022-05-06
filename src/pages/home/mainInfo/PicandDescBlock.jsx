@@ -16,7 +16,7 @@ const Picture = ({ src, alt }) => (
   <img src={src} alt={alt} width="100%" height="auto" />
 );
 
-const TextBlock = styled(({ title, content, ...rest }) => (
+const TextBlock = styled(({ title, content, textAlign, ...rest }) => (
   <FlexBox {...rest}>
     <div>{title}</div>
     <div>{content}</div>
@@ -24,6 +24,7 @@ const TextBlock = styled(({ title, content, ...rest }) => (
 ))`
   padding-top: 88px;
   font-size: 20px;
+  text-align: ${({ textAlign }) => textAlign};
 
   div:first-child {
     font-size: 24px;
@@ -84,6 +85,7 @@ function PicandDescBlock() {
             <TextBlock
               align="flex-end"
               title="成就點數增加挑戰的樂趣"
+              textAlign="end"
               content="除了自行車的挑戰成就，我們也精心構想一些成就等您發掘。"
             />
           ),

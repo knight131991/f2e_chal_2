@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
-import { Input } from "antd";
+import { Input, notification } from "antd";
 import banner from "../../../images/pictures/unsplash__ezqPPf8Cpk.jpg";
 import FlexBox from "../../../component/FlexBox";
 import styled from "styled-components";
@@ -41,10 +41,18 @@ const StyledSearch = styled(Input.Search)`
 `;
 
 function MoreInfoBanner(props) {
+  const openNotification = useCallback(() => {
+    notification["warning"]({ message: "尚未實做此功能" });
+  }, []);
+
   return (
     <Container justify="center" gap={16} noShrink>
       獲得更多資訊
-      <StyledSearch enterButton="送出" placeholder="請輸入您的 Email" />
+      <StyledSearch
+        enterButton="送出"
+        placeholder="請輸入您的 Email"
+        onSearch={openNotification}
+      />
     </Container>
   );
 }
