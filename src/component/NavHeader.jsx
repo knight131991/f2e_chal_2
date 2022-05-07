@@ -50,14 +50,14 @@ function NavHeader({ opaque, pos }) {
       opaque={opaque}
     >
       <Logo type="black-text" onClick={() => history.push("/home")} />
-      <div>
+      <FlexBox row gap={33}>
         {btnList.map(({ name, onClick }) => (
           <LinkBtn key={name} opaque={opaque} onClick={onClick}>
             {name}
           </LinkBtn>
         ))}
-        <LinkBtn>登入</LinkBtn>
-      </div>
+        <LinkBtn><PText>註冊/登入</PText></LinkBtn>
+      </FlexBox>
     </Container>
   );
 }
