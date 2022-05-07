@@ -7,6 +7,7 @@ import pic_col3 from "../../../images/pictures/unsplash_BNry1F5aHAU.jpg";
 import pic_col4 from "../../../images/pictures/unsplash_x5nZzttn2_k.jpg";
 import FlexBox from "../../../component/FlexBox";
 import styled from "styled-components";
+import useRWD from "../../../hooks/useRWD";
 
 const Container = styled(FlexBox)`
   padding: 24px;
@@ -33,15 +34,22 @@ const TextBlock = styled(({ title, content, textAlign, ...rest }) => (
 `;
 
 function PicandDescBlock() {
+  const { pictureSpan, textSpan } = useRWD(
+    { pictureSpan: 12, textSpan: 12 },
+    {
+      l: { pictureSpan: 15, textSpan: 9 },
+      s: { pictureSpan: 24, textSpan: 24 },
+    }
+  );
   const items = useMemo(
     () => [
       [
         {
-          span: 12,
+          span: pictureSpan,
           component: <Picture src={pic_col1} alt="picture1" />,
         },
         {
-          span: 12,
+          span: textSpan,
           component: (
             <TextBlock
               title="說走就走的小旅行"
@@ -52,7 +60,7 @@ function PicandDescBlock() {
       ],
       [
         {
-          span: 12,
+          span: textSpan,
           component: (
             <TextBlock
               align="flex-end"
@@ -61,15 +69,18 @@ function PicandDescBlock() {
             />
           ),
         },
-        { span: 12, component: <Picture src={pic_col2} alt="picture2" /> },
+        {
+          span: pictureSpan,
+          component: <Picture src={pic_col2} alt="picture2" />,
+        },
       ],
       [
         {
-          span: 12,
+          span: pictureSpan,
           component: <Picture src={pic_col3} alt="picture3" />,
         },
         {
-          span: 12,
+          span: textSpan,
           component: (
             <TextBlock
               title="紀錄您的歷程紀錄"
@@ -80,7 +91,7 @@ function PicandDescBlock() {
       ],
       [
         {
-          span: 12,
+          span: textSpan,
           component: (
             <TextBlock
               align="flex-end"
@@ -90,10 +101,13 @@ function PicandDescBlock() {
             />
           ),
         },
-        { span: 12, component: <Picture src={pic_col4} alt="picture4" /> },
+        {
+          span: pictureSpan,
+          component: <Picture src={pic_col4} alt="picture4" />,
+        },
       ],
     ],
-    []
+    [pictureSpan, textSpan]
   );
   return (
     <Container gap="48px">
