@@ -9,7 +9,9 @@ import InfoBlock from "./InfoBlock";
 import styled from "styled-components";
 import useRWD from "../../../../hooks/useRWD";
 
-const StyledArrowIcon = styled(ArrowIcon)`
+const StyledArrowIcon = styled(({ rotate, ...rest }) => (
+  <ArrowIcon {...rest} />
+))`
   ${({ rotate }) => rotate && "transform: rotate(90deg);"}
 `;
 

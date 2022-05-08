@@ -1,15 +1,16 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 // import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-import FlexBox from "./FlexBox";
-import Button from "./Button";
-import PText from "./texts/PText";
-import BlackText from "./texts/BlackText";
-import Logo from "./Logo";
-import useRWD, { useRWDStyleParams } from "../hooks/useRWD";
-import { ReactComponent as MenuIcon } from "../images/icon/Menu.svg";
-import screenEnum from "../constant/screenEnum";
+import FlexBox from "../FlexBox";
+import Button from "../Button";
+import PText from "../texts/PText";
+import BlackText from "../texts/BlackText";
+import Logo from "../Logo";
+import useRWD, { useRWDStyleParams } from "../../hooks/useRWD";
+import { ReactComponent as MenuIcon } from "../../images/icon/Menu.svg";
+import screenEnum from "../../constant/screenEnum";
+import Drawer from "./Drawer";
 
 const Container = styled(({ opaque, paddingLeft, paddingRight, ...rest }) => (
   <FlexBox {...rest} />
@@ -26,6 +27,7 @@ const StyledMenuIcon = styled(MenuIcon)`
 `;
 
 function NavHeader({ opaque, pos }) {
+  const [showDrawer, setShowDrawer] = useState(false);
   const history = useHistory();
   const { mainPadding } = useRWDStyleParams();
   const { paddingRight, screen } = useRWD(
@@ -67,7 +69,7 @@ function NavHeader({ opaque, pos }) {
     >
       <Logo type="black-text" onClick={() => history.push("/home")} />
       {screen <= screenEnum.sm ? (
-        <StyledMenuIcon />
+        <StyledMenuIcon onClick={() => setShowDrawer(true)} />
       ) : (
         <FlexBox row gap={33}>
           {btnList.map(({ name, onClick }) => (
@@ -80,6 +82,7 @@ function NavHeader({ opaque, pos }) {
           </LinkBtn>
         </FlexBox>
       )}
+      <Drawer visible={showDrawer} onClose={() => setShowDrawer(false)} />
     </Container>
   );
 }

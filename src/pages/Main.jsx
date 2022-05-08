@@ -4,7 +4,7 @@ import initAxios from "../utils/initAxios";
 import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Home from "./home/Home";
-import NavHeader from "../component/NavHeader";
+import NavHeader from "../component/navHeader/NavHeader";
 import FlexBox from "../component/FlexBox";
 import BikeRoute from "./BikeRoute";
 import PlanPage from "./planPage/PlanPage";
