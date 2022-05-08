@@ -1,23 +1,27 @@
-import React, { useCallback } from "react";
-import PropTypes from "prop-types";
+import React, { useCallback, useMemo } from "react";
+// import PropTypes from "prop-types";
 import { Input, notification } from "antd";
 import banner from "../../../images/pictures/unsplash__ezqPPf8Cpk.jpg";
 import FlexBox from "../../../component/FlexBox";
 import styled from "styled-components";
+import useRWD from "../../../hooks/useRWD";
+import screenEnum from "../../../constant/screenEnum";
 
-const Container = styled(FlexBox)`
+const Container = styled(({ isSmScreen, ...rest }) => <FlexBox {...rest} />)`
   background-image: url("${banner}");
   background-position: left;
   height: 400px;
   width: 100%;
-  padding-left: 372px;
+  ${({ isSmScreen }) => !isSmScreen && "padding-left: 372px;"}
   font-size: 40px;
   color: #fff;
   font-weight: bold;
 `;
 
-const StyledSearch = styled(Input.Search)`
-  max-width: 481px;
+const StyledSearch = styled(({ isSmScreen, ...rest }) => (
+  <Input.Search {...rest} />
+))`
+  max-width: ${({ isSmScreen }) => (isSmScreen ? "397px" : "481px")};
 
   & input {
     border-radius: 8px 0px 0px 8px;
@@ -45,10 +49,20 @@ function MoreInfoBanner(props) {
     notification["warning"]({ message: "尚未實做此功能" });
   }, []);
 
+  const { screen } = useRWD();
+  const isSmScreen = useMemo(() => screen <= screenEnum.sm, [screen]);
+
   return (
-    <Container justify="center" gap={16} noShrink>
+    <Container
+      justify="center"
+      isSmScreen={isSmScreen}
+      gap={16}
+      noShrink
+      align={isSmScreen && "center"}
+    >
       獲得更多資訊
       <StyledSearch
+        isSmScreen={isSmScreen}
         enterButton="送出"
         placeholder="請輸入您的 Email"
         onSearch={openNotification}

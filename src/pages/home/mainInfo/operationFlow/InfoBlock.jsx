@@ -10,6 +10,7 @@ const Container = styled(FlexBox)`
 
 const OrderIcon = styled(FlexBox)`
   position: relative;
+  min-height: 78px;
 `;
 
 const StyledOrder = styled(PText)`
@@ -22,8 +23,16 @@ const StyledOrder = styled(PText)`
   transform: translateX(-100%);
 `;
 
+const Title = styled(FlexBox)`
+  padding-top: 28px;
+  font-size: 24px;
+  font-weight: bold;
+`;
+
 const StyledContent = styled(FlexBox)`
   text-align: center;
+  font-size: 20px;
+  color: #616161;
 `;
 
 function InfoBlock({ icon, order, title, content }) {
@@ -33,7 +42,7 @@ function InfoBlock({ icon, order, title, content }) {
         <StyledOrder>{order}</StyledOrder>
         {icon}
       </OrderIcon>
-      <FlexBox>{title}</FlexBox>
+      <Title>{title}</Title>
       <StyledContent>{content}</StyledContent>
     </Container>
   );

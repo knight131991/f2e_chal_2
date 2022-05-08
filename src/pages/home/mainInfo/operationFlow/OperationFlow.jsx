@@ -9,6 +9,10 @@ import InfoBlock from "./InfoBlock";
 import styled from "styled-components";
 import useRWD from "../../../../hooks/useRWD";
 
+const Container = styled(FlexBox)`
+  padding: 0 48px;
+`;
+
 const StyledArrowIcon = styled(({ rotate, ...rest }) => (
   <ArrowIcon {...rest} />
 ))`
@@ -26,7 +30,7 @@ function OperationFlow() {
   );
 
   return (
-    <FlexBox gap={gap} row={row} align="center">
+    <Container gap={gap} row={row} align="center">
       <InfoBlock
         icon={<Step1Icon />}
         order={1}
@@ -47,7 +51,7 @@ function OperationFlow() {
         title="取得成就"
         content="除了騎腳踏車的挑戰，我們還提供了其它成就等您挑戰！"
       />
-    </FlexBox>
+    </Container>
   );
 }
 
