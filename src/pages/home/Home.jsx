@@ -7,9 +7,9 @@ import FlexBox from "../../component/FlexBox";
 import { useHistory } from "react-router-dom";
 import Bg from "../../images/BG.jpg";
 import ScrollHint from "./ScrollHint";
-import styleParam from "../../constant/styleParams";
 import MainInfos from "./mainInfo/MainInfos";
 import MoreInfoBanner from "./mainInfo/MoreInfoBanner";
+import { useRWDStyleParams } from "../../hooks/useRWD";
 
 const Container = styled(FlexBox)`
   width: 100%;
@@ -20,8 +20,10 @@ const Container = styled(FlexBox)`
   position: relative;
 `;
 
-const FullHeightContent = styled(FlexBox)`
-  padding-left: ${styleParam.padding.xl};
+const FullHeightContent = styled(({ paddingLeft, ...rest }) => (
+  <FlexBox {...rest} />
+))`
+  padding-left: ${({ paddingLeft }) => paddingLeft};
   color: #fff;
   font-size: 20px;
   gap: 16px;
@@ -40,10 +42,11 @@ const Title = styled.span`
 
 function Home() {
   const history = useHistory();
+  const { mainPadding } = useRWDStyleParams();
 
   return (
     <Container>
-      <FullHeightContent justify="center" noShrink>
+      <FullHeightContent justify="center" noShrink paddingLeft={mainPadding}>
         <Title>一起享受單車的美好</Title>
         <FlexBox>
           你知道你家最近的單車道在哪嗎？

@@ -5,14 +5,14 @@ import FlexBox from "./FlexBox";
 import { ReactComponent as Line } from "../images/line.svg";
 import { ReactComponent as FB } from "../images/fb.svg";
 import { ReactComponent as Instagram } from "../images/instagram.svg";
-import styleParam from "../constant/styleParams";
+import { useRWDStyleParams } from "../hooks/useRWD";
 
-const FooterContainer = styled.footer`
+const FooterContainer = styled(({ padding, ...rest }) => <footer {...rest} />)`
   display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: #000;
-  padding: 0 ${styleParam.padding.xl};
+  padding: ${({ padding }) => padding};
   color: #fff;
 `;
 
@@ -22,8 +22,9 @@ const IconWrapper = styled(FlexBox)`
 `;
 
 function Footer(props) {
+  const { mainPadding } = useRWDStyleParams();
   return (
-    <FooterContainer>
+    <FooterContainer padding={`0 ${mainPadding}`}>
       © L17 All Rights Reserved.
       <IconWrapper align="center" row>
         <FB />
