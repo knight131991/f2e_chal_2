@@ -7,17 +7,31 @@ import Button from "./Button";
 import PText from "./texts/PText";
 import BlackText from "./texts/BlackText";
 import Logo from "./Logo";
-import styleParam from "../constant/styleParams";
+import useRWD, { useRWDStyleParams } from "../hooks/useRWD";
+import { ReactComponent as MenuIcon } from "../images/icon/Menu.svg";
+import screenEnum from "../constant/screenEnum";
 
-const Container = styled(({ opaque, ...rest }) => <FlexBox {...rest} />)`
+const Container = styled(({ opaque, paddingLeft, paddingRight, ...rest }) => (
+  <FlexBox {...rest} />
+))`
   background-color: ${({ opaque }) => (opaque ? "#fafafa" : "#fafafa")};
   height: 72px;
   transition: background-color 0.8s ease-out;
-  padding: 0 96px 0 ${styleParam.padding.xl};
+  padding: 0 ${({ paddingRight }) => paddingRight} 0
+    ${({ paddingLeft }) => paddingLeft};
+`;
+
+const StyledMenuIcon = styled(MenuIcon)`
+  cursor: pointer;
 `;
 
 function NavHeader({ opaque, pos }) {
   const history = useHistory();
+  const { mainPadding } = useRWDStyleParams();
+  const { paddingRight, screen } = useRWD(
+    { paddingRight: "96px" },
+    { l: { paddingRight: "54px" }, s: { paddingRight: "20px" } }
+  );
 
   const LinkBtn = useCallback(({ children, opaque, ...rest }) => {
     return (
@@ -48,16 +62,24 @@ function NavHeader({ opaque, pos }) {
       justify="space-between"
       noShrink
       opaque={opaque}
+      paddingLeft={mainPadding}
+      paddingRight={paddingRight}
     >
       <Logo type="black-text" onClick={() => history.push("/home")} />
-      <FlexBox row gap={33}>
-        {btnList.map(({ name, onClick }) => (
-          <LinkBtn key={name} opaque={opaque} onClick={onClick}>
-            {name}
+      {screen <= screenEnum.sm ? (
+        <StyledMenuIcon />
+      ) : (
+        <FlexBox row gap={33}>
+          {btnList.map(({ name, onClick }) => (
+            <LinkBtn key={name} opaque={opaque} onClick={onClick}>
+              {name}
+            </LinkBtn>
+          ))}
+          <LinkBtn>
+            <PText>註冊/登入</PText>
           </LinkBtn>
-        ))}
-        <LinkBtn><PText>註冊/登入</PText></LinkBtn>
-      </FlexBox>
+        </FlexBox>
+      )}
     </Container>
   );
 }

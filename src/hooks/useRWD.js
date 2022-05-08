@@ -36,3 +36,12 @@ export default function useRWD(defaultVal, config) {
   }
   return result;
 }
+
+export function useRWDStyleParams() {
+  const params = useRWD(
+    { mainPadding: "70px" },
+    { l: { mainPadding: "32px" }, s: { mainPadding: "20px" } }
+  );
+
+  return params;
+}
