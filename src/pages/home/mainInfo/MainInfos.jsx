@@ -6,7 +6,13 @@ import OperationFlow from "./operationFlow/OperationFlow";
 import PicandDescBlock from "./PicandDescBlock";
 
 const Container = styled(FlexBox)`
-  padding 80px 8px 206px;
+  padding 80px 8px 0px;
+`;
+
+const PictureTextContainer = styled(FlexBox)`
+  background-color: #fafafa;
+  margin-top: 120px;
+  padding-bottom: 206px;
 `;
 
 const Title = styled(({ paddingTop, paddingBottom, ...rest }) => (
@@ -24,10 +30,12 @@ function MainInfos(props) {
       <Title paddingBottom="100px">展開你的單車之旅</Title>
       <FlexBox>
         <OperationFlow />
-        <Title align="center" paddingTop="200px" paddingBottom="32px">
-          一起享受單車的美好！
-        </Title>
-        <PicandDescBlock />
+        <PictureTextContainer>
+          <Title align="center" paddingTop="80px" paddingBottom="32px">
+            一起享受單車的美好！
+          </Title>
+          <PicandDescBlock />
+        </PictureTextContainer>
       </FlexBox>
     </Container>
   );

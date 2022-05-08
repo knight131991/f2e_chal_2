@@ -8,6 +8,7 @@ import pic_col4 from "../../../images/pictures/unsplash_x5nZzttn2_k.jpg";
 import FlexBox from "../../../component/FlexBox";
 import styled from "styled-components";
 import useRWD from "../../../hooks/useRWD";
+import screenEnum from "../../../constant/screenEnum";
 
 const Container = styled(FlexBox)`
   padding: 24px;
@@ -17,15 +18,18 @@ const Picture = ({ src, alt }) => (
   <img src={src} alt={alt} width="100%" height="auto" />
 );
 
-const TextBlock = styled(({ title, content, textAlign, ...rest }) => (
-  <FlexBox {...rest}>
-    <div>{title}</div>
-    <div>{content}</div>
-  </FlexBox>
-))`
-  padding-top: 88px;
+const TextBlock = styled(
+  ({ title, content, textAlign, align, isSmScreen, ...rest }) => (
+    <FlexBox {...rest} align={isSmScreen ? "center" : align}>
+      <div>{title}</div>
+      <div>{content}</div>
+    </FlexBox>
+  )
+)`
+  padding-top: ${({ isSmScreen }) => (isSmScreen ? "24px" : "88px")};
   font-size: 20px;
-  text-align: ${({ textAlign }) => textAlign};
+  text-align: ${({ textAlign, isSmScreen }) =>
+    isSmScreen ? "center" : textAlign};
 
   div:first-child {
     font-size: 24px;
@@ -34,15 +38,18 @@ const TextBlock = styled(({ title, content, textAlign, ...rest }) => (
 `;
 
 function PicandDescBlock() {
-  const { pictureSpan, textSpan } = useRWD(
+  const { pictureSpan, textSpan, screen } = useRWD(
     { pictureSpan: 12, textSpan: 12 },
     {
       l: { pictureSpan: 15, textSpan: 9 },
       s: { pictureSpan: 24, textSpan: 24 },
     }
   );
-  const items = useMemo(
-    () => [
+
+  const isSmScreen = useMemo(() => screen <= screenEnum.sm, [screen]);
+
+  const items = useMemo(() => {
+    const item = [
       [
         {
           span: pictureSpan,
@@ -52,6 +59,7 @@ function PicandDescBlock() {
           span: textSpan,
           component: (
             <TextBlock
+              isSmScreen={isSmScreen}
               title="說走就走的小旅行"
               content="整合全台灣的 Youbike 站點及自行車地圖，讓您方便規劃行程。"
             />
@@ -63,7 +71,9 @@ function PicandDescBlock() {
           span: textSpan,
           component: (
             <TextBlock
+              isSmScreen={isSmScreen}
               align="flex-end"
+              textAlign="end"
               title="簡單三步驟即可完成"
               content="照著流程即可快速完成規劃。"
             />
@@ -83,6 +93,7 @@ function PicandDescBlock() {
           span: textSpan,
           component: (
             <TextBlock
+              isSmScreen={isSmScreen}
               title="紀錄您的歷程紀錄"
               content="加入會員即可記錄您的挑戰紀錄。"
             />
@@ -94,6 +105,7 @@ function PicandDescBlock() {
           span: textSpan,
           component: (
             <TextBlock
+              isSmScreen={isSmScreen}
               align="flex-end"
               title="成就點數增加挑戰的樂趣"
               textAlign="end"
@@ -106,11 +118,15 @@ function PicandDescBlock() {
           component: <Picture src={pic_col4} alt="picture4" />,
         },
       ],
-    ],
-    [pictureSpan, textSpan]
-  );
+    ];
+
+    if (isSmScreen)
+      item.filter((ele, id) => id % 2 === 1).forEach((ele) => ele.reverse());
+    return item;
+  }, [pictureSpan, textSpan, isSmScreen]);
+
   return (
-    <Container gap="48px">
+    <Container gap={isSmScreen ? "32px" : "48px"}>
       {items.map((subItems, index) => (
         <Row key={index} gutter={[24]}>
           {subItems.map(({ span, component }, id) => (
