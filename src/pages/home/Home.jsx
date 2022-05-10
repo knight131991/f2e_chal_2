@@ -10,24 +10,24 @@ import ScrollHint from "./ScrollHint";
 import MainInfos from "./mainInfo/MainInfos";
 import MoreInfoBanner from "./mainInfo/MoreInfoBanner";
 import { useRWDStyleParams } from "../../hooks/useRWD";
+import PageContainer from "../../component/PageContainer";
 
-const Container = styled(FlexBox)`
+const Container = styled(PageContainer)`
   width: 100%;
-  height: 100%;
   overflow: visible;
-  background-image: url("${Bg}");
-  background-position: left;
-  position: relative;
 `;
 
 const FullHeightContent = styled(({ paddingLeft, ...rest }) => (
   <FlexBox {...rest} />
 ))`
+  background-image: url("${Bg}");
+  background-position: left;
   padding-left: ${({ paddingLeft }) => paddingLeft};
   color: #fff;
   font-size: 20px;
   gap: 16px;
   height: 100%;
+  position: relative;
 `;
 
 const StyledButton = styled(Button)`
@@ -46,7 +46,7 @@ function Home() {
 
   return (
     <Container>
-      <FullHeightContent justify="center" noShrink paddingLeft={mainPadding}>
+      <FullHeightContent justify="center" flex paddingLeft={mainPadding}>
         <Title>一起享受單車的美好</Title>
         <FlexBox>
           你知道你家最近的單車道在哪嗎？

@@ -7,6 +7,7 @@ import initAxios from "./utils/initAxios";
 const RootContainer = styled.div`
   width: 100vw;
   height: 100vh;
+  max-height: fill-available;
 `;
 
 function App() {

@@ -16,13 +16,6 @@ const Container = styled(FlexBox)`
   height: 100%;
 `;
 
-const PageContainer = styled(({ darkMode, ...rest }) => <FlexBox {...rest} />)`
-  overflow: auto;
-  width: 100%;
-  background: ${({ darkMode }) => darkMode && "#1e1e1e"};
-  transition: background-color 0.8s ease-out;
-`;
-
 function Main(props) {
   const { pathname } = useLocation();
   const [pos] = useGetUserPos();
@@ -43,14 +36,12 @@ function Main(props) {
   return (
     <Container>
       <NavHeader opaque={pathname !== "/home"} pos={pos} />
-      <PageContainer flex darkMode={pathname !== "/home"}>
         <Switch>
           {pages.map(({ path, component }) => (
             <Route key={path} path={path} render={component} />
           ))}
           <Redirect to="/home" />
         </Switch>
-      </PageContainer>
     </Container>
   );
 }

@@ -11,15 +11,24 @@ import useRWD, { useRWDStyleParams } from "../../hooks/useRWD";
 import { ReactComponent as MenuIcon } from "../../images/icon/Menu.svg";
 import screenEnum from "../../constant/screenEnum";
 import Drawer from "./Drawer";
+import styleParams from "../../constant/styleParams";
 
 const Container = styled(({ opaque, paddingLeft, paddingRight, ...rest }) => (
   <FlexBox {...rest} />
 ))`
+  position: fixed;
+  width: 100%;
+  z-index: 2;
+  pointer-events: none;
   background-color: ${({ opaque }) => (opaque ? "#fafafa" : "#fafafa")};
-  height: 72px;
+  height: ${styleParams.headerHeight};
   transition: background-color 0.8s ease-out;
   padding: 0 ${({ paddingRight }) => paddingRight} 0
     ${({ paddingLeft }) => paddingLeft};
+
+  & * {
+    pointer-events: auto;
+  }
 `;
 
 const StyledMenuIcon = styled(MenuIcon)`

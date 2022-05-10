@@ -1,3 +1,3 @@
-const main = { padding: { xl: "70px", md: "24px", sm: "12px" } };
+const main = { headerHeight: "72px" };
 
 export default main;
