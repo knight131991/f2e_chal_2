@@ -21,7 +21,7 @@ const StyledArrowIcon = styled(({ rotate, ...rest }) => (
 
 function OperationFlow() {
   const { gap, row, rotate } = useRWD(
-    { gap: "100%", row: true, rotate: false },
+    { gap: "100px", row: true, rotate: false },
     {
       l: { gap: "56px" },
       m: { gap: "48px" },

@@ -58,7 +58,7 @@ function MoreInfoBanner(props) {
       isSmScreen={isSmScreen}
       gap={16}
       noShrink
-      align={isSmScreen && "center"}
+      align={isSmScreen ? "center" : undefined}
     >
       獲得更多資訊
       <StyledSearch

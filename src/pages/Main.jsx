@@ -36,12 +36,12 @@ function Main(props) {
   return (
     <Container>
       <NavHeader opaque={pathname !== "/home"} pos={pos} />
-        <Switch>
-          {pages.map(({ path, component }) => (
-            <Route key={path} path={path} render={component} />
-          ))}
-          <Redirect to="/home" />
-        </Switch>
+      <Switch>
+        {pages.map(({ path, component }) => (
+          <Route key={path} path={path} render={component} />
+        ))}
+        <Redirect to="/home" />
+      </Switch>
     </Container>
   );
 }
