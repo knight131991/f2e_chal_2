@@ -7,21 +7,21 @@ import styled from "styled-components";
 import useRWD from "../../../hooks/useRWD";
 import screenEnum from "../../../constant/screenEnum";
 
-const Container = styled(({ isSmScreen, ...rest }) => <FlexBox {...rest} />)`
+const Container = styled(({ isMdScreen, ...rest }) => <FlexBox {...rest} />)`
   background-image: url("${banner}");
   background-position: left;
   height: 400px;
   width: 100%;
-  ${({ isSmScreen }) => !isSmScreen && "padding-left: 372px;"}
+  ${({ isMdScreen }) => !isMdScreen && "padding-left: 372px;"}
   font-size: 40px;
   color: #fff;
   font-weight: bold;
 `;
 
-const StyledSearch = styled(({ isSmScreen, ...rest }) => (
+const StyledSearch = styled(({ isMdScreen, ...rest }) => (
   <Input.Search {...rest} />
 ))`
-  max-width: ${({ isSmScreen }) => (isSmScreen ? "397px" : "481px")};
+  max-width: ${({ isMdScreen }) => (isMdScreen ? "397px" : "481px")};
 
   & input {
     border-radius: 8px 0px 0px 8px;
@@ -50,19 +50,19 @@ function MoreInfoBanner(props) {
   }, []);
 
   const { screen } = useRWD();
-  const isSmScreen = useMemo(() => screen <= screenEnum.sm, [screen]);
+  const isMdScreen = useMemo(() => screen <= screenEnum.md, [screen]);
 
   return (
     <Container
       justify="center"
-      isSmScreen={isSmScreen}
+      isMdScreen={isMdScreen}
       gap={16}
       noShrink
-      align={isSmScreen ? "center" : undefined}
+      align={isMdScreen ? "center" : undefined}
     >
       獲得更多資訊
       <StyledSearch
-        isSmScreen={isSmScreen}
+        isMdScreen={isMdScreen}
         enterButton="送出"
         placeholder="請輸入您的 Email"
         onSearch={openNotification}

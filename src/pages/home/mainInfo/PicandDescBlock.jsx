@@ -10,8 +10,11 @@ import styled from "styled-components";
 import useRWD from "../../../hooks/useRWD";
 import screenEnum from "../../../constant/screenEnum";
 
-const Container = styled(FlexBox)`
+const Container = styled(({ gap, ...rest }) => <FlexBox {...rest} />)`
   padding: 24px;
+  & > *:not(:last-child) {
+    margin-bottom: ${({ gap }) => gap};
+  }
 `;
 
 const Picture = ({ src, alt }) => (

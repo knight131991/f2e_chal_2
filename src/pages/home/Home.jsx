@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 // import PropTypes from "prop-types";
 import Footer from "../../component/Footer";
 import Button from "../../component/Button";
@@ -9,45 +9,58 @@ import Bg from "../../images/BG.jpg";
 import ScrollHint from "./ScrollHint";
 import MainInfos from "./mainInfo/MainInfos";
 import MoreInfoBanner from "./mainInfo/MoreInfoBanner";
-import { useRWDStyleParams } from "../../hooks/useRWD";
+import useRWD, { useRWDStyleParams } from "../../hooks/useRWD";
 import PageContainer from "../../component/PageContainer";
+import screenEnum from "../../constant/screenEnum";
 
 const Container = styled(PageContainer)`
   width: 100%;
   overflow: visible;
 `;
 
-const FullHeightContent = styled(({ paddingLeft, ...rest }) => (
+const FullHeightContent = styled(({ paddingLeft, isSmScreen, ...rest }) => (
   <FlexBox {...rest} />
 ))`
   background-image: url("${Bg}");
   background-position: left;
   padding-left: ${({ paddingLeft }) => paddingLeft};
   color: #fff;
-  font-size: 20px;
-  gap: 16px;
+  font-size: ${({ isSmScreen }) => (isSmScreen ? "16px" : "20px")};
   height: 100%;
   position: relative;
+
+  & > *:not(:last-child) {
+    margin-bottom: 16px;
+  }
 `;
 
 const StyledButton = styled(Button)`
   max-width: 288px;
   height: 60px;
+  font-size: 20px;
+  margin-top: 20px;
 `;
 
 const Title = styled.span`
   font-weight: bold;
-  font-size: 40px;
+  font-size: ${({ isSmScreen }) => (isSmScreen ? "32px" : "40px")};
 `;
 
 function Home() {
   const history = useHistory();
   const { mainPadding } = useRWDStyleParams();
+  const { screen } = useRWD();
+  const isSmScreen = useMemo(() => screen <= screenEnum.sm, [screen]);
 
   return (
     <Container>
-      <FullHeightContent justify="center" flex paddingLeft={mainPadding}>
-        <Title>一起享受單車的美好</Title>
+      <FullHeightContent
+        isSmScreen={isSmScreen}
+        justify="center"
+        flex
+        paddingLeft={mainPadding}
+      >
+        <Title isSmScreen={isSmScreen}>一起享受單車的美好</Title>
         <FlexBox>
           你知道你家最近的單車道在哪嗎？
           <br /> 路易騎收集了全台灣超過 300 條腳踏車道，

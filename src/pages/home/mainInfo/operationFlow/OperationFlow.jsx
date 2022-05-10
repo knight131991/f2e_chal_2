@@ -13,38 +13,40 @@ const Container = styled(FlexBox)`
   padding: 0 48px;
 `;
 
-const StyledArrowIcon = styled(({ rotate, ...rest }) => (
+const StyledArrowIcon = styled(({ rotate, margin, ...rest }) => (
   <ArrowIcon {...rest} />
 ))`
   ${({ rotate }) => rotate && "transform: rotate(90deg);"}
+  margin: ${({ margin }) => margin};
+  flex-shrink: 0;
 `;
 
 function OperationFlow() {
-  const { gap, row, rotate } = useRWD(
-    { gap: "100px", row: true, rotate: false },
+  const { margin, row, rotate } = useRWD(
+    { margin: "100px", row: true, rotate: false },
     {
-      l: { gap: "56px" },
-      m: { gap: "48px" },
-      s: { gap: "32px", row: false, rotate: true },
+      l: { margin: "56px" },
+      m: { margin: "48px" },
+      s: { margin: "32px", row: false, rotate: true },
     }
   );
 
   return (
-    <Container gap={gap} row={row} align="center">
+    <Container row={row} align="center">
       <InfoBlock
         icon={<Step1Icon />}
         order={1}
         title="站點與路線一站式規劃"
         content="我們整合全台灣的路線及 Youbike 站點，讓您快速地完成規劃。"
       />
-      <StyledArrowIcon rotate={rotate} />
+      <StyledArrowIcon rotate={rotate} margin={margin} />
       <InfoBlock
         icon={<Step2Icon />}
         order={2}
         title="隨時出發"
         content="彈性且快速的流程規劃，讓您隨時可以出發。"
       />
-      <StyledArrowIcon rotate={rotate} />
+      <StyledArrowIcon rotate={rotate} margin={margin} />
       <InfoBlock
         icon={<Step3Icon />}
         order={3}

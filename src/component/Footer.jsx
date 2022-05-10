@@ -18,7 +18,9 @@ const FooterContainer = styled(({ padding, ...rest }) => <footer {...rest} />)`
 
 const IconWrapper = styled(FlexBox)`
   height: 56px;
-  gap: 24px;
+  & > *:not(:last-child) {
+    margin-right: 24px;
+  }
 `;
 
 function Footer(props) {
