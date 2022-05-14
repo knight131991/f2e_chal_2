@@ -2,6 +2,7 @@ import React from "react";
 // import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Radio } from "antd";
+import styleParams from "../constant/styleParams";
 
 function RadioButton(props) {
   return <Radio.Button {...props} />;
@@ -10,24 +11,35 @@ function RadioButton(props) {
 RadioButton.propTypes = {};
 
 export default styled(RadioButton)`
+  height: 48px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-color: #5368f0;
-  background: #1e1e1e;
-  color: rgba(255, 255, 255, 0.6);
-  
+  background: transparent;
+  font-weight: bold;
+  color: #9e9e9e;
+
+  &:before: {
+    content: none;
+  }
+
   &:focus-within {
     box-shadow: none;
   }
 
+  &:hover {
+    color: ${styleParams.mainColor};
+  }
+
   &.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
-    background-color: #5368f0;
-    border-color: #5368f0;
+    border: 1px solid ${styleParams.mainColor};
+    background: ${styleParams.bg};
+    color: ${styleParams.mainColor};
 
     &:hover {
-      background-color: #5368f0;
-      border-color: #5368f0;
+      background-color: ${styleParams.bg};
+      color: ${styleParams.mainColor};
+      border-color: ${styleParams.mainColor};
     }
 
     &:focus-within {
@@ -35,12 +47,12 @@ export default styled(RadioButton)`
     }
   }
 
-  &.ant-radio-button-wrapper:first-child {
-    border-radius: 8px 0px 0px 8px;
-    border-color: #5368f0;
-  }
+  & > span {
+    display: flex;
+    flex-direction: row;
 
-  &.ant-radio-button-wrapper:last-child {
-    border-radius: 0px 8px 8px 0px;
+    & > *:not(:last-child) {
+      margin-right: 8px;
+    }
   }
 `;

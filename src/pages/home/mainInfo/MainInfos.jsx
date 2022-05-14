@@ -4,13 +4,14 @@ import FlexBox from "../../../component/FlexBox";
 import styled from "styled-components";
 import OperationFlow from "./operationFlow/OperationFlow";
 import PicandDescBlock from "./PicandDescBlock";
+import styleParams from "../../../constant/styleParams";
 
 const Container = styled(FlexBox)`
   padding 80px 8px 0px;
 `;
 
 const PictureTextContainer = styled(FlexBox)`
-  background-color: #fafafa;
+  background-color: ${styleParams.bg};
   margin-top: 120px;
   padding-bottom: 206px;
 `;

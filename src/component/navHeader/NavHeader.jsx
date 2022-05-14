@@ -20,7 +20,8 @@ const Container = styled(({ opaque, paddingLeft, paddingRight, ...rest }) => (
   width: 100%;
   z-index: 2;
   pointer-events: none;
-  background-color: ${({ opaque }) => (opaque ? "#fafafa" : "#fafafa")};
+  box-shadow: inset 0px -1px 0px #e0e0e0;
+  background-color: ${styleParams.bg};
   height: ${styleParams.headerHeight};
   transition: background-color 0.8s ease-out;
   padding: 0 ${({ paddingRight }) => paddingRight} 0

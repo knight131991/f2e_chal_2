@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Button as AntButton } from "antd";
 import styled from "styled-components";
+import styleParams from "../constant/styleParams";
 
 function Button(props) {
   return <AntButton {...props} />;
@@ -16,7 +17,7 @@ Button.propTypes = {
 
 export default styled((props) => <Button {...props} />)`
   border-radius: 8px;
-  
+
   ${({ type }) => {
     if (!type || type === "default") {
       return `
@@ -26,6 +27,7 @@ export default styled((props) => <Button {...props} />)`
     
     &:hover {
        background-color:rgba(138, 138, 138, 0.6);
+       color: ${styleParams.mainColor};
     }
     `;
     } else if (type === "link") {

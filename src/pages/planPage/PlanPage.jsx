@@ -1,19 +1,13 @@
 import React, { useMemo, useState } from "react";
 // import PropTypes from "prop-types";
-import { Radio } from "antd";
-import FlexBox from "../../component/FlexBox";
 import DarkPad from "../../component/DarkPad";
-import RadioButton from "../../component/RadioButton";
 import StopSelectorTab from "./stopSelectorTab/StopSeletorTab";
 import RouteSelectorTab from "./routeSelectorTab/RouteSelectorTab";
-import styled from "styled-components";
-
-const StyledRBtn = styled(RadioButton)`
-  width: 248px;
-  height: 62px;
-  font-size: 20px;
-  margin-bottom: 24px;
-`;
+import PageContainer from "../../component/PageContainer";
+import Toolbar from "../../component/Toolbar";
+import RadioGroup from "../../component/RadioGroup";
+import { ReactComponent as Route } from "../../images/icon/Route.svg";
+import { ReactComponent as Youbike } from "../../images/icon/Youbike.svg";
 
 function PlanPage(props) {
   const [curMode, setCurMode] = useState("stop");
@@ -34,17 +28,26 @@ function PlanPage(props) {
   }, [curMode]);
 
   return (
-    <FlexBox flex>
-      <Radio.Group
-        buttonStyle="solid"
-        defaultValue="stop"
-        onChange={(e) => setCurMode(e.target.value)}
-      >
-        <StyledRBtn value="stop">先選擇 Youbike 站點</StyledRBtn>
-        <StyledRBtn value="route">先選擇自行車路線</StyledRBtn>
-      </Radio.Group>
+    <PageContainer flex>
+      <Toolbar>
+        <RadioGroup
+          onChange={setCurMode}
+          items={[
+            {
+              value: "stop",
+              icon: <Youbike />,
+              label: <span>Youbike 站點</span>,
+            },
+            {
+              value: "route",
+              icon: <Route />,
+              label: <span>自行車路線</span>,
+            },
+          ]}
+        />
+      </Toolbar>
       <DarkPad flex>{mainBlock}</DarkPad>
-    </FlexBox>
+    </PageContainer>
   );
 }
 
