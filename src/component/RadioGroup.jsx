@@ -26,13 +26,9 @@ const StyledRGroup = styled(Radio.Group)`
 
 function RadioGroup({ items, onChange, ...rest }) {
   return (
-    <StyledRGroup
-      defaultValue="stop"
-      onChange={(e) => onChange(e.target.value)}
-      {...rest}
-    >
+    <StyledRGroup onChange={(e) => onChange(e.target.value)} {...rest}>
       {items.map(({ value, label, icon }) => (
-        <RadioButton value={value}>
+        <RadioButton value={value} key={value}>
           {label}
           {icon}
         </RadioButton>

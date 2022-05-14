@@ -1,11 +1,17 @@
 import React, { useEffect, useMemo, useState } from "react";
+import PropTypes from "prop-types";
 import StopSelector from "./StopSelector";
 import RouteSelector from "./RouteSelector";
 import FinishPage from "./FinishPage";
 import cityList from "../../../constant/cityList";
 import useGetBikeStopInfo from "../../../hooks/useGetBikeStopInfo";
+import Toolbar from "../../../component/Toolbar";
+import ModeSelector from "../ModeSelector";
+import FlexBox from "../../../component/FlexBox";
+import CitySelector from "../../../component/CitySelector";
+import { Input } from "antd";
 
-export default function StopSeletorTab() {
+export default function StopSeletorTab({ onModeChange }) {
   const [curMode, setCurMode] = useState("stop");
   const [city, setCity] = useState(cityList[0].value);
   const [stopInfo, setStopInfo] = useState({});
@@ -19,8 +25,9 @@ export default function StopSeletorTab() {
     getBikeStopInfo({ city });
   }, [getBikeStopInfo, city]);
 
-  const component = useMemo(() => {
+  const { component, toolbarComponent } = useMemo(() => {
     let component = null;
+    let toolbarComponent = null;
     switch (curMode) {
       case "stop":
         component = (
@@ -28,20 +35,26 @@ export default function StopSeletorTab() {
             stops={data}
             city={city}
             loading={loading}
-            onSearch={(keywords) =>
-              getBikeStopInfo({
-                city,
-                search: keywords,
-                noSearchResultCB: (flag) => setNotFoundStop(flag),
-              })
-            }
             showEmptyHint={notFoundStop}
-            onSelectCity={setCity}
             onSelectStop={(data) => {
               setStopInfo(data);
               setCurMode("route");
             }}
           />
+        );
+        toolbarComponent = (
+          <FlexBox row justify="space-between" flex>
+            <CitySelector value={city} onSelect={setCity} />
+            <Input.Search
+              onSearch={(keywords) =>
+                getBikeStopInfo({
+                  city,
+                  search: keywords,
+                  noSearchResultCB: (flag) => setNotFoundStop(flag),
+                })
+              }
+            />
+          </FlexBox>
         );
         break;
       case "route":
@@ -62,7 +75,10 @@ export default function StopSeletorTab() {
         break;
       default:
     }
-    return component;
+    return {
+      component,
+      toolbarComponent,
+    };
   }, [
     curMode,
     data,
@@ -74,5 +90,16 @@ export default function StopSeletorTab() {
     loading,
   ]);
 
-  return component;
+  return (
+    <>
+      <Toolbar>
+        <ModeSelector onChange={onModeChange} />
+        {toolbarComponent}
+      </Toolbar>
+      {component}
+    </>
+  );
 }
+
+StopSelector.defaultProps = { onModeChange: () => {} };
+StopSelector.propTypes = { onModeChange: PropTypes.func };
