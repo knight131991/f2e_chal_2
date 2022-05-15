@@ -11,11 +11,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-/* antd-select */
-div.ant-select:not(.ant-select-disabled):hover .ant-select-selector {
-  border-color: red;
-}
-div.ant-select-selector {
-  border: 1px solid red;
-}

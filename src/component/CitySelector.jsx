@@ -1,17 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Select } from "antd";
+import Select from "./Select";
 import cityList from "../constant/cityList";
-
 function CitySelector({ value, onSelect }) {
   return (
-    <Select value={value} onSelect={onSelect}>
-      {cityList.map(({ label, value }) => (
-        <Select.Option key={value} value={value}>
-          {label}
-        </Select.Option>
-      ))}
-    </Select>
+    <Select
+      value={value}
+      onSelect={onSelect}
+      options={cityList.map(({ label, value }) => ({ label, value }))}
+    />
   );
 }
 
