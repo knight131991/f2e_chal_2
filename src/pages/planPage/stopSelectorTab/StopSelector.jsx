@@ -5,7 +5,7 @@ import FlexBox from "../../../component/FlexBox";
 import GMap from "../../../component/gMap/GMap";
 import getPos from "../../../utils/getPos";
 import Marker from "../../../component/gMap/Marker";
-import CitySelector from "../../../component/CitySelector";
+import CitySelector from "../../../component/selector/CitySelector";
 import getCenterPos from "../../../utils/getCenterPos";
 import EmptyResultHint from "../../../component/EmptyResultHint";
 import styled from "styled-components";

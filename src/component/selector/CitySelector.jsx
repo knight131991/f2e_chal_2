@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Select from "./Select";
-import cityList from "../constant/cityList";
+import cityList from "../../constant/cityList";
 function CitySelector({ value, onSelect }) {
   return (
     <Select

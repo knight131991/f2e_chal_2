@@ -2,12 +2,12 @@ import React from "react";
 // import PropTypes from "prop-types";
 import { Select as AntSelect } from "antd";
 import styled from "styled-components";
-import styleParams from "../constant/styleParams";
-import { ReactComponent as Down } from "../images/icon/Down.svg";
+import styleParams from "../../constant/styleParams";
+import { ReactComponent as Down } from "../../images/icon/Down.svg";
 
-const SuffixIcon = styled(Down)`
+const SuffixIcon = styled(({ disabled, ...rest }) => <Down {...rest} />)`
   transform: translate(-11px, -25%);
-  color: #616161;
+  color: ${({ disabled }) => (disabled ? "rgba(0, 0, 0, 0.25)" : "#616161")};
 
   &:hover {
     color: ${styleParams.mainColor};
@@ -33,19 +33,15 @@ const StyledDropdown = styled(({ component, ...rest }) => (
   }
 `;
 
-export default styled(({ ...rest }) => (
+export default styled((props) => (
   <AntSelect
     dropdownStyle={{
       border: `1px solid ${styleParams.mainColorDark}`,
       borderRadius: "8px",
     }}
     dropdownRender={(origin) => <StyledDropdown component={origin} />}
-    suffixIcon={
-      <span className="test">
-        <SuffixIcon />
-      </span>
-    }
-    {...rest}
+    suffixIcon={<SuffixIcon disabled={props.disabled} />}
+    {...props}
   />
 ))`
   min-width: 170px;

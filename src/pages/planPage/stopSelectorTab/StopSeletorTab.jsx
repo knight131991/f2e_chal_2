@@ -4,16 +4,18 @@ import StopSelector from "./StopSelector";
 import RouteSelector from "./RouteSelector";
 import FinishPage from "./FinishPage";
 import cityList from "../../../constant/cityList";
+import youbikeList from "../../../constant/youbikeList";
 import useGetBikeStopInfo from "../../../hooks/useGetBikeStopInfo";
 import Toolbar from "../../../component/Toolbar";
 import ModeSelector from "../ModeSelector";
 import FlexBox from "../../../component/FlexBox";
-import CitySelector from "../../../component/CitySelector";
+import CityYoubikeSelector from "../../../component/selector/CityYoubikeSelector";
 import { Input } from "antd";
 
 export default function StopSeletorTab({ onModeChange }) {
   const [curMode, setCurMode] = useState("stop");
   const [city, setCity] = useState(cityList[0].value);
+  const [youbikeVer, setYoubikeVer] = useState(youbikeList[0].value);
   const [stopInfo, setStopInfo] = useState({});
   const [routeInfo, setRouteInfo] = useState({});
   const [notFoundStop, setNotFoundStop] = useState(false);
@@ -44,7 +46,13 @@ export default function StopSeletorTab({ onModeChange }) {
         );
         toolbarComponent = (
           <FlexBox row justify="space-between" flex>
-            <CitySelector value={city} onSelect={setCity} />
+            <CityYoubikeSelector
+              cityVal={city}
+              onCityChange={setCity}
+              youbikeVal={youbikeVer}
+              onYoubikeChange={setYoubikeVer}
+            />
+            {/* <CitySelector value={city} onSelect={setCity} /> */}
             <Input.Search
               onSearch={(keywords) =>
                 getBikeStopInfo({
@@ -88,6 +96,7 @@ export default function StopSeletorTab({ onModeChange }) {
     getBikeStopInfo,
     notFoundStop,
     loading,
+    youbikeVer,
   ]);
 
   return (

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import FlexBox from "./FlexBox";
-import CitySelector from "./CitySelector";
+import CitySelector from "./selector/CitySelector";
 import RouteOrderSelector from "./RouteOrderSelector";
 import DirectionCheckBox from "./DirectionCheckBox";
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
 import FlexBox from "../component/FlexBox";
 import DarkPad from "../component/DarkPad";
-import CitySelector from "../component/CitySelector";
+import CitySelector from "../component/selector/CitySelector";
 import { Input, Radio } from "antd";
 import RadioButton from "../component/RadioButton";
 import cityList from "../constant/cityList";
