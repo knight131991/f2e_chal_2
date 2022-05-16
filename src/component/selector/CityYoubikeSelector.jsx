@@ -5,6 +5,13 @@ import CitySelector from "./CitySelector";
 import FlexBox from "../FlexBox";
 import { cityEnum } from "../../constant/cityList";
 import youbikeList from "../../constant/youbikeList";
+import styled from "styled-components";
+
+const Container = styled(FlexBox)`
+  & > *:not(:last-child) {
+    margin-right: 8px;
+  }
+`;
 
 function CityYoubikeSelector({
   cityVal,
@@ -43,7 +50,7 @@ function CityYoubikeSelector({
   );
 
   return (
-    <FlexBox row>
+    <Container row>
       <CitySelector onSelect={handleCityChange} value={cityVal} />
       {options.length !== 0 && (
         <Select
@@ -53,7 +60,7 @@ function CityYoubikeSelector({
           options={options}
         />
       )}
-    </FlexBox>
+    </Container>
   );
 }
 

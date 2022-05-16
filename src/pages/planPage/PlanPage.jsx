@@ -22,7 +22,7 @@ function PlanPage(props) {
     return component;
   }, [curMode]);
 
-  return <PageContainer flex>{mainBlock}</PageContainer>;
+  return <PageContainer>{mainBlock}</PageContainer>;
 }
 
 PlanPage.propTypes = {};
