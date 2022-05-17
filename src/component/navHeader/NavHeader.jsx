@@ -22,7 +22,7 @@ const Container = styled(({ opaque, paddingLeft, paddingRight, ...rest }) => (
   pointer-events: none;
   box-shadow: inset 0px -1px 0px #e0e0e0;
   background-color: ${styleParams.bg};
-  height: ${styleParams.headerHeight};
+  height: ${styleParams.headerHeight}px;
   transition: background-color 0.8s ease-out;
   padding: 0 ${({ paddingRight }) => paddingRight} 0
     ${({ paddingLeft }) => paddingLeft};

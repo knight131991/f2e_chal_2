@@ -5,6 +5,7 @@ import { ReactComponent as AvailableMark } from "../../images/map_available.svg"
 import { ReactComponent as CloseIcon } from "../../images/Close/Default.svg";
 import FlexBox from "../FlexBox";
 import Button from "../Button";
+import styleParams from "../../constant/styleParams";
 
 const Container = styled.div`
   position: relative;
@@ -23,6 +24,8 @@ const TextWrapper = styled.span`
   justify-content: center;
   align-items: center;
   pointer-events: none;
+  color: white;
+  font-size: 18px;
 `;
 
 const InfoCardContainer = styled.div`
@@ -57,7 +60,8 @@ const AvaInfoBlock = styled(({ title, num, ...rest }) => (
     {num}
   </FlexBox>
 ))`
-  background-color: ${(props) => (props.num > 0 ? "#D3D7F5" : "#EBC0C0")};
+  background-color: ${(props) =>
+    props.num > 0 ? styleParams.mainColorDark : "#B40505"};
   border-radius: 8px;
   color: rgba(0, 0, 0, 0.6);
   padding: 8px 16px;
@@ -66,6 +70,10 @@ const AvaInfoBlock = styled(({ title, num, ...rest }) => (
   & > span {
     font-size: 18px;
   }
+`;
+
+const StyledAvailableMark = styled(AvailableMark)`
+  color: ${styleParams.mainColorDark};
 `;
 
 function Marker({
@@ -114,7 +122,7 @@ function Marker({
           )}
         </InfoCardContainer>
       )}
-      <AvailableMark
+      <StyledAvailableMark
         onClick={(e) => {
           setShowInfo(true);
           e.stopPropagation();

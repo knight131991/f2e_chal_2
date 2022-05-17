@@ -14,11 +14,23 @@ import FlexBox from "../../../component/FlexBox";
 import CityYoubikeSelector from "../../../component/selector/CityYoubikeSelector";
 import { Input } from "antd";
 import styled from "styled-components";
+import MainContentContainer from "../../../component/MainContentContainer";
 
 const StyledInput = styled(Input)`
   max-width: 277px;
   min-height: 48px;
   font-size: 16px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  border: none;
+
+  &.ant-input-affix-wrapper.ant-input-affix-wrapper-focused {
+    border: none;
+    box-shadow: none;
+  }
+  & input {
+    background: #f5f5f5;
+  }
 `;
 
 const Divider = styled.div`
@@ -125,7 +137,7 @@ export default function StopSeletorTab({ onModeChange }) {
         <ModeSelector onChange={onModeChange} />
         {toolbarComponent}
       </Toolbar>
-      {component}
+      <MainContentContainer>{component}</MainContentContainer>
     </>
   );
 }
