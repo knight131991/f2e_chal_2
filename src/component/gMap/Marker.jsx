@@ -3,6 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { ReactComponent as AvailableMark } from "../../images/map_available.svg";
 import { ReactComponent as CloseIcon } from "../../images/Close/Default.svg";
+import { ReactComponent as ErrorIcon } from "../../images/icon/Error.svg";
 import FlexBox from "../FlexBox";
 import Button from "../Button";
 import styleParams from "../../constant/styleParams";
@@ -32,22 +33,38 @@ const InfoCardContainer = styled.div`
   position: absolute;
   top: 0px;
   left: 0px;
-  border: 1px solid #a0adff;
-  padding: 24px;
-  font-size: 20px;
-  color: #000;
+  border: 1px solid ${styleParams.mainColorDark};
+  padding: 16px;
+  font-size: 16px;
+  color: ${styleParams.text};
   background: #fff;
-  width: 405px;
+  max-width: 400px;
+  border-radius: 8px;
 `;
 
-const AddressWrapper = styled.div`
-  color: rgba(0, 0, 0, 0.6);
+const InfoCardTitleBar = styled(FlexBox)`
+  margin-bottom: 8px;
+`;
+
+const ErrorHint = styled(FlexBox)`
+  & > :not(:last-child) {
+    margin-right: 8px;
+  }
+  margin-top: 8px;
+  font-size: 14px;
+  color: ${styleParams.errColor};
+`;
+
+const StyledCloseIcon = styled(CloseIcon)`
+  flex-shrink: noshrink;
 `;
 
 const TitleWrapper = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-weight: 700;
+  margin-right: 16px;
 `;
 
 const AvaInfosContainer = styled(FlexBox)`
@@ -61,7 +78,7 @@ const AvaInfoBlock = styled(({ title, num, ...rest }) => (
   </FlexBox>
 ))`
   background-color: ${(props) =>
-    props.num > 0 ? styleParams.mainColorDark : "#B40505"};
+    props.num > 0 ? styleParams.mainColorDark : styleParams.errColor};
   border-radius: 8px;
   color: rgba(0, 0, 0, 0.6);
   padding: 8px 16px;
@@ -72,8 +89,21 @@ const AvaInfoBlock = styled(({ title, num, ...rest }) => (
   }
 `;
 
-const StyledAvailableMark = styled(AvailableMark)`
-  color: ${styleParams.mainColorDark};
+const ButtonWrapper = styled(FlexBox)`
+  margin-top: 16px;
+`;
+
+const StyledAvailableMark = styled(({ num, ...rest }) => (
+  <AvailableMark {...rest} />
+))`
+  color: ${({ num }) =>
+    num ? styleParams.mainColorDark : styleParams.errColor};
+`;
+
+const UpdateTime = styled.span`
+  font-size: 12px;
+  white-space: nowrap;
+  margin-left: 32px;
 `;
 
 function Marker({
@@ -86,6 +116,8 @@ function Marker({
   showAvaInfo,
   avaReturn,
   num,
+  errHint,
+  updateTime,
   ...rest
 }) {
   const [showInfo, setShowInfo] = useState(false);
@@ -94,11 +126,11 @@ function Marker({
       <TextWrapper>{num}</TextWrapper>
       {showInfo && (
         <InfoCardContainer onClick={(e) => e.stopPropagation()}>
-          <FlexBox flex row justify="space-between" align="center">
-            <TitleWrapper title={name}>{name}</TitleWrapper>{" "}
-            <CloseIcon onClick={() => setShowInfo(false)} />
-          </FlexBox>
-          <AddressWrapper>{address}</AddressWrapper>
+          <InfoCardTitleBar flex row justify="space-between" align="center">
+            <TitleWrapper title={name}>{name}</TitleWrapper>
+            <StyledCloseIcon onClick={() => setShowInfo(false)} />
+          </InfoCardTitleBar>
+          <div>{address}</div>
           {showAvaInfo && (
             <AvaInfosContainer row gap={8}>
               <AvaInfoBlock
@@ -115,14 +147,22 @@ function Marker({
               />
             </AvaInfosContainer>
           )}
+          {errHint && (
+            <ErrorHint row>
+              <ErrorIcon />
+              <span>{errHint}</span>
+            </ErrorHint>
+          )}
           {showBtn && (
-            <Button type="primary" onClick={onClickInfoCardBtn}>
-              {btnText}
-            </Button>
+            <ButtonWrapper row justify="space-between" align="center">
+              <Button onClick={onClickInfoCardBtn}>{btnText}</Button>
+              <UpdateTime>更新時間：{updateTime}</UpdateTime>
+            </ButtonWrapper>
           )}
         </InfoCardContainer>
       )}
       <StyledAvailableMark
+        num={num}
         onClick={(e) => {
           setShowInfo(true);
           e.stopPropagation();

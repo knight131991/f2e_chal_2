@@ -43,6 +43,7 @@ function CityYoubikeSelector({
           setOptions(youbikeList.filter((item) => item.value === 2));
           break;
         default:
+          onYoubikeChange(undefined);
           setOptions([]);
       }
     },

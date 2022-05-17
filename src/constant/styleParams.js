@@ -4,6 +4,8 @@ const main = {
   mainColor: "#37cc56",
   bg: "#FAFAFA",
   mainColorDark: "#2A823C",
+  text: "#424242",
+  errColor: "#B40505",
 };
 
 export default main;

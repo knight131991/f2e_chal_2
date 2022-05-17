@@ -45,14 +45,20 @@ export default function StopSeletorTab({ onModeChange }) {
   const [youbikeVer, setYoubikeVer] = useState(youbikeList[0].value);
   const [stopInfo, setStopInfo] = useState({});
   const [routeInfo, setRouteInfo] = useState({});
+  const [searchKey, setSearchKey] = useState("");
   const [notFoundStop, setNotFoundStop] = useState(false);
   // const history = useHistory();
   // const { lat, log } = queryString.parse(history.location.search);
   const { getBikeStopInfo, data, loading } = useGetBikeStopInfo([]);
 
   useEffect(() => {
-    getBikeStopInfo({ city });
-  }, [getBikeStopInfo, city]);
+    getBikeStopInfo({
+      city,
+      youbikeVer,
+      search: searchKey,
+      noSearchResultCB: (flag) => setNotFoundStop(flag),
+    });
+  }, [getBikeStopInfo, city, youbikeVer, searchKey]);
 
   const { component, toolbarComponent } = useMemo(() => {
     let component = null;
@@ -78,20 +84,14 @@ export default function StopSeletorTab({ onModeChange }) {
               <CityYoubikeSelector
                 cityVal={city}
                 onCityChange={setCity}
-                youbikeVal={youbikeVer}
                 onYoubikeChange={setYoubikeVer}
+                youbikeVal={youbikeVer}
               />
               <StyledInput
                 allowClear={{ clearIcon: "sdf" }}
                 placeholder="站點搜尋"
                 prefix={<SearchIcon />}
-                onPressEnter={(e) =>
-                  getBikeStopInfo({
-                    city,
-                    search: e.target.value,
-                    noSearchResultCB: (flag) => setNotFoundStop(flag),
-                  })
-                }
+                onPressEnter={(e) => setSearchKey(e.target.value)}
               />
             </FlexBox>
           </>
@@ -125,7 +125,6 @@ export default function StopSeletorTab({ onModeChange }) {
     city,
     stopInfo,
     routeInfo,
-    getBikeStopInfo,
     notFoundStop,
     loading,
     youbikeVer,

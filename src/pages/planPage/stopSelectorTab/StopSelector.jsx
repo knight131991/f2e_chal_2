@@ -7,6 +7,7 @@ import getCenterPos from "../../../utils/getCenterPos";
 import EmptyResultHint from "../../../component/EmptyResultHint";
 import styled from "styled-components";
 import FlexSpin from "../../../component/FlexSpin";
+import utcToTime from "../../../utils/utcToTime";
 
 const StyledEmptyResultHint = styled(EmptyResultHint)`
   transform: translate(-50%, -50%);
@@ -31,7 +32,12 @@ function StopSelector({ stops, onSelectStop, loading, showEmptyHint }) {
         ) : (
           stops.map((item, id) => {
             const { lat, lng } = getPos(item);
-            const { AvailableRentBikes, StationAddress, StationName } = item;
+            const {
+              AvailableRentBikes,
+              StationAddress,
+              StationName,
+              UpdateTime,
+            } = item;
             const name = StationName.Zh_tw;
             const address = StationAddress.Zh_tw;
             return (
@@ -41,10 +47,12 @@ function StopSelector({ stops, onSelectStop, loading, showEmptyHint }) {
                 lng={lng}
                 num={AvailableRentBikes}
                 avaRent={AvailableRentBikes}
+                updateTime={utcToTime(UpdateTime)}
                 name={name}
                 address={address}
                 btnText="選擇路線"
                 showBtn
+                errHint={!AvailableRentBikes && "目前無車輛可租用"}
                 onClickInfoCardBtn={() =>
                   onSelectStop({ lat, lng, name, address })
                 }

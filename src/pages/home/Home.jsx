@@ -12,6 +12,7 @@ import MoreInfoBanner from "./mainInfo/MoreInfoBanner";
 import useRWD, { useRWDStyleParams } from "../../hooks/useRWD";
 import PageContainer from "../../component/PageContainer";
 import screenEnum from "../../constant/screenEnum";
+import styleParams from "../../constant/styleParams";
 
 const Container = styled(PageContainer)`
   width: 100%;
@@ -39,6 +40,14 @@ const StyledButton = styled(Button)`
   height: 60px;
   font-size: 20px;
   margin-top: 20px;
+
+  background-color: rgba(138, 138, 138, 0.6);
+  color: #fff;
+
+  &:hover {
+    background-color: rgba(138, 138, 138, 0.6);
+    color: ${styleParams.mainColor};
+  }
 `;
 
 const Title = styled.span`
@@ -67,7 +76,7 @@ function Home() {
           <br /> 以及 300 個 Youbike 站點，透過簡單的規劃，
           <br /> 就能找到最適合你的路線，讓我們一起輕鬆上路。
         </FlexBox>
-        <StyledButton onClick={() => history.push("/plan")}>
+        <StyledButton type="primary" onClick={() => history.push("/plan")}>
           規劃路線
         </StyledButton>
         <ScrollHint />

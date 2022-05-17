@@ -21,15 +21,26 @@ export default styled((props) => <Button {...props} />)`
   ${({ type }) => {
     if (!type || type === "default") {
       return `
-    background-color:rgba(138, 138, 138, 0.6); 
+      color:${styleParams.mainColor};
+      background-color: #fff;
+      border-color:${styleParams.mainColor}; 
+
+      &:hover {
+       border-color:${styleParams.mainColorDark};
+       color: ${styleParams.mainColorDark};
+      }
+      `;
+    } else if (type === "primary") {
+      return `
+    background-color:${styleParams.mainColorDark}; 
     border: none;
     color: #fff;
     
     &:hover {
-       background-color:rgba(138, 138, 138, 0.6);
-       color: ${styleParams.mainColor};
-    }
-    `;
+       background-color:${styleParams.mainColor};
+       color: #fff;
+      }
+      `;
     } else if (type === "link") {
       return `
         color: #fff;
