@@ -7,31 +7,13 @@ import cityList from "../../../constant/cityList";
 import youbikeList from "../../../constant/youbikeList";
 import useGetBikeStopInfo from "../../../hooks/useGetBikeStopInfo";
 import Toolbar from "../../../component/Toolbar";
-import { ReactComponent as SearchIcon } from "../../../images/icon/Search.svg";
 import ModeSelector from "../ModeSelector";
 import FlexBox from "../../../component/FlexBox";
 import CityYoubikeSelector from "../../../component/selector/CityYoubikeSelector";
-import { Input } from "antd";
 import styled from "styled-components";
 import MainContentContainer from "../../../component/MainContentContainer";
 import DistanceSelector from "../../../component/selector/DistanceSelector";
-
-const StyledInput = styled(Input)`
-  max-width: 277px;
-  min-height: 48px;
-  font-size: 16px;
-  background: #f5f5f5;
-  border-radius: 8px;
-  border: none;
-
-  &.ant-input-affix-wrapper.ant-input-affix-wrapper-focused {
-    border: none;
-    box-shadow: none;
-  }
-  & input {
-    background: #f5f5f5;
-  }
-`;
+import Search from "../../../component/Search";
 
 const Divider = styled.div`
   border-left: 1px solid #e0e0e0;
@@ -45,7 +27,8 @@ export default function StopSeletorTab({ onModeChange }) {
   const [youbikeVer, setYoubikeVer] = useState(youbikeList[0].value);
   const [stopInfo, setStopInfo] = useState({});
   const [routeInfo, setRouteInfo] = useState({});
-  const [searchKey, setSearchKey] = useState("");
+  const [searchStop, setSearchStop] = useState("");
+  const [searchRoute, setSearchRoute] = useState("");
   const [routeLen, setRouteLen] = useState();
   const [notFoundStop, setNotFoundStop] = useState(false);
   // const history = useHistory();
@@ -56,10 +39,10 @@ export default function StopSeletorTab({ onModeChange }) {
     getBikeStopInfo({
       city,
       youbikeVer,
-      search: searchKey,
+      search: searchStop,
       noSearchResultCB: (flag) => setNotFoundStop(flag),
     });
-  }, [getBikeStopInfo, city, youbikeVer, searchKey]);
+  }, [getBikeStopInfo, city, youbikeVer, searchStop]);
 
   const { component, toolbarComponent } = useMemo(() => {
     let component = null;
@@ -88,12 +71,7 @@ export default function StopSeletorTab({ onModeChange }) {
                 onYoubikeChange={setYoubikeVer}
                 youbikeVal={youbikeVer}
               />
-              <StyledInput
-                allowClear={{ clearIcon: "sdf" }}
-                placeholder="站點搜尋"
-                prefix={<SearchIcon />}
-                onPressEnter={(e) => setSearchKey(e.target.value)}
-              />
+              <Search placeholder="站點搜尋" onPressEnter={setSearchStop} />
             </FlexBox>
           </>
         );
@@ -104,7 +82,7 @@ export default function StopSeletorTab({ onModeChange }) {
             city={city}
             stopInfo={stopInfo}
             routeLen={routeLen}
-            searchKey={searchKey}
+            searchKey={searchRoute}
             onClickReturn={() => setCurMode("stop")}
             onSelectRoute={(data) => {
               setRouteInfo(data);
@@ -121,6 +99,11 @@ export default function StopSeletorTab({ onModeChange }) {
               onSelect={setRouteLen}
               prefixStr="車道長度： "
               filterName="CyclingLength"
+            />
+            <Divider />
+            <Search
+              placeholder="路線 / 起、迄點搜尋"
+              onPressEnter={setSearchRoute}
             />
           </>
         );
@@ -144,7 +127,7 @@ export default function StopSeletorTab({ onModeChange }) {
     loading,
     youbikeVer,
     routeLen,
-    searchKey,
+    searchRoute,
   ]);
 
   return (
