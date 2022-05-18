@@ -59,6 +59,10 @@ export default styled((props) => (
       padding: 0 16px;
       border-color: #616161;
       transition: none;
+
+      & .ant-select-selection-item {
+        margin-right: 12px;
+      }
     }
   }
 
@@ -89,6 +93,12 @@ export default styled((props) => (
       align-items: center;
       transition: none;
     }
+  }
+
+  & .ant-select-selection-placeholder {
+    display: flex;
+    align-items: center;
+    color: #616161;
   }
 
   & .ant-select-arrow {

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 import FlexBox from "../../../component/FlexBox";
-import { Input } from "antd";
 import InfoCard from "../../../component/InfoCard";
 import GMap from "../../../component/gMap/GMap";
 import DirectionCheckBox from "../../../component/DirectionCheckBox";
@@ -31,7 +30,14 @@ const StyledEmptyResultHint = styled(EmptyResultHint)`
   transform: translate(-50%, -50%);
 `;
 
-function RouteSelector({ city, stopInfo, onSelectRoute, onClickReturn }) {
+function RouteSelector({
+  city,
+  stopInfo,
+  onSelectRoute,
+  onClickReturn,
+  routeLen,
+  searchKey,
+}) {
   const {
     getRoute,
     isLoading: gettingRoute,
@@ -42,24 +48,18 @@ function RouteSelector({ city, stopInfo, onSelectRoute, onClickReturn }) {
   const [dirFilter, setDirFilter] = useState([]);
   const [sortBy, setSortBy] = useState("distance");
 
-  const fetchRoute = useCallback(
-    (searchKey) => {
-      getRoute(
-        city,
-        (routes) => {
-          const infos = appendDistanceToRouteInfo(stopInfo, routes);
-          infos.sort((a, b) => a.CyclingLength - b.CyclingLength);
-          return infos;
-        },
-        searchKey
-      );
-    },
-    [getRoute, city, stopInfo]
-  );
-
   useEffect(() => {
-    fetchRoute();
-  }, [fetchRoute]);
+    getRoute(
+      city,
+      (routes) => {
+        const infos = appendDistanceToRouteInfo(stopInfo, routes);
+        infos.sort((a, b) => a.CyclingLength - b.CyclingLength);
+        return infos;
+      },
+      searchKey,
+      routeLen
+    );
+  }, [getRoute, city, stopInfo, searchKey, routeLen]);
 
   const filterdRouteInfos = useMemo(() => {
     if (dirFilter.length === 0) return routeInfos;
@@ -84,7 +84,6 @@ function RouteSelector({ city, stopInfo, onSelectRoute, onClickReturn }) {
         {stopInfo.name}
         <DirectionCheckBox onChange={handleCheckboxChange} />
         <RouteOrderSelector onChange={handleSorterChange} />
-        <Input.Search onSearch={(val) => fetchRoute(val)} />
       </FlexBox>
       共{filterdRouteInfos.length}條路線
       <Container row flex>
@@ -159,12 +158,16 @@ RouteSelector.defaultProps = {
   stopInfo: {},
   onSelectRoute: () => {},
   onClickReturn: () => {},
+  routeLen: undefined,
+  searchKey: "",
 };
 RouteSelector.propTypes = {
   city: PropTypes.string,
   stopInfo: PropTypes.objectOf(PropTypes.any),
   onSelectRoute: PropTypes.func,
   onClickReturn: PropTypes.func,
+  routeLen: PropTypes.string,
+  searchKey: PropTypes.string,
 };
 
 export default RouteSelector;

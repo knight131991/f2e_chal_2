@@ -21,7 +21,7 @@ export default function useGetBikeStopInfo() {
     }) =>
       new Promise((resolve, reject) => {
         const posFilter = `$spatialFilter=nearby(${lat},${lng},600)`;
-        const filters = `$filter=contains(StationName/Zh_tw,'${search}') or contains(StationAddress/Zh_tw,'${search}') ${
+        const filters = `$filter=(contains(StationName/Zh_tw,'${search}') or contains(StationAddress/Zh_tw,'${search}')) ${
           youbikeVer ? `and ServiceType eq ${youbikeVer}` : ""
         }`;
 
@@ -55,7 +55,7 @@ export default function useGetBikeStopInfo() {
               api: axios.get(
                 `https://ptx.transportdata.tw/MOTC/v2/Bike/Availability/${
                   city ? city : "NearBy"
-                }?$top=300&$format=JSON&$filter=${stationFilters} ${
+                }?$top=300&$format=JSON&$filter=(${stationFilters}) ${
                   youbikeVer ? `and ServiceType eq ${youbikeVer}` : ""
                 }`
               ),

@@ -8,13 +8,13 @@ import youbikeList from "../../../constant/youbikeList";
 import useGetBikeStopInfo from "../../../hooks/useGetBikeStopInfo";
 import Toolbar from "../../../component/Toolbar";
 import { ReactComponent as SearchIcon } from "../../../images/icon/Search.svg";
-// import { ReactComponent as Del } from "../../../images/icon/Del.svg";
 import ModeSelector from "../ModeSelector";
 import FlexBox from "../../../component/FlexBox";
 import CityYoubikeSelector from "../../../component/selector/CityYoubikeSelector";
 import { Input } from "antd";
 import styled from "styled-components";
 import MainContentContainer from "../../../component/MainContentContainer";
+import DistanceSelector from "../../../component/selector/DistanceSelector";
 
 const StyledInput = styled(Input)`
   max-width: 277px;
@@ -46,6 +46,7 @@ export default function StopSeletorTab({ onModeChange }) {
   const [stopInfo, setStopInfo] = useState({});
   const [routeInfo, setRouteInfo] = useState({});
   const [searchKey, setSearchKey] = useState("");
+  const [routeLen, setRouteLen] = useState();
   const [notFoundStop, setNotFoundStop] = useState(false);
   // const history = useHistory();
   // const { lat, log } = queryString.parse(history.location.search);
@@ -102,12 +103,26 @@ export default function StopSeletorTab({ onModeChange }) {
           <RouteSelector
             city={city}
             stopInfo={stopInfo}
+            routeLen={routeLen}
+            searchKey={searchKey}
             onClickReturn={() => setCurMode("stop")}
             onSelectRoute={(data) => {
               setRouteInfo(data);
               setCurMode("finish");
             }}
           />
+        );
+        toolbarComponent = (
+          <>
+            <Divider />
+            <DistanceSelector
+              placeholder="車道長度"
+              value={routeLen}
+              onSelect={setRouteLen}
+              prefixStr="車道長度： "
+              filterName="CyclingLength"
+            />
+          </>
         );
         break;
       case "finish":
@@ -128,6 +143,8 @@ export default function StopSeletorTab({ onModeChange }) {
     notFoundStop,
     loading,
     youbikeVer,
+    routeLen,
+    searchKey,
   ]);
 
   return (

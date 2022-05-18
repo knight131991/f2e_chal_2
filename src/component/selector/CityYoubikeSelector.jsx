@@ -29,17 +29,18 @@ function CityYoubikeSelector({
         case cityEnum.tpe.value:
         case cityEnum.nwt.value:
         case cityEnum.txg.value:
+          if (!youbikeVal) onYoubikeChange(1);
           setOptions(youbikeList);
           break;
         case cityEnum.tyn.value:
         case cityEnum.hsz.value:
         case cityEnum.zmi.value:
-          if (youbikeVal === 2) onYoubikeChange(1);
+          if (youbikeVal === 2 || !youbikeVal) onYoubikeChange(1);
           setOptions(youbikeList.filter((item) => item.value === 1));
           break;
         case cityEnum.cyi.value:
         case cityEnum.khh.value:
-          if (youbikeVal === 1) onYoubikeChange(2);
+          if (youbikeVal === 1 || !youbikeVal) onYoubikeChange(2);
           setOptions(youbikeList.filter((item) => item.value === 2));
           break;
         default:
