@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo , useState} from "react";
 // import PropTypes from "prop-types";
 import queryString from "query-string";
 import useGetRoute from "../../../hooks/useGetRoute";
-import { useState } from "react/cjs/react.development";
 import cityList from "../../../constant/cityList";
 import StopSelector from "./StopSelector";
 import RouteSelector from "./RouteSelector";

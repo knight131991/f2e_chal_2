@@ -1,6 +1,5 @@
 import { Input } from "antd";
-import React, { useEffect, useMemo } from "react";
-import { useState } from "react/cjs/react.development";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import DarkPad from "../component/DarkPad";
 import FlexBox from "../component/FlexBox";

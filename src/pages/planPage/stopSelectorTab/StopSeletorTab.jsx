@@ -14,6 +14,8 @@ import styled from "styled-components";
 import MainContentContainer from "../../../component/MainContentContainer";
 import DistanceSelector from "../../../component/selector/DistanceSelector";
 import Search from "../../../component/Search";
+import CheckboxGroup from "../../../component/CheckboxGroup";
+import { directionList } from "../../../constant/directionEnum";
 
 const Divider = styled.div`
   border-left: 1px solid #e0e0e0;
@@ -31,6 +33,7 @@ export default function StopSeletorTab({ onModeChange }) {
   const [searchRoute, setSearchRoute] = useState("");
   const [routeLen, setRouteLen] = useState();
   const [notFoundStop, setNotFoundStop] = useState(false);
+  const [dirFilter, setDirFilter] = useState([]);
   // const history = useHistory();
   // const { lat, log } = queryString.parse(history.location.search);
   const { getBikeStopInfo, data, loading } = useGetBikeStopInfo([]);
@@ -83,6 +86,7 @@ export default function StopSeletorTab({ onModeChange }) {
             stopInfo={stopInfo}
             routeLen={routeLen}
             searchKey={searchRoute}
+            dirFilter={dirFilter}
             onClickReturn={() => setCurMode("stop")}
             onSelectRoute={(data) => {
               setRouteInfo(data);
@@ -91,21 +95,24 @@ export default function StopSeletorTab({ onModeChange }) {
           />
         );
         toolbarComponent = (
-          <>
-            <Divider />
-            <DistanceSelector
-              placeholder="車道長度"
-              value={routeLen}
-              onSelect={setRouteLen}
-              prefixStr="車道長度： "
-              filterName="CyclingLength"
-            />
-            <Divider />
+          <FlexBox flex row justify="space-between" align="center">
+            <FlexBox row align="center">
+              <Divider />
+              <DistanceSelector
+                placeholder="車道長度"
+                value={routeLen}
+                onSelect={setRouteLen}
+                prefixStr="車道長度： "
+                filterName="CyclingLength"
+              />
+              <Divider />
+              <CheckboxGroup options={directionList} onChange={setDirFilter} />
+            </FlexBox>
             <Search
               placeholder="路線 / 起、迄點搜尋"
               onPressEnter={setSearchRoute}
             />
-          </>
+          </FlexBox>
         );
         break;
       case "finish":
@@ -128,6 +135,7 @@ export default function StopSeletorTab({ onModeChange }) {
     youbikeVer,
     routeLen,
     searchRoute,
+    dirFilter,
   ]);
 
   return (

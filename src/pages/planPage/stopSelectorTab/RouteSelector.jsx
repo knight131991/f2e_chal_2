@@ -1,25 +1,20 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import FlexBox from "../../../component/FlexBox";
 import InfoCard from "../../../component/InfoCard";
 import GMap from "../../../component/gMap/GMap";
-import DirectionCheckBox from "../../../component/DirectionCheckBox";
 import useGetRoute from "../../../hooks/useGetRoute";
-import { useState } from "react/cjs/react.development";
 import styled from "styled-components";
 import getCenterPos from "../../../utils/getCenterPos";
 import EmptyResultHint from "../../../component/EmptyResultHint";
 import BikeMarker from "../../../component/gMap/BikeMarker";
-import RouteOrderSelector, {
-  routeOrders,
-} from "../../../component/RouteOrderSelector";
 import appendDistanceToRouteInfo from "../../../utils/appendDistanceToRouteInfo";
 import LinkBtn from "../../../component/LinkBtn";
 import NoDataHint from "../../../component/NoDataHint";
 import FlexSpin from "../../../component/FlexSpin";
 
 const Container = styled(FlexBox)`
-  height: 0px;
+  height: 100%;
 `;
 
 const ListConainer = styled(FlexBox)`
@@ -37,6 +32,7 @@ function RouteSelector({
   onClickReturn,
   routeLen,
   searchKey,
+  dirFilter,
 }) {
   const {
     getRoute,
@@ -45,8 +41,7 @@ function RouteSelector({
   } = useGetRoute([]);
   const [selectedRoute, setSelectedRoute] = useState([]);
   const [centerPos, setCenterPos] = useState();
-  const [dirFilter, setDirFilter] = useState([]);
-  const [sortBy, setSortBy] = useState("distance");
+  const [sortBy] = useState("distance");
 
   useEffect(() => {
     getRoute(
@@ -66,29 +61,14 @@ function RouteSelector({
     return routeInfos.filter(({ Direction }) => dirFilter.includes(Direction));
   }, [dirFilter, routeInfos]);
 
-  const handleCheckboxChange = useCallback((vals) => setDirFilter(vals), []);
-
-  const handleSorterChange = useCallback((val) => {
-    if (val === routeOrders.distance) {
-      setSortBy("Distance");
-    } else if (val === routeOrders.length) {
-      setSortBy("CyclingLength");
-    } else {
-      console.log("非預期的排序值");
-    }
-  }, []);
-
   return (
     <>
-      <FlexBox row>
-        {stopInfo.name}
-        <DirectionCheckBox onChange={handleCheckboxChange} />
-        <RouteOrderSelector onChange={handleSorterChange} />
-      </FlexBox>
-      共{filterdRouteInfos.length}條路線
+      <FlexBox row></FlexBox>
       <Container row flex>
         <FlexSpin spinning={gettingRoute}>
           <ListConainer flex>
+            共{filterdRouteInfos.length}條路線
+            {stopInfo.name}
             {filterdRouteInfos.length === 0 ? (
               <NoDataHint />
             ) : (
@@ -160,6 +140,7 @@ RouteSelector.defaultProps = {
   onClickReturn: () => {},
   routeLen: undefined,
   searchKey: "",
+  dirFilter: [],
 };
 RouteSelector.propTypes = {
   city: PropTypes.string,
@@ -168,6 +149,7 @@ RouteSelector.propTypes = {
   onClickReturn: PropTypes.func,
   routeLen: PropTypes.string,
   searchKey: PropTypes.string,
+  dirFilter: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default RouteSelector;
