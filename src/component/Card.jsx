@@ -10,8 +10,8 @@ function Card(props) {
 Card.propTypes = {};
 
 export default styled(Card)`
-  border: 1px solid #595959;
+  // border: 1px solid #595959;
   border-radius: 8px;
-  background-color: #252525;
   padding: 24px;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15);
 `;

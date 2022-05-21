@@ -7,7 +7,8 @@ import { ReactComponent as Down } from "../../images/icon/Down.svg";
 
 const SuffixIcon = styled(({ disabled, ...rest }) => <Down {...rest} />)`
   transform: translate(-11px, -25%);
-  color: ${({ disabled }) => (disabled ? "rgba(0, 0, 0, 0.25)" : "#616161")};
+  color: ${({ disabled }) =>
+    disabled ? "rgba(0, 0, 0, 0.25)" : styleParams.grayText};
 
   &:hover {
     color: ${styleParams.mainColor};
@@ -18,7 +19,7 @@ const StyledDropdown = styled(({ component, ...rest }) => (
   <div {...rest}>{component}</div>
 ))`
   & .ant-select-item {
-    color: #616161;
+    color: ${styleParams.grayText};
     font-size: 16px;
 
     &.ant-select-item-option-selected {
@@ -46,7 +47,7 @@ export default styled((props) => (
 ))`
   min-width: 170px;
   font-size: 16px;
-  color: #616161;
+  color: ${styleParams.grayText};
 
   &:not(.ant-select-customize-input) {
     &.ant-select-focused:not(.ant-select-disabled) .ant-select-selector {
@@ -57,7 +58,7 @@ export default styled((props) => (
     & .ant-select-selector {
       border-radius: 100px;
       padding: 0 16px;
-      border-color: #616161;
+      border-color: ${styleParams.grayText};
       transition: none;
 
       & .ant-select-selection-item {
@@ -98,7 +99,7 @@ export default styled((props) => (
   & .ant-select-selection-placeholder {
     display: flex;
     align-items: center;
-    color: #616161;
+    color: ${styleParams.grayText};
   }
 
   & .ant-select-arrow {

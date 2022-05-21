@@ -5,6 +5,7 @@ const main = {
   bg: "#FAFAFA",
   mainColorDark: "#2A823C",
   text: "#424242",
+  grayText: "#616161",
   errColor: "#B40505",
 };
 

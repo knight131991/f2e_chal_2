@@ -7,6 +7,7 @@ import Card from "./Card";
 import FlexBox from "./FlexBox";
 import { ReactComponent as Like } from "../images/Like/Outlined.svg";
 import styled from "styled-components";
+import BlodBlockText from "./texts/BlodBlockText";
 
 function InfoCard({
   title,
@@ -20,7 +21,7 @@ function InfoCard({
   return (
     <Card row justify="space-between" className={className} onClick={onClick}>
       <FlexBox>
-        <FlexBox>{title}</FlexBox>
+        <BlodBlockText>{title}</BlodBlockText>
         {content}
       </FlexBox>
       <FlexBox justify="space-between" align="flex-end">

@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
 import GMapReact from "google-map-react";
+import styleParams from "../../constant/styleParams";
 
-function GMap({ steps = [], bpoint, center, ...rest }) {
+function GMap({
+  steps = [],
+  bpoint,
+  center,
+  onMount = () => {},
+  width = "100%",
+  ...rest
+}) {
   const [gMap, setGMap] = useState();
   const [gMaps, setGMaps] = useState();
 
@@ -12,8 +20,8 @@ function GMap({ steps = [], bpoint, center, ...rest }) {
       polylinePath = new gMaps.Polyline({
         path: steps,
         geodesic: false,
-        strokeColor: "#008800",
-        strokeOpacity: 0.8,
+        strokeColor: styleParams.mainColor,
+        strokeOpacity: 1,
         strokeWeight: 8,
         editable: false,
         draggable: false,
@@ -38,108 +46,111 @@ function GMap({ steps = [], bpoint, center, ...rest }) {
       style={{
         // 如果設定高度設定100%,iphone會無法顯示地圖,尚未了解原因,所以先寫死高度
         height: bpoint === "xs" ? "calc(100vh - 140px)" : "100%",
-        width: "100%",
+        width,
       }}
     >
       <GMapReact
         yesIWantToUseGoogleMapApiInternals
-        bootstrapURLKeys={{ key: "AIzaSyCnBX045s9vhUBtjDAGmdKlHAKIP42ljOI" }}
+        // bootstrapURLKeys={{ key: "AIzaSyCnBX045s9vhUBtjDAGmdKlHAKIP42ljOI" }}
         defaultCenter={{
           lat: 25.048,
           lng: 121.516,
         }}
         defaultZoom={15}
-        options={{
-          styles: [
-            { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
-            {
-              elementType: "labels.text.stroke",
-              stylers: [{ color: "#242f3e" }],
-            },
-            {
-              elementType: "labels.text.fill",
-              stylers: [{ color: "#746855" }],
-            },
-            {
-              featureType: "administrative.locality",
-              elementType: "labels.text.fill",
-              stylers: [{ color: "#d59563" }],
-            },
-            {
-              featureType: "poi",
-              elementType: "labels.text.fill",
-              stylers: [{ color: "#d59563" }],
-            },
-            {
-              featureType: "poi.park",
-              elementType: "geometry",
-              stylers: [{ color: "#263c3f" }],
-            },
-            {
-              featureType: "poi.park",
-              elementType: "labels.text.fill",
-              stylers: [{ color: "#6b9a76" }],
-            },
-            {
-              featureType: "road",
-              elementType: "geometry",
-              stylers: [{ color: "#38414e" }],
-            },
-            {
-              featureType: "road",
-              elementType: "geometry.stroke",
-              stylers: [{ color: "#212a37" }],
-            },
-            {
-              featureType: "road",
-              elementType: "labels.text.fill",
-              stylers: [{ color: "#9ca5b3" }],
-            },
-            {
-              featureType: "road.highway",
-              elementType: "geometry",
-              stylers: [{ color: "#746855" }],
-            },
-            {
-              featureType: "road.highway",
-              elementType: "geometry.stroke",
-              stylers: [{ color: "#1f2835" }],
-            },
-            {
-              featureType: "road.highway",
-              elementType: "labels.text.fill",
-              stylers: [{ color: "#f3d19c" }],
-            },
-            {
-              featureType: "transit",
-              elementType: "geometry",
-              stylers: [{ color: "#2f3948" }],
-            },
-            {
-              featureType: "transit.station",
-              elementType: "labels.text.fill",
-              stylers: [{ color: "#d59563" }],
-            },
-            {
-              featureType: "water",
-              elementType: "geometry",
-              stylers: [{ color: "#17263c" }],
-            },
-            {
-              featureType: "water",
-              elementType: "labels.text.fill",
-              stylers: [{ color: "#515c6d" }],
-            },
-            {
-              featureType: "water",
-              elementType: "labels.text.stroke",
-              stylers: [{ color: "#17263c" }],
-            },
-          ],
-        }}
+        options={
+          {
+            // styles: [
+            //   { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
+            //   {
+            //     elementType: "labels.text.stroke",
+            //     stylers: [{ color: "#242f3e" }],
+            //   },
+            //   {
+            //     elementType: "labels.text.fill",
+            //     stylers: [{ color: "#746855" }],
+            //   },
+            //   {
+            //     featureType: "administrative.locality",
+            //     elementType: "labels.text.fill",
+            //     stylers: [{ color: "#d59563" }],
+            //   },
+            //   {
+            //     featureType: "poi",
+            //     elementType: "labels.text.fill",
+            //     stylers: [{ color: "#d59563" }],
+            //   },
+            //   {
+            //     featureType: "poi.park",
+            //     elementType: "geometry",
+            //     stylers: [{ color: "#263c3f" }],
+            //   },
+            //   {
+            //     featureType: "poi.park",
+            //     elementType: "labels.text.fill",
+            //     stylers: [{ color: "#6b9a76" }],
+            //   },
+            //   {
+            //     featureType: "road",
+            //     elementType: "geometry",
+            //     stylers: [{ color: "#38414e" }],
+            //   },
+            //   {
+            //     featureType: "road",
+            //     elementType: "geometry.stroke",
+            //     stylers: [{ color: "#212a37" }],
+            //   },
+            //   {
+            //     featureType: "road",
+            //     elementType: "labels.text.fill",
+            //     stylers: [{ color: "#9ca5b3" }],
+            //   },
+            //   {
+            //     featureType: "road.highway",
+            //     elementType: "geometry",
+            //     stylers: [{ color: "#746855" }],
+            //   },
+            //   {
+            //     featureType: "road.highway",
+            //     elementType: "geometry.stroke",
+            //     stylers: [{ color: "#1f2835" }],
+            //   },
+            //   {
+            //     featureType: "road.highway",
+            //     elementType: "labels.text.fill",
+            //     stylers: [{ color: "#f3d19c" }],
+            //   },
+            //   {
+            //     featureType: "transit",
+            //     elementType: "geometry",
+            //     stylers: [{ color: "#2f3948" }],
+            //   },
+            //   {
+            //     featureType: "transit.station",
+            //     elementType: "labels.text.fill",
+            //     stylers: [{ color: "#d59563" }],
+            //   },
+            //   {
+            //     featureType: "water",
+            //     elementType: "geometry",
+            //     stylers: [{ color: "#17263c" }],
+            //   },
+            //   {
+            //     featureType: "water",
+            //     elementType: "labels.text.fill",
+            //     stylers: [{ color: "#515c6d" }],
+            //   },
+            //   {
+            //     featureType: "water",
+            //     elementType: "labels.text.stroke",
+            //     stylers: [{ color: "#17263c" }],
+            //   },
+            // ],
+          }
+        }
         onGoogleApiLoaded={({ map, maps }) => {
           setGMap(map);
           setGMaps(maps);
+          onMount(map, maps);
           // console.log("steps", steps);
           // const polylinePath = new maps.Polyline({
           //   path: steps,
