@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useState, useCallback } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+  useCallback,
+  useRef,
+} from "react";
 import PropTypes from "prop-types";
 import FlexBox from "../../../component/FlexBox";
 import GMap from "../../../component/gMap/GMap";
@@ -70,6 +76,7 @@ function RouteSelector({
   const [selectedRoute, setSelectedRoute] = useState([]);
   const [selectedRouteId, setSelectedRouteId] = useState();
   const [sortBy] = useState("distance");
+  const refEle = useRef({ list: [] });
 
   const { mainPadding } = useRWDStyleParams();
 
@@ -145,29 +152,33 @@ function RouteSelector({
                     id
                   ) => {
                     return (
-                      <RouteInfoCard
-                        checked={selectedRouteId === id}
+                      <div
                         key={RouteName}
-                        title={RouteName}
-                        distance={Distance}
-                        direction={Direction}
-                        length={CyclingLength}
-                        start={RoadSectionStart}
-                        end={RoadSectionEnd}
-                        onClickBtn={() =>
-                          onSelectRoute({
-                            name: RouteName,
-                            start: RoadSectionStart,
-                            end: RoadSectionEnd,
-                            length: CyclingLength,
-                            direction: Direction,
-                            geometry: Geometry,
-                          })
-                        }
-                        onClick={() =>
-                          handleSelectRoute(map, maps, Geometry, id)
-                        }
-                      />
+                        ref={(ele) => (refEle.current.list[id] = ele)}
+                      >
+                        <RouteInfoCard
+                          checked={selectedRouteId === id}
+                          title={RouteName}
+                          distance={Distance}
+                          direction={Direction}
+                          length={CyclingLength}
+                          start={RoadSectionStart}
+                          end={RoadSectionEnd}
+                          onClickBtn={() =>
+                            onSelectRoute({
+                              name: RouteName,
+                              start: RoadSectionStart,
+                              end: RoadSectionEnd,
+                              length: CyclingLength,
+                              direction: Direction,
+                              geometry: Geometry,
+                            })
+                          }
+                          onClick={() =>
+                            handleSelectRoute(map, maps, Geometry, id)
+                          }
+                        />
+                      </div>
                     );
                   }
                 )
@@ -201,14 +212,17 @@ function RouteSelector({
                   lat={lat}
                   lng={lng}
                   key={id}
-                  onClick={() =>
+                  onClick={() => {
                     handleSelectRoute(
                       map,
                       maps,
                       filteredRouteInfos[id].Geometry,
                       id
-                    )
-                  }
+                    );
+                    refEle.current.list[id].scrollIntoView({
+                      behavior: "smooth",
+                    });
+                  }}
                 />
               ))}
         </GMap>
