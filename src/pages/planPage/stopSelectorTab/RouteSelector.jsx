@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import FlexBox from "../../../component/FlexBox";
 import InfoCard from "../../../component/InfoCard";
@@ -83,6 +83,12 @@ function RouteSelector({
     fitGMapBounds(map, maps, routeStartStops);
   }, [routeStartStops, map, maps]);
 
+  const handleSelectRoute = useCallback((map, maps, geometry) => {
+    setSelectedRoute(geometry);
+    setCenterPos(getCenterPos(geometry));
+    fitGMapBounds(map, maps, geometry);
+  }, []);
+
   return (
     <>
       <FlexBox row></FlexBox>
@@ -121,11 +127,7 @@ function RouteSelector({
                             geometry: Geometry,
                           })
                         }
-                        onClick={() => {
-                          setSelectedRoute(Geometry);
-                          setCenterPos(getCenterPos(Geometry));
-                          fitGMapBounds(map, maps, Geometry);
-                        }}
+                        onClick={() => handleSelectRoute(map, maps, Geometry)}
                         content={
                           <>
                             <span>車道長度：{CyclingLength} 公里</span>
@@ -166,7 +168,18 @@ function RouteSelector({
                   />
                 ))
               : routeStartStops.map(({ lat, lng }, id) => (
-                  <RouteMarker lat={lat} lng={lng} key={id} />
+                  <RouteMarker
+                    lat={lat}
+                    lng={lng}
+                    key={id}
+                    onClick={() =>
+                      handleSelectRoute(
+                        map,
+                        maps,
+                        filteredRouteInfos[id].Geometry
+                      )
+                    }
+                  />
                 ))}
           </GMap>
         </FlexSpin>
