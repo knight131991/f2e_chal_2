@@ -5,11 +5,7 @@ import { ReactComponent as PositionIcon } from "../../images/icon/PositionName.s
 import styled from "styled-components";
 import styleParams from "../../constant/styleParams";
 import BlodBlockText from "../texts/BlodBlockText";
-
-const Divider = styled.div`
-  border-top: 1px solid #bdbdbd;
-  margin: 16px 0;
-`;
+import HDivider from "../HDivider";
 
 const Title = styled(FlexBox)`
   & > *:not(:last-child) {
@@ -32,7 +28,7 @@ function RouteListHeader({ stopName, extraNode, routeNum }) {
         </Title>
         {extraNode}
       </FlexBox>
-      <Divider />
+      <HDivider />
       <Content>共{routeNum}條路線</Content>
     </FlexBox>
   );

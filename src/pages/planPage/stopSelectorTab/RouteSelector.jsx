@@ -12,12 +12,11 @@ import NoDataHint from "../../../component/NoDataHint";
 import FlexSpin from "../../../component/FlexSpin";
 import RouteMarker from "../../../component/gMap/RouteMarker";
 import fitGMapBounds from "../../../utils/fitGMapBounds";
-import RouteStopIcon from "../../../component/gMap/RouteStopIcon";
-import StartIcon from "../../../images/icon/Route_Start.png";
-import EndIcon from "../../../images/icon/Route_End.png";
 import RouteListHeader from "../../../component/list/RouteListHeader";
 import { useRWDStyleParams } from "../../../hooks/useRWD";
 import RouteInfoCard from "../../../component/cards/RouteInfoCard";
+import RouteStartMarker from "../../../component/gMap/RouteStartMark";
+import RouteEndMarker from "../../../component/gMap/RouteEndMark";
 
 const Container = styled(FlexBox)`
   height: 100%;
@@ -114,114 +113,107 @@ function RouteSelector({
   }, []);
 
   return (
-    <>
-      <Container row flex>
-        <FlexSpin spinning={gettingRoute}>
-          <LeftSideContainer paddingLeft={mainPadding}>
-            <RouteListHeader
-              routeNum={filteredRouteInfos.length}
-              stopName={stopInfo.name}
-              extraNode={
-                <StyleLink type="link" onClick={onClickReturn}>
-                  重新選擇站點
-                </StyleLink>
-              }
-            />
-            <ListConainer flex>
-              {filteredRouteInfos.length === 0 ? (
-                <NoDataHint />
-              ) : (
-                filteredRouteInfos
-                  .sort((a, b) => a[sortBy] - b[sortBy])
-                  .map(
-                    (
-                      {
-                        RouteName,
-                        CyclingLength,
-                        RoadSectionStart,
-                        RoadSectionEnd,
-                        Geometry,
-                        Direction,
-                        Distance,
-                      },
-                      id
-                    ) => {
-                      return (
-                        <RouteInfoCard
-                          checked={selectedRouteId === id}
-                          key={RouteName}
-                          title={RouteName}
-                          distance={Distance}
-                          direction={Direction}
-                          length={CyclingLength}
-                          start={RoadSectionStart}
-                          end={RoadSectionEnd}
-                          onClickBtn={() =>
-                            onSelectRoute({
-                              name: RouteName,
-                              start: RoadSectionStart,
-                              end: RoadSectionEnd,
-                              length: CyclingLength,
-                              direction: Direction,
-                              geometry: Geometry,
-                            })
-                          }
-                          onClick={() =>
-                            handleSelectRoute(map, maps, Geometry, id)
-                          }
-                        />
-                      );
-                    }
-                  )
-              )}
-            </ListConainer>
-          </LeftSideContainer>
-          <GMap
-            steps={selectedRoute}
-            width="50%"
-            onMount={(_map, _maps) => {
-              setMap(_map);
-              setMaps(_maps);
-            }}
-          >
-            {filteredRouteInfos.length === 0 && !gettingRoute && (
-              <StyledEmptyResultHint specificStr="路線" />
+    <Container row flex>
+      <FlexSpin spinning={gettingRoute}>
+        <LeftSideContainer paddingLeft={mainPadding}>
+          <RouteListHeader
+            routeNum={filteredRouteInfos.length}
+            stopName={stopInfo.name}
+            extraNode={
+              <StyleLink type="link" onClick={onClickReturn}>
+                重新選擇站點
+              </StyleLink>
+            }
+          />
+          <ListConainer flex>
+            {filteredRouteInfos.length === 0 ? (
+              <NoDataHint />
+            ) : (
+              filteredRouteInfos
+                .sort((a, b) => a[sortBy] - b[sortBy])
+                .map(
+                  (
+                    {
+                      RouteName,
+                      CyclingLength,
+                      RoadSectionStart,
+                      RoadSectionEnd,
+                      Geometry,
+                      Direction,
+                      Distance,
+                    },
+                    id
+                  ) => {
+                    return (
+                      <RouteInfoCard
+                        checked={selectedRouteId === id}
+                        key={RouteName}
+                        title={RouteName}
+                        distance={Distance}
+                        direction={Direction}
+                        length={CyclingLength}
+                        start={RoadSectionStart}
+                        end={RoadSectionEnd}
+                        onClickBtn={() =>
+                          onSelectRoute({
+                            name: RouteName,
+                            start: RoadSectionStart,
+                            end: RoadSectionEnd,
+                            length: CyclingLength,
+                            direction: Direction,
+                            geometry: Geometry,
+                          })
+                        }
+                        onClick={() =>
+                          handleSelectRoute(map, maps, Geometry, id)
+                        }
+                      />
+                    );
+                  }
+                )
             )}
-            <BikeMarker lat={stopInfo.lat} lng={stopInfo.lng} />
-            {selectedRoute.length
-              ? [
-                  { ...selectedRoute[0], icon: StartIcon },
-                  {
-                    ...selectedRoute[selectedRoute.length - 1],
-                    icon: EndIcon,
-                  },
-                ].map(({ lat, lng, icon }, id) => (
-                  <RouteStopIcon
-                    lat={lat}
-                    lng={lng}
-                    key={id}
-                    icon={<img src={icon} alt="route icon" />}
-                  />
-                ))
-              : routeStartStops.map(({ lat, lng }, id) => (
-                  <RouteMarker
-                    lat={lat}
-                    lng={lng}
-                    key={id}
-                    onClick={() =>
-                      handleSelectRoute(
-                        map,
-                        maps,
-                        filteredRouteInfos[id].Geometry
-                      )
-                    }
-                  />
-                ))}
-          </GMap>
-        </FlexSpin>
-      </Container>
-      <FlexBox align="flex-end"></FlexBox>
-    </>
+          </ListConainer>
+        </LeftSideContainer>
+        <GMap
+          steps={selectedRoute}
+          width="50%"
+          onMount={(_map, _maps) => {
+            setMap(_map);
+            setMaps(_maps);
+          }}
+        >
+          {filteredRouteInfos.length === 0 && !gettingRoute && (
+            <StyledEmptyResultHint specificStr="路線" />
+          )}
+          <BikeMarker lat={stopInfo.lat} lng={stopInfo.lng} />
+          {selectedRoute.length
+            ? [
+                { ...selectedRoute[0], Component: RouteStartMarker },
+                {
+                  ...selectedRoute[selectedRoute.length - 1],
+                  Component: RouteEndMarker,
+                },
+              ].map(({ lat, lng, Component }, id) => (
+                <Component lat={lat} lng={lng} key={id} />
+              ))
+            : routeStartStops.map(({ lat, lng }, id) => (
+                <RouteMarker
+                  lat={lat}
+                  lng={lng}
+                  key={id}
+                  onClick={() =>
+                    handleSelectRoute(
+                      map,
+                      maps,
+                      filteredRouteInfos[id].Geometry,
+                      id
+                    )
+                  }
+                />
+              ))}
+        </GMap>
+      </FlexSpin>
+    </Container>
   );
 }
 

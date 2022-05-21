@@ -98,10 +98,10 @@ RouteInfoCard.propTypes = {
   direction: PropTypes.string,
   onClick: PropTypes.func,
   onClickBtn: PropTypes.func,
-  length: PropTypes.number,
+  length: PropTypes.string,
   start: PropTypes.string,
   end: PropTypes.string,
-  distance: PropTypes.number,
+  distance: PropTypes.string,
   checked: PropTypes.bool,
 };
 
