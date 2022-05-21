@@ -12,6 +12,11 @@ import appendDistanceToRouteInfo from "../../../utils/appendDistanceToRouteInfo"
 import LinkBtn from "../../../component/LinkBtn";
 import NoDataHint from "../../../component/NoDataHint";
 import FlexSpin from "../../../component/FlexSpin";
+import RouteMarker from "../../../component/gMap/RouteMarker";
+import fitGMapBounds from "../../../utils/fitGMapBounds";
+import RouteStopIcon from "../../../component/gMap/RouteStopIcon";
+import StartIcon from "../../../images/icon/Route_Start.png";
+import EndIcon from "../../../images/icon/Route_End.png";
 
 const Container = styled(FlexBox)`
   height: 100%;
@@ -39,6 +44,9 @@ function RouteSelector({
     isLoading: gettingRoute,
     data: routeInfos,
   } = useGetRoute([]);
+
+  const [map, setMap] = useState();
+  const [maps, setMaps] = useState();
   const [selectedRoute, setSelectedRoute] = useState([]);
   const [centerPos, setCenterPos] = useState();
   const [sortBy] = useState("distance");
@@ -56,10 +64,24 @@ function RouteSelector({
     );
   }, [getRoute, city, stopInfo, searchKey, routeLen]);
 
-  const filterdRouteInfos = useMemo(() => {
-    if (dirFilter.length === 0) return routeInfos;
-    return routeInfos.filter(({ Direction }) => dirFilter.includes(Direction));
+  const { filteredRouteInfos, routeStartStops } = useMemo(() => {
+    let filteredRoutes = routeInfos;
+    if (dirFilter.length !== 0)
+      filteredRoutes = routeInfos.filter(({ Direction }) =>
+        dirFilter.includes(Direction)
+      );
+
+    const routeStartStops = filteredRoutes.map(({ Geometry }) => Geometry?.[0]);
+    return { filteredRouteInfos: filteredRoutes, routeStartStops };
   }, [dirFilter, routeInfos]);
+
+  useEffect(() => {
+    setSelectedRoute([]);
+  }, [city, stopInfo, searchKey, routeLen, dirFilter]);
+
+  useEffect(() => {
+    fitGMapBounds(map, maps, routeStartStops);
+  }, [routeStartStops, map, maps]);
 
   return (
     <>
@@ -67,12 +89,12 @@ function RouteSelector({
       <Container row flex>
         <FlexSpin spinning={gettingRoute}>
           <ListConainer flex>
-            共{filterdRouteInfos.length}條路線
+            共{filteredRouteInfos.length}條路線
             {stopInfo.name}
-            {filterdRouteInfos.length === 0 ? (
+            {filteredRouteInfos.length === 0 ? (
               <NoDataHint />
             ) : (
-              filterdRouteInfos
+              filteredRouteInfos
                 .sort((a, b) => a[sortBy] - b[sortBy])
                 .map(
                   ({
@@ -102,6 +124,7 @@ function RouteSelector({
                         onClick={() => {
                           setSelectedRoute(Geometry);
                           setCenterPos(getCenterPos(Geometry));
+                          fitGMapBounds(map, maps, Geometry);
                         }}
                         content={
                           <>
@@ -118,11 +141,33 @@ function RouteSelector({
                 )
             )}
           </ListConainer>
-          <GMap steps={selectedRoute} center={centerPos}>
-            {filterdRouteInfos.length === 0 && !gettingRoute && (
+          <GMap
+            steps={selectedRoute}
+            center={centerPos}
+            onMount={(_map, _maps) => {
+              setMap(_map);
+              setMaps(_maps);
+            }}
+          >
+            {filteredRouteInfos.length === 0 && !gettingRoute && (
               <StyledEmptyResultHint specificStr="路線" />
             )}
             <BikeMarker lat={stopInfo.lat} lng={stopInfo.lng} />
+            {selectedRoute.length
+              ? [
+                  { ...selectedRoute[0], icon: StartIcon },
+                  { ...selectedRoute[selectedRoute.length - 1], icon: EndIcon },
+                ].map(({ lat, lng, icon }, id) => (
+                  <RouteStopIcon
+                    lat={lat}
+                    lng={lng}
+                    key={id}
+                    icon={<img src={icon} alt="route icon" />}
+                  />
+                ))
+              : routeStartStops.map(({ lat, lng }, id) => (
+                  <RouteMarker lat={lat} lng={lng} key={id} />
+                ))}
           </GMap>
         </FlexSpin>
       </Container>

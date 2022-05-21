@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Select from "./Select";
 import CitySelector from "./CitySelector";
@@ -24,32 +24,34 @@ function CityYoubikeSelector({
   const handleCityChange = useCallback(
     (val) => {
       onCityChange(val);
-
-      switch (val) {
-        case cityEnum.tpe.value:
-        case cityEnum.nwt.value:
-        case cityEnum.txg.value:
-          if (!youbikeVal) onYoubikeChange(1);
-          setOptions(youbikeList);
-          break;
-        case cityEnum.tyn.value:
-        case cityEnum.hsz.value:
-        case cityEnum.zmi.value:
-          if (youbikeVal === 2 || !youbikeVal) onYoubikeChange(1);
-          setOptions(youbikeList.filter((item) => item.value === 1));
-          break;
-        case cityEnum.cyi.value:
-        case cityEnum.khh.value:
-          if (youbikeVal === 1 || !youbikeVal) onYoubikeChange(2);
-          setOptions(youbikeList.filter((item) => item.value === 2));
-          break;
-        default:
-          onYoubikeChange(undefined);
-          setOptions([]);
-      }
     },
-    [youbikeVal, onYoubikeChange, onCityChange]
+    [onCityChange]
   );
+
+  useEffect(() => {
+    switch (cityVal) {
+      case cityEnum.tpe.value:
+      case cityEnum.nwt.value:
+      case cityEnum.txg.value:
+        if (!youbikeVal) onYoubikeChange(1);
+        setOptions(youbikeList);
+        break;
+      case cityEnum.tyn.value:
+      case cityEnum.hsz.value:
+      case cityEnum.zmi.value:
+        if (youbikeVal === 2 || !youbikeVal) onYoubikeChange(1);
+        setOptions(youbikeList.filter((item) => item.value === 1));
+        break;
+      case cityEnum.cyi.value:
+      case cityEnum.khh.value:
+        if (youbikeVal === 1 || !youbikeVal) onYoubikeChange(2);
+        setOptions(youbikeList.filter((item) => item.value === 2));
+        break;
+      default:
+        onYoubikeChange(undefined);
+        setOptions([]);
+    }
+  }, [cityVal, onYoubikeChange, youbikeVal]);
 
   return (
     <Container row>

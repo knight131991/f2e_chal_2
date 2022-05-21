@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import GMap from "../../../component/gMap/GMap";
 import getPos from "../../../utils/getPos";
@@ -8,11 +8,14 @@ import EmptyResultHint from "../../../component/EmptyResultHint";
 import styled from "styled-components";
 import FlexSpin from "../../../component/FlexSpin";
 import utcToTime from "../../../utils/utcToTime";
+import fitGMapBounds from "../../../utils/fitGMapBounds";
 
 const StyledEmptyResultHint = styled(EmptyResultHint)`
   transform: translate(-50%, -50%);
 `;
 function StopSelector({ stops, onSelectStop, loading, showEmptyHint }) {
+  const [map, setMap] = useState();
+  const [maps, setMaps] = useState();
   const mapCenter = useMemo(
     () =>
       getCenterPos(
@@ -24,9 +27,24 @@ function StopSelector({ stops, onSelectStop, loading, showEmptyHint }) {
     [stops]
   );
 
+  useEffect(() => {
+    // 計算可視邊界
+    fitGMapBounds(
+      map,
+      maps,
+      stops.map((stop) => getPos(stop))
+    );
+  }, [stops, map, maps]);
+
   return (
     <FlexSpin spinning={loading}>
-      <GMap center={mapCenter}>
+      <GMap
+        center={mapCenter}
+        onMount={(_map, _maps) => {
+          setMap(_map);
+          setMaps(_maps);
+        }}
+      >
         {showEmptyHint ? (
           <StyledEmptyResultHint />
         ) : (
