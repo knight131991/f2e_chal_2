@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import FlexBox from "../../../component/FlexBox";
-import InfoCard from "../../../component/cards/InfoCard";
 import GMap from "../../../component/gMap/GMap";
 import useGetRoute from "../../../hooks/useGetRoute";
 import styled from "styled-components";
@@ -18,8 +17,7 @@ import StartIcon from "../../../images/icon/Route_Start.png";
 import EndIcon from "../../../images/icon/Route_End.png";
 import RouteListHeader from "../../../component/list/RouteListHeader";
 import { useRWDStyleParams } from "../../../hooks/useRWD";
-import StateLabel from "../../../component/StateLabel";
-// import styleParams from '../../../constant/styleParams';
+import RouteInfoCard from "../../../component/cards/RouteInfoCard";
 
 const Container = styled(FlexBox)`
   height: 100%;
@@ -29,7 +27,7 @@ const ListConainer = styled(FlexBox)`
   overflow: auto;
   margin-top: 16px;
   padding-right: 2px;
-  & > *:not(:last-child) {
+  & > * {
     margin-bottom: 16px;
   }
 `;
@@ -133,10 +131,14 @@ function RouteSelector({
                       Distance,
                     }) => {
                       return (
-                        <InfoCard
+                        <RouteInfoCard
                           key={RouteName}
                           title={RouteName}
-                          btnName="挑戰此路線"
+                          distance={Distance}
+                          direction={Direction}
+                          length={CyclingLength}
+                          start={RoadSectionStart}
+                          end={RoadSectionEnd}
                           onClickBtn={() =>
                             onSelectRoute({
                               name: RouteName,
@@ -148,16 +150,6 @@ function RouteSelector({
                             })
                           }
                           onClick={() => handleSelectRoute(map, maps, Geometry)}
-                          extraTitle={<StateLabel label={Direction} />}
-                          content={
-                            <>
-                              <span>車道長度：{CyclingLength} 公里</span>
-                              <span>
-                                {RoadSectionStart} - {RoadSectionEnd}
-                              </span>
-                              <span> 鄰近起點： {Distance} 公里</span>
-                            </>
-                          }
                         />
                       );
                     }
