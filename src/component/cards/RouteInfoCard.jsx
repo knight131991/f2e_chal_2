@@ -46,6 +46,7 @@ function RouteInfoCard({
   onClick,
   onClickBtn,
   length,
+  checked,
   start,
   end,
   distance,
@@ -56,6 +57,7 @@ function RouteInfoCard({
       btnName="挑戰此路線"
       onClickBtn={onClickBtn}
       onClick={onClick}
+      checked={checked}
       extraTitle={direction && <StyledStateLable label={direction} />}
       content={
         <>
@@ -89,6 +91,7 @@ RouteInfoCard.defaultProps = {
   start: "",
   end: "",
   distance: undefined,
+  checked: false,
 };
 RouteInfoCard.propTypes = {
   title: PropTypes.string,
@@ -99,6 +102,7 @@ RouteInfoCard.propTypes = {
   start: PropTypes.string,
   end: PropTypes.string,
   distance: PropTypes.number,
+  checked: PropTypes.bool,
 };
 
 export default RouteInfoCard;

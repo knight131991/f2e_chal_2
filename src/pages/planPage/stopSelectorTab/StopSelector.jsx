@@ -16,6 +16,7 @@ const StyledEmptyResultHint = styled(EmptyResultHint)`
 function StopSelector({ stops, onSelectStop, loading, showEmptyHint }) {
   const [map, setMap] = useState();
   const [maps, setMaps] = useState();
+  const [selectedStop, setSelectedStop] = useState();
   const mapCenter = useMemo(
     () =>
       getCenterPos(
@@ -70,6 +71,9 @@ function StopSelector({ stops, onSelectStop, loading, showEmptyHint }) {
                 address={address}
                 btnText="選擇路線"
                 showBtn
+                showInfoCard={selectedStop === id}
+                onClick={() => setSelectedStop(id)}
+                onCloseInfoCard={() => setSelectedStop()}
                 errHint={!AvailableRentBikes && "目前無車輛可租用"}
                 onClickInfoCardBtn={() =>
                   onSelectStop({ lat, lng, name, address })

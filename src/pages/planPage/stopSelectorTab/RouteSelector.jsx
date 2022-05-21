@@ -61,6 +61,7 @@ function RouteSelector({
   const [map, setMap] = useState();
   const [maps, setMaps] = useState();
   const [selectedRoute, setSelectedRoute] = useState([]);
+  const [selectedRouteId, setSelectedRouteId] = useState();
   const [sortBy] = useState("distance");
 
   const { mainPadding } = useRWDStyleParams();
@@ -91,15 +92,17 @@ function RouteSelector({
 
   useEffect(() => {
     setSelectedRoute([]);
+    setSelectedRouteId();
   }, [city, stopInfo, searchKey, routeLen, dirFilter]);
 
   useEffect(() => {
     fitGMapBounds(map, maps, routeStartStops);
   }, [routeStartStops, map, maps]);
 
-  const handleSelectRoute = useCallback((map, maps, geometry) => {
+  const handleSelectRoute = useCallback((map, maps, geometry, id) => {
     setSelectedRoute(geometry);
     fitGMapBounds(map, maps, geometry);
+    setSelectedRouteId(id);
   }, []);
 
   return (
@@ -121,17 +124,21 @@ function RouteSelector({
                 filteredRouteInfos
                   .sort((a, b) => a[sortBy] - b[sortBy])
                   .map(
-                    ({
-                      RouteName,
-                      CyclingLength,
-                      RoadSectionStart,
-                      RoadSectionEnd,
-                      Geometry,
-                      Direction,
-                      Distance,
-                    }) => {
+                    (
+                      {
+                        RouteName,
+                        CyclingLength,
+                        RoadSectionStart,
+                        RoadSectionEnd,
+                        Geometry,
+                        Direction,
+                        Distance,
+                      },
+                      id
+                    ) => {
                       return (
                         <RouteInfoCard
+                          checked={selectedRouteId === id}
                           key={RouteName}
                           title={RouteName}
                           distance={Distance}
@@ -149,7 +156,9 @@ function RouteSelector({
                               geometry: Geometry,
                             })
                           }
-                          onClick={() => handleSelectRoute(map, maps, Geometry)}
+                          onClick={() =>
+                            handleSelectRoute(map, maps, Geometry, id)
+                          }
                         />
                       );
                     }

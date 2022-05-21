@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { ReactComponent as AvailableMark } from "../../images/map_available.svg";
@@ -111,6 +111,9 @@ function Marker({
   name,
   address,
   onClickInfoCardBtn,
+  onCloseInfoCard = () => {},
+  onClick = () => {},
+  showInfoCard,
   btnText,
   showBtn,
   showAvaInfo,
@@ -120,15 +123,14 @@ function Marker({
   updateTime,
   ...rest
 }) {
-  const [showInfo, setShowInfo] = useState(false);
   return (
-    <Container {...rest} showInfo={showInfo}>
+    <Container {...rest} showInfo={showInfoCard}>
       <TextWrapper>{num}</TextWrapper>
-      {showInfo && (
+      {showInfoCard && (
         <InfoCardContainer onClick={(e) => e.stopPropagation()}>
           <InfoCardTitleBar flex row justify="space-between" align="center">
             <TitleWrapper title={name}>{name}</TitleWrapper>
-            <StyledCloseIcon onClick={() => setShowInfo(false)} />
+            <StyledCloseIcon onClick={onCloseInfoCard} />
           </InfoCardTitleBar>
           <div>{address}</div>
           {showAvaInfo && (
@@ -164,7 +166,7 @@ function Marker({
       <StyledAvailableMark
         num={num}
         onClick={(e) => {
-          setShowInfo(true);
+          onClick();
           e.stopPropagation();
         }}
       />

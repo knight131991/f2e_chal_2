@@ -14,12 +14,19 @@ function InfoCard({
   btnName,
   onClickBtn,
   onClickLike,
+  checked,
   className,
   extraTitle,
   onClick,
 }) {
   return (
-    <Card row justify="space-between" className={className} onClick={onClick}>
+    <Card
+      row
+      justify="space-between"
+      className={className}
+      onClick={onClick}
+      checked={checked}
+    >
       <FlexBox>
         <FlexBox row flex align="center">
           <BlodBlockText>{title}</BlodBlockText>
