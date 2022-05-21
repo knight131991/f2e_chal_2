@@ -43,7 +43,11 @@ export default styled((props) => <Button {...props} />)`
       `;
     } else if (type === "link") {
       return `
-        color: #fff;
+        color: ${styleParams.mainColor};
+        
+        &:hover {
+          color: ${styleParams.mainColor};
+        }
         `;
     }
   }}

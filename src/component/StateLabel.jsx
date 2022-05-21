@@ -5,7 +5,7 @@ import FlexBox from "./FlexBox";
 import styleParams from "../constant/styleParams";
 
 export default styled(({ label, ...rest }) => (
-  <FlexBox {...rest}>{label}</FlexBox>
+  <FlexBox noShrink {...rest}>{label}</FlexBox>
 ))`
   background-color: #f5f5f5;
   border-radius: 100px;

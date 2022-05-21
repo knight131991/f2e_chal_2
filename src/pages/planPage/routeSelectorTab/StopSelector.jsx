@@ -10,7 +10,7 @@ import useGetBikeStopInfo from "../../../hooks/useGetBikeStopInfo";
 import directionEnum from "../../../constant/directionEnum";
 import Marker from "../../../component/gMap/Marker";
 import getCenterPos from "../../../utils/getCenterPos";
-import LinkBtn from "../../../component/LinkBtn";
+import Button from "../../../component/Button";
 import EmptyResultHint from "../../../component/EmptyResultHint";
 import styled from "styled-components";
 import FlexSpin from "../../../component/FlexSpin";
@@ -125,7 +125,9 @@ function StopSelector({ city, routeInfos, onClickReturn, onSelectStop }) {
         </GMap>
       </FlexSpin>
       <FlexBox align="flex-end">
-        <LinkBtn onClick={onClickReturn}>重新選擇自行車路線</LinkBtn>
+        <Button type="link" onClick={onClickReturn}>
+          重新選擇自行車路線
+        </Button>
       </FlexBox>
     </FlexBox>
   );

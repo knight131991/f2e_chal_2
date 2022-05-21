@@ -7,7 +7,7 @@ import styled from "styled-components";
 import EmptyResultHint from "../../../component/EmptyResultHint";
 import BikeMarker from "../../../component/gMap/BikeMarker";
 import appendDistanceToRouteInfo from "../../../utils/appendDistanceToRouteInfo";
-import LinkBtn from "../../../component/LinkBtn";
+import Button from "../../../component/Button";
 import NoDataHint from "../../../component/NoDataHint";
 import FlexSpin from "../../../component/FlexSpin";
 import RouteMarker from "../../../component/gMap/RouteMarker";
@@ -41,6 +41,14 @@ const LeftSideContainer = styled(({ paddingLeft, ...rest }) => (
 ))`
   width: 50%;
   margin: 26px 26px 0 ${({ paddingLeft }) => paddingLeft};
+`;
+
+const StyleLink = styled(Button)`
+  color: #df9300;
+
+  &:hover {
+    color: #df9300;
+  }
 `;
 
 function RouteSelector({
@@ -114,7 +122,9 @@ function RouteSelector({
               routeNum={filteredRouteInfos.length}
               stopName={stopInfo.name}
               extraNode={
-                <LinkBtn onClick={onClickReturn}>重新選擇站點</LinkBtn>
+                <StyleLink type="link" onClick={onClickReturn}>
+                  重新選擇站點
+                </StyleLink>
               }
             />
             <ListConainer flex>

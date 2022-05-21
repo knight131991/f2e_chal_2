@@ -8,6 +8,13 @@ import FlexBox from "../FlexBox";
 import styled from "styled-components";
 import BlodBlockText from "../texts/BlodBlockText";
 
+const StyledTitle = styled(BlodBlockText)`
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 1;
+  display: -webkit-box;
+`;
+
 function InfoCard({
   title,
   content,
@@ -29,7 +36,7 @@ function InfoCard({
     >
       <FlexBox>
         <FlexBox row flex align="center">
-          <BlodBlockText>{title}</BlodBlockText>
+          <StyledTitle>{title}</StyledTitle>
           {extraTitle}
         </FlexBox>
         {content}
