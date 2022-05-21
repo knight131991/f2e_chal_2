@@ -5,7 +5,7 @@ import DarkPad from "../component/DarkPad";
 import FlexBox from "../component/FlexBox";
 import FlexSpin from "../component/FlexSpin";
 import GMap from "../component/gMap/GMap";
-import InfoCard from "../component/InfoCard";
+import InfoCard from "../component/cards/InfoCard";
 import NoDataHint from "../component/NoDataHint";
 import RouteFilters from "../component/RouteFilters";
 import { useOrderChange } from "../component/RouteOrderSelector";

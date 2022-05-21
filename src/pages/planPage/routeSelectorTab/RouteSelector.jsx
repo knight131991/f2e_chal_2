@@ -4,7 +4,7 @@ import FlexBox from "../../../component/FlexBox";
 import { useOrderChange } from "../../../component/RouteOrderSelector";
 import { Input } from "antd";
 import styled from "styled-components";
-import InfoCard from "../../../component/InfoCard";
+import InfoCard from "../../../component/cards/InfoCard";
 import GMap from "../../../component/gMap/GMap";
 import getCenterPos from "../../../utils/getCenterPos";
 import RouteFilters from "../../../component/RouteFilters";

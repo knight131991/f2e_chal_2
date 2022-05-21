@@ -1,13 +1,13 @@
 import React from "react";
 // import PropTypes from 'prop-types'
 // import { Button } from "antd";
-import Button from "./Button";
+import Button from "../Button";
 import Card from "./Card";
 // import styled from "styled-components";
-import FlexBox from "./FlexBox";
-import { ReactComponent as Like } from "../images/Like/Outlined.svg";
+import FlexBox from "../FlexBox";
+import { ReactComponent as Like } from "../../images/Like/Outlined.svg";
 import styled from "styled-components";
-import BlodBlockText from "./texts/BlodBlockText";
+import BlodBlockText from "../texts/BlodBlockText";
 
 function InfoCard({
   title,
@@ -16,12 +16,16 @@ function InfoCard({
   onClickBtn,
   onClickLike,
   className,
+  extraTitle,
   onClick,
 }) {
   return (
     <Card row justify="space-between" className={className} onClick={onClick}>
       <FlexBox>
-        <BlodBlockText>{title}</BlodBlockText>
+        <FlexBox row flex align="center">
+          <BlodBlockText>{title}</BlodBlockText>
+          {extraTitle}
+        </FlexBox>
         {content}
       </FlexBox>
       <FlexBox justify="space-between" align="flex-end">

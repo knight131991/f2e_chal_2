@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import FlexBox from "../../../component/FlexBox";
-import InfoCard from "../../../component/InfoCard";
+import InfoCard from "../../../component/cards/InfoCard";
 import GMap from "../../../component/gMap/GMap";
 import useGetRoute from "../../../hooks/useGetRoute";
 import styled from "styled-components";
@@ -18,6 +18,7 @@ import StartIcon from "../../../images/icon/Route_Start.png";
 import EndIcon from "../../../images/icon/Route_End.png";
 import RouteListHeader from "../../../component/list/RouteListHeader";
 import { useRWDStyleParams } from "../../../hooks/useRWD";
+import StateLabel from "../../../component/StateLabel";
 // import styleParams from '../../../constant/styleParams';
 
 const Container = styled(FlexBox)`
@@ -147,6 +148,7 @@ function RouteSelector({
                             })
                           }
                           onClick={() => handleSelectRoute(map, maps, Geometry)}
+                          extraTitle={<StateLabel label={Direction} />}
                           content={
                             <>
                               <span>車道長度：{CyclingLength} 公里</span>
