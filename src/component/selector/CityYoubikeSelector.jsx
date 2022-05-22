@@ -55,10 +55,10 @@ function CityYoubikeSelector({
       onCityChange(val);
       cityTypeSwitch(
         val,
-        !youbikeVal && onYoubikeChange(1),
-        !(youbikeVal === 2 || !youbikeVal) && onYoubikeChange(1),
-        !(youbikeVal === 1 || !youbikeVal) && onYoubikeChange(2),
-        onYoubikeChange()
+        () => !youbikeVal && onYoubikeChange(1),
+        () => !(youbikeVal === 2 || !youbikeVal) && onYoubikeChange(1),
+        () => !(youbikeVal === 1 || !youbikeVal) && onYoubikeChange(2),
+        () => onYoubikeChange()
       );
     },
     [onCityChange, onYoubikeChange, youbikeVal, cityTypeSwitch]
@@ -67,10 +67,10 @@ function CityYoubikeSelector({
   useEffect(() => {
     cityTypeSwitch(
       cityVal,
-      setOptions(youbikeList),
-      setOptions(youbikeList.filter((item) => item.value === 1)),
-      setOptions(youbikeList.filter((item) => item.value === 2)),
-      setOptions([])
+      () => setOptions(youbikeList),
+      () => setOptions(youbikeList.filter((item) => item.value === 1)),
+      () => setOptions(youbikeList.filter((item) => item.value === 2)),
+      () => setOptions([])
     );
   }, [cityVal, onYoubikeChange, youbikeVal, cityTypeSwitch]);
 
