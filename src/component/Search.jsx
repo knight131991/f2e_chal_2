@@ -8,7 +8,7 @@ export default styled(({ onPressEnter, ...rest }) => (
   <Input
     allowClear
     prefix={<SearchIcon />}
-    onPressEnter={(e) => onPressEnter(e.target.value)}
+    onChange={(e) => onPressEnter(e.target.value)}
     {...rest}
   />
 ))`
