@@ -144,7 +144,7 @@ function FinishPage({
           { ...geometry[0], Component: RouteStartMarker },
           { ...geometry[geometry.length - 1], Component: RouteEndMarker },
         ].map(({ lat, lng, Component }, id) => (
-          <Component lat={lat} lng={lng} id={id} />
+          <Component lat={lat} lng={lng} key={id} />
         ))}
       </GMap>
     </Container>
