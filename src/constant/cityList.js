@@ -26,4 +26,8 @@ export const cityEnum = {
   knh: cityList[10],
 };
 
+// 新竹市沒有自行車路線，所以偷偷把他轉換到新竹縣
+export const stopCityMaptoRouteCity = (city) =>
+  city === cityEnum.hsz.value ? "HsinchuCounty" : city;
+
 export default cityList;

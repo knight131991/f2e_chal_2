@@ -93,6 +93,7 @@ const StyledSelect = styled(({ minW, fontSize, ...rest }) => (
     display: flex;
     align-items: center;
     color: ${styleParams.grayText};
+    margin-right: 8px;
   }
 
   & .ant-select-arrow {

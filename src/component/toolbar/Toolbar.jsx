@@ -1,9 +1,9 @@
 import React from "react";
 // import PropTypes from "prop-types";
-import FlexBox from "./FlexBox";
+import FlexBox from "../FlexBox";
 import styled from "styled-components";
-import { useRWDStyleParams } from "../hooks/useRWD";
-import styleParams from "../constant/styleParams";
+import { useRWDStyleParams } from "../../hooks/useRWD";
+import styleParams from "../../constant/styleParams";
 
 const Container = styled(({ padding, height, ...rest }) => (
   <FlexBox {...rest} />

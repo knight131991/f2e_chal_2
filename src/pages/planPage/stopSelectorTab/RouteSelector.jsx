@@ -23,6 +23,7 @@ import { useRWDStyleParams } from "../../../hooks/useRWD";
 import RouteInfoCard from "../../../component/cards/RouteInfoCard";
 import RouteStartMarker from "../../../component/gMap/RouteStartMark";
 import RouteEndMarker from "../../../component/gMap/RouteEndMark";
+import { stopCityMaptoRouteCity } from "../../../constant/cityList";
 
 const Container = styled(FlexBox)`
   height: 100%;
@@ -82,7 +83,7 @@ function RouteSelector({
 
   useEffect(() => {
     getRoute(
-      city,
+      stopCityMaptoRouteCity(city),
       (routes) => {
         const infos = appendDistanceToRouteInfo(stopInfo, routes);
         infos.sort((a, b) => a.CyclingLength - b.CyclingLength);
