@@ -4,6 +4,7 @@ import { Select as AntSelect } from "antd";
 import styled from "styled-components";
 import styleParams from "../../constant/styleParams";
 import { ReactComponent as Down } from "../../images/icon/Down.svg";
+import useRWD from "../../hooks/useRWD";
 
 const SuffixIcon = styled(({ disabled, ...rest }) => <Down {...rest} />)`
   transform: translate(-11px, -25%);
@@ -34,19 +35,11 @@ const StyledDropdown = styled(({ component, ...rest }) => (
   }
 `;
 
-export default styled((props) => (
-  <AntSelect
-    dropdownStyle={{
-      border: `1px solid ${styleParams.mainColorDark}`,
-      borderRadius: "8px",
-    }}
-    dropdownRender={(origin) => <StyledDropdown component={origin} />}
-    suffixIcon={<SuffixIcon disabled={props.disabled} />}
-    {...props}
-  />
+const StyledSelect = styled(({ minW, fontSize, ...rest }) => (
+  <AntSelect {...rest} />
 ))`
-  min-width: 170px;
-  font-size: 16px;
+  min-width: ${({ minW }) => minW}px;
+  font-size: ${({ fontSize }) => fontSize}px;
   color: ${styleParams.grayText};
 
   &:not(.ant-select-customize-input) {
@@ -106,3 +99,25 @@ export default styled((props) => (
     right: 16px;
   }
 `;
+
+const Select = (props) => {
+  const { minW, fontSize } = useRWD(
+    { minW: 170, fontSize: 16 },
+    { m: { minW: 150 }, s: { minW: 50, fontSize: 14 } }
+  );
+  return (
+    <StyledSelect
+      dropdownStyle={{
+        border: `1px solid ${styleParams.mainColorDark}`,
+        borderRadius: "8px",
+      }}
+      dropdownRender={(origin) => <StyledDropdown component={origin} />}
+      suffixIcon={<SuffixIcon disabled={props.disabled} />}
+      minW={minW}
+      fontSize={fontSize}
+      {...props}
+    />
+  );
+};
+
+export default Select;

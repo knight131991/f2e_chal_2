@@ -56,8 +56,8 @@ function CityYoubikeSelector({
       cityTypeSwitch(
         val,
         () => !youbikeVal && onYoubikeChange(1),
-        () => !(youbikeVal === 2 || !youbikeVal) && onYoubikeChange(1),
-        () => !(youbikeVal === 1 || !youbikeVal) && onYoubikeChange(2),
+        () => (youbikeVal === 2 || !youbikeVal) && onYoubikeChange(1),
+        () => (youbikeVal === 1 || !youbikeVal) && onYoubikeChange(2),
         () => onYoubikeChange()
       );
     },

@@ -5,8 +5,10 @@ import styled from "styled-components";
 import { useRWDStyleParams } from "../hooks/useRWD";
 import styleParams from "../constant/styleParams";
 
-const Container = styled(({ padding, ...rest }) => <FlexBox {...rest} />)`
-  height: 96px;
+const Container = styled(({ padding, height, ...rest }) => (
+  <FlexBox {...rest} />
+))`
+  height: ${({ height = styleParams.toolbarHeight }) => height}px;
   box-shadow: 0px 4px 9px rgba(0, 0, 0, 0.1);
   background-color: ${styleParams.bg};
   padding: ${({ padding }) => padding};

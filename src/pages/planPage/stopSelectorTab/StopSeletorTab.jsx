@@ -9,13 +9,15 @@ import useGetBikeStopInfo from "../../../hooks/useGetBikeStopInfo";
 import Toolbar from "../../../component/Toolbar";
 import ModeSelector from "../ModeSelector";
 import FlexBox from "../../../component/FlexBox";
-import CityYoubikeSelector from "../../../component/selector/CityYoubikeSelector";
 import styled from "styled-components";
 import MainContentContainer from "../../../component/MainContentContainer";
 import DistanceSelector from "../../../component/selector/DistanceSelector";
 import Search from "../../../component/Search";
 import CheckboxGroup from "../../../component/CheckboxGroup";
 import { directionList } from "../../../constant/directionEnum";
+import useRWD from "../../../hooks/useRWD";
+import screenEnum from "../../../constant/screenEnum";
+import StopSelectorToolbar from "./StopSelectorToolbar";
 
 const Divider = styled.div`
   border-left: 1px solid #e0e0e0;
@@ -37,6 +39,7 @@ export default function StopSeletorTab({ onModeChange }) {
   // const history = useHistory();
   // const { lat, log } = queryString.parse(history.location.search);
   const { getBikeStopInfo, data, loading } = useGetBikeStopInfo([]);
+  const { screen } = useRWD();
 
   useEffect(() => {
     getBikeStopInfo({
@@ -47,9 +50,10 @@ export default function StopSeletorTab({ onModeChange }) {
     });
   }, [getBikeStopInfo, city, youbikeVer, searchStop]);
 
-  const { component, toolbarComponent } = useMemo(() => {
+  const { component, toolbarComponent, secondToolbar } = useMemo(() => {
     let component = null;
     let toolbarComponent = null;
+    let secondToolbar = null;
     switch (curMode) {
       case "stop":
         component = (
@@ -64,19 +68,28 @@ export default function StopSeletorTab({ onModeChange }) {
             }}
           />
         );
-        toolbarComponent = (
+        toolbarComponent = screen >= screenEnum.lg && (
           <>
             <Divider />
-            <FlexBox row justify="space-between" flex align="center">
-              <CityYoubikeSelector
-                cityVal={city}
-                onCityChange={setCity}
-                onYoubikeChange={setYoubikeVer}
-                youbikeVal={youbikeVer}
-              />
-              <Search placeholder="站點搜尋" onPressEnter={setSearchStop} />
-            </FlexBox>
+            <StopSelectorToolbar
+              city={city}
+              onCityChange={setCity}
+              onYoubikeChange={setYoubikeVer}
+              youbikeVer={youbikeVer}
+              onSearch={setSearchStop}
+            />
           </>
+        );
+        secondToolbar = screen < screenEnum.lg && (
+          <Toolbar height={78}>
+            <StopSelectorToolbar
+              city={city}
+              onCityChange={setCity}
+              onYoubikeChange={setYoubikeVer}
+              youbikeVer={youbikeVer}
+              onSearch={setSearchStop}
+            />
+          </Toolbar>
         );
         break;
       case "route":
@@ -123,6 +136,7 @@ export default function StopSeletorTab({ onModeChange }) {
     return {
       component,
       toolbarComponent,
+      secondToolbar,
     };
   }, [
     curMode,
@@ -136,6 +150,7 @@ export default function StopSeletorTab({ onModeChange }) {
     routeLen,
     searchRoute,
     dirFilter,
+    screen,
   ]);
 
   return (
@@ -144,7 +159,10 @@ export default function StopSeletorTab({ onModeChange }) {
         <ModeSelector onChange={onModeChange} />
         {toolbarComponent}
       </Toolbar>
-      <MainContentContainer>{component}</MainContentContainer>
+      {secondToolbar}
+      <MainContentContainer hasSecondToolbar={Boolean(secondToolbar)}>
+        {component}
+      </MainContentContainer>
     </>
   );
 }

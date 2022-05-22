@@ -9,6 +9,7 @@ const StyledRGroup = styled(Radio.Group)`
   min-height: 64px;
   background-color: #f5f5f5;
   border-radius: 100px;
+  white-space: nowrap;
 
   & .ant-radio-button-wrapper {
     border-radius: 100px;

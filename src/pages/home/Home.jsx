@@ -35,11 +35,14 @@ const FullHeightContent = styled(({ paddingLeft, isSmScreen, ...rest }) => (
   }
 `;
 
-const StyledButton = styled(Button)`
-  max-width: 288px;
+const StyledButton = styled(({ isSmScreen, paddingRight, ...rest }) => (
+  <Button {...rest} />
+))`
+  max-width: ${(props) => (props.isSmScreen ? "none" : "288px")};
   height: 60px;
   font-size: 20px;
   margin-top: 20px;
+  margin-right: ${(props) => props.paddingRight};
 
   background-color: rgba(138, 138, 138, 0.6);
   color: #fff;
@@ -76,7 +79,12 @@ function Home() {
           <br /> 以及 300 個 Youbike 站點，透過簡單的規劃，
           <br /> 就能找到最適合你的路線，讓我們一起輕鬆上路。
         </FlexBox>
-        <StyledButton type="primary" onClick={() => history.push("/plan")}>
+        <StyledButton
+          isSmScreen={isSmScreen}
+          paddingRight={mainPadding}
+          type="primary"
+          onClick={() => history.push("/plan")}
+        >
           規劃路線
         </StyledButton>
         <ScrollHint />
