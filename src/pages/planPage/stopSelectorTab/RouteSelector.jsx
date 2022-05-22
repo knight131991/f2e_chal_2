@@ -15,19 +15,16 @@ import BikeMarker from "../../../component/gMap/BikeMarker";
 import appendDistanceToRouteInfo from "../../../utils/appendDistanceToRouteInfo";
 import Button from "../../../component/Button";
 import NoDataHint from "../../../component/NoDataHint";
-import FlexSpin from "../../../component/FlexSpin";
 import RouteMarker from "../../../component/gMap/RouteMarker";
 import fitGMapBounds from "../../../utils/fitGMapBounds";
 import RouteListHeader from "../../../component/list/RouteListHeader";
-import { useRWDStyleParams } from "../../../hooks/useRWD";
 import RouteInfoCard from "../../../component/cards/RouteInfoCard";
 import RouteStartMarker from "../../../component/gMap/RouteStartMark";
 import RouteEndMarker from "../../../component/gMap/RouteEndMark";
 import { stopCityMaptoRouteCity } from "../../../constant/cityList";
-
-const Container = styled(FlexBox)`
-  height: 100%;
-`;
+import SwitchableMainContentLayout from "../../../component/SwitchableMainContentLayout";
+import useRWD from "../../../hooks/useRWD";
+import screenEnum from "../../../constant/screenEnum";
 
 const ListConainer = styled(FlexBox)`
   overflow: auto;
@@ -40,13 +37,6 @@ const ListConainer = styled(FlexBox)`
 
 const StyledEmptyResultHint = styled(EmptyResultHint)`
   transform: translate(-50%, -50%);
-`;
-
-const LeftSideContainer = styled(({ paddingLeft, ...rest }) => (
-  <FlexBox {...rest} />
-))`
-  width: 50%;
-  margin: 26px 26px 0 ${({ paddingLeft }) => paddingLeft};
 `;
 
 const StyleLink = styled(Button)`
@@ -78,8 +68,7 @@ function RouteSelector({
   const [selectedRouteId, setSelectedRouteId] = useState();
   const [sortBy] = useState("distance");
   const refEle = useRef({ list: [] });
-
-  const { mainPadding } = useRWDStyleParams();
+  const { screen } = useRWD();
 
   useEffect(() => {
     getRoute(
@@ -121,9 +110,11 @@ function RouteSelector({
   }, []);
 
   return (
-    <Container row flex>
-      <FlexSpin spinning={gettingRoute}>
-        <LeftSideContainer paddingLeft={mainPadding}>
+    <SwitchableMainContentLayout
+      switchMode={screen <= screenEnum.md}
+      loading={gettingRoute}
+      leftContent={
+        <>
           <RouteListHeader
             routeNum={filteredRouteInfos.length}
             stopName={stopInfo.name}
@@ -185,10 +176,11 @@ function RouteSelector({
                 )
             )}
           </ListConainer>
-        </LeftSideContainer>
+        </>
+      }
+      rightContent={
         <GMap
           steps={selectedRoute}
-          width="50%"
           onMount={(_map, _maps) => {
             setMap(_map);
             setMaps(_maps);
@@ -227,8 +219,8 @@ function RouteSelector({
                 />
               ))}
         </GMap>
-      </FlexSpin>
-    </Container>
+      }
+    />
   );
 }
 

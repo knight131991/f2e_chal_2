@@ -20,7 +20,7 @@ const Content = styled.span`
 
 function RouteListHeader({ stopName, extraNode, routeNum }) {
   return (
-    <FlexBox>
+    <FlexBox noShrink>
       <FlexBox flex row align="center" justify="space-between">
         <Title row>
           <PositionIcon />
