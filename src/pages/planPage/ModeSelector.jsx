@@ -4,10 +4,10 @@ import RadioGroup from "../../component/RadioGroup";
 import { ReactComponent as Route } from "../../images/icon/Route.svg";
 import { ReactComponent as Youbike } from "../../images/icon/Youbike.svg";
 
-function ModeSelector({ onChange }) {
+function ModeSelector({ onChange, value }) {
   return (
     <RadioGroup
-      defaultValue="stop"
+      value={value}
       onChange={onChange}
       items={[
         {
@@ -25,7 +25,7 @@ function ModeSelector({ onChange }) {
   );
 }
 
-ModeSelector.defaultProps = { onChange: () => {} };
-ModeSelector.propTypes = { onChange: PropTypes.func };
+ModeSelector.defaultProps = { onChange: () => {}, value: "stop" };
+ModeSelector.propTypes = { onChange: PropTypes.func, value: PropTypes.string };
 
 export default ModeSelector;

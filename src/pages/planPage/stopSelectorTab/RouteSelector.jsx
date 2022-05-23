@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useMemo,
-  useState,
-  useCallback,
-  useRef,
-} from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
 import FlexBox from "../../../component/FlexBox";
 import GMap from "../../../component/gMap/GMap";
@@ -15,16 +9,15 @@ import BikeMarker from "../../../component/gMap/BikeMarker";
 import appendDistanceToRouteInfo from "../../../utils/appendDistanceToRouteInfo";
 import Button from "../../../component/Button";
 import NoDataHint from "../../../component/NoDataHint";
-import RouteMarker from "../../../component/gMap/RouteMarker";
 import fitGMapBounds from "../../../utils/fitGMapBounds";
 import RouteListHeader from "../../../component/list/RouteListHeader";
 import RouteInfoCard from "../../../component/cards/RouteInfoCard";
-import RouteStartMarker from "../../../component/gMap/RouteStartMark";
-import RouteEndMarker from "../../../component/gMap/RouteEndMark";
 import { stopCityMaptoRouteCity } from "../../../constant/cityList";
 import SwitchableMainContentLayout from "../../../component/SwitchableMainContentLayout";
 import useRWD from "../../../hooks/useRWD";
 import screenEnum from "../../../constant/screenEnum";
+import useGetFilteredRouteInfo from "../../../hooks/useGetFilteredRouteInfo";
+import SelectableRouteMarks from "../../../component/gMap/SelectableRouteMarks";
 
 const ListConainer = styled(FlexBox)`
   overflow: auto;
@@ -83,16 +76,11 @@ function RouteSelector({
     );
   }, [getRoute, city, stopInfo, searchKey, routeLen]);
 
-  const { filteredRouteInfos, routeStartStops } = useMemo(() => {
-    let filteredRoutes = routeInfos;
-    if (dirFilter.length !== 0)
-      filteredRoutes = routeInfos.filter(({ Direction }) =>
-        dirFilter.includes(Direction)
-      );
+  const { filteredRouteInfos, routeStartStops } = useGetFilteredRouteInfo(
+    dirFilter,
+    routeInfos
+  );
 
-    const routeStartStops = filteredRoutes.map(({ Geometry }) => Geometry?.[0]);
-    return { filteredRouteInfos: filteredRoutes, routeStartStops };
-  }, [dirFilter, routeInfos]);
 
   useEffect(() => {
     setSelectedRoute([]);
@@ -190,34 +178,14 @@ function RouteSelector({
             <StyledEmptyResultHint specificStr="路線" />
           )}
           <BikeMarker lat={stopInfo.lat} lng={stopInfo.lng} />
-          {selectedRoute.length
-            ? [
-                { ...selectedRoute[0], Component: RouteStartMarker },
-                {
-                  ...selectedRoute[selectedRoute.length - 1],
-                  Component: RouteEndMarker,
-                },
-              ].map(({ lat, lng, Component }, id) => (
-                <Component lat={lat} lng={lng} key={id} />
-              ))
-            : routeStartStops.map(({ lat, lng }, id) => (
-                <RouteMarker
-                  lat={lat}
-                  lng={lng}
-                  key={id}
-                  onClick={() => {
-                    handleSelectRoute(
-                      map,
-                      maps,
-                      filteredRouteInfos[id].Geometry,
-                      id
-                    );
-                    refEle.current.list[id].scrollIntoView({
-                      behavior: "smooth",
-                    });
-                  }}
-                />
-              ))}
+          {SelectableRouteMarks({
+            selectedRoute,
+            allRouteStartStops: routeStartStops,
+            onClickRouteMark: (id) => {
+              handleSelectRoute(map, maps, filteredRouteInfos[id].Geometry, id);
+              refEle.current.list[id].scrollIntoView({ behavior: "smooth" });
+            },
+          })}
         </GMap>
       }
     />

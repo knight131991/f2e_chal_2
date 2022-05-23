@@ -72,7 +72,7 @@ function RouteInfoCard({
             <End />
             <span>{end}</span>
           </StopInfoWrapper>
-          <LengthWrapper> 距離 {distance} 公里</LengthWrapper>
+          {distance && <LengthWrapper> 距離 {distance} 公里</LengthWrapper>}
           <DistanceWrapper>
             <span> 總長</span> <BlodBlockText> {length} 公里</BlodBlockText>
           </DistanceWrapper>

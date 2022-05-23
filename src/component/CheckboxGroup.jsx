@@ -3,6 +3,8 @@ import styled from "styled-components";
 import styleParams from "../constant/styleParams";
 
 export default styled(Checkbox.Group)`
+  white-space: nowrap;
+
   & .ant-checkbox-inner {
     width: 20px;
     height: 20px;

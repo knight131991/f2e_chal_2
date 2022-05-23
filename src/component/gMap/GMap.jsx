@@ -151,7 +151,6 @@ function GMap({
           setGMap(map);
           setGMaps(maps);
           onMount(map, maps);
-          // console.log("steps", steps);
           // const polylinePath = new maps.Polyline({
           //   path: steps,
           //   geodesic: false,

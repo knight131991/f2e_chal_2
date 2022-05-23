@@ -11,10 +11,14 @@ function PlanPage(props) {
     let component = null;
     switch (curMode) {
       case "stop":
-        component = <StopSelectorTab onModeChange={setCurMode} />;
+        component = (
+          <StopSelectorTab curTabMode="stop" onModeChange={setCurMode} />
+        );
         break;
       case "route":
-        component = <RouteSelectorTab />;
+        component = (
+          <RouteSelectorTab curTabMode="route" onModeChange={setCurMode} />
+        );
         break;
       default:
         break;

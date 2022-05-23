@@ -7,16 +7,15 @@ import cityList from "../../../constant/cityList";
 import youbikeList from "../../../constant/youbikeList";
 import useGetBikeStopInfo from "../../../hooks/useGetBikeStopInfo";
 import Toolbar from "../../../component/toolbar/Toolbar";
-import ModeSelector from "../ModeSelector";
-import MainContentContainer from "../../../component/MainContentContainer";
 import useRWD from "../../../hooks/useRWD";
 import screenEnum from "../../../constant/screenEnum";
 import StopSelectorToolbar from "./StopSelectorToolbar";
 import Divider from "../../../component/toolbar/Divider";
 import RouteSelectorToolbar from "./RouteSelectorToolbar";
 import styleParams from "../../../constant/styleParams";
+import PlanPageLayout from "../../PlanPageLayout";
 
-export default function StopSeletorTab({ onModeChange }) {
+export default function StopSeletorTab({ onModeChange, curTabMode }) {
   const [curMode, setCurMode] = useState("stop");
   const [city, setCity] = useState(cityList[0].value);
   const [youbikeVer, setYoubikeVer] = useState(youbikeList[0].value);
@@ -171,18 +170,19 @@ export default function StopSeletorTab({ onModeChange }) {
     ]);
 
   return (
-    <>
-      <Toolbar>
-        <ModeSelector onChange={onModeChange} />
-        {toolbarComponent}
-      </Toolbar>
-      {Boolean(secondToolbar) && secondToolbar}
-      <MainContentContainer offsetTop={offsetTop}>
-        {component}
-      </MainContentContainer>
-    </>
+    <PlanPageLayout
+      onModeChange={onModeChange}
+      curMode={curTabMode}
+      toolbarComponent={toolbarComponent}
+      secondToolbar={secondToolbar}
+      offsetTop={offsetTop}
+      mainComponent={component}
+    />
   );
 }
 
-StopSelector.defaultProps = { onModeChange: () => {} };
-StopSelector.propTypes = { onModeChange: PropTypes.func };
+StopSelector.defaultProps = { onModeChange: () => {}, curTabMode: undefined };
+StopSelector.propTypes = {
+  onModeChange: PropTypes.func,
+  curTabMode: PropTypes.string,
+};
