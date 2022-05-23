@@ -37,7 +37,7 @@ const StyledSpin = styled(({ showRightSide, ...rest }) => (
   }
 `;
 
-const StyledBtn = styled((props) => <FlexBox row align='center' {...props} />)`
+const StyledBtn = styled((props) => <FlexBox row align="center" {...props} />)`
   position: absolute;
   bottom: 16px;
   left: 50%;
@@ -59,6 +59,7 @@ function SwitchableMainContentLayout({
   rightContent,
   loading,
   switchMode,
+  hideBtn,
 }) {
   const { mainPadding } = useRWDStyleParams();
   const [showRightSide, setShowRightSide] = useState();
@@ -77,7 +78,7 @@ function SwitchableMainContentLayout({
         </LeftSideWrapper>
         <SubContainer fullWidth={switchMode}>{rightContent}</SubContainer>
       </StyledSpin>
-      {switchMode && (
+      {switchMode && !hideBtn && (
         <StyledBtn onClick={() => setShowRightSide(!showRightSide)}>
           {btnIcon}
           <span>{btnText}</span>
@@ -92,6 +93,7 @@ SwitchableMainContentLayout.defaultProps = {
   rightContent: null,
   loading: false,
   switchMode: false,
+  hideBtn: false,
   // switchBtnIcon: null,
   // switchBtnText: "切換",
 };
@@ -100,6 +102,7 @@ SwitchableMainContentLayout.propTypes = {
   rightContent: PropTypes.node,
   loading: PropTypes.bool,
   switchMode: PropTypes.bool,
+  hideBtn: PropTypes.bool,
   // switchBtnIcon: PropTypes.node,
   // switchBtnText: PropTypes.string,
 };

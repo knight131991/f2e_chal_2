@@ -98,6 +98,7 @@ function FinishPage({
   return (
     <SwitchableMainContentLayout
       switchMode={screen <= screenEnum.md}
+      hideBtn
       leftContent={
         <>
           <Description>規劃完成，您的挑戰資訊如下</Description>
