@@ -5,7 +5,7 @@ import GMap from "../../../component/gMap/GMap";
 import { Steps } from "antd";
 import styled from "styled-components";
 import BikeMarker from "../../../component/gMap/BikeMarker";
-import { useRWDStyleParams } from "../../../hooks/useRWD";
+import useRWD from "../../../hooks/useRWD";
 import BlodBlockText from "../../../component/texts/BlodBlockText";
 import Card from "../../../component/cards/Card";
 import HDivider from "../../../component/HDivider";
@@ -15,18 +15,11 @@ import { ReactComponent as Ellipse } from "../../../images/icon/Ellipse.svg";
 import fitGMapBounds from "../../../utils/fitGMapBounds";
 import RouteStartMarker from "../../../component/gMap/RouteStartMark";
 import RouteEndMarker from "../../../component/gMap/RouteEndMark";
-
-const Container = styled(FlexBox)`
-  height: 100%;
-`;
+import SwitchableMainContentLayout from "../../../component/SwitchableMainContentLayout";
+import screenEnum from "../../../constant/screenEnum";
 
 const Description = styled(BlodBlockText)`
   margin-bottom: 16px;
-`;
-
-const LeftSide = styled(({ paddingLeft, ...rest }) => <FlexBox {...rest} />)`
-  width: 50%;
-  padding: 24px 24px 24px ${({ paddingLeft }) => paddingLeft};
 `;
 
 const Label = styled.div`
@@ -92,7 +85,7 @@ function FinishPage({
     geometry,
   },
 }) {
-  const { mainPadding } = useRWDStyleParams();
+  const { screen } = useRWD();
 
   const [map, setMap] = useState();
   const [maps, setMaps] = useState();
@@ -103,51 +96,58 @@ function FinishPage({
   }, [geometry, stopInfo, map, maps]);
 
   return (
-    <Container row>
-      <LeftSide flex paddingLeft={mainPadding}>
-        <Description>規劃完成，您的挑戰資訊如下</Description>
-        <Card>
-          <Label>挑戰名稱</Label>
-          <BlodBlockText>{routeName}</BlodBlockText>
-          <HDivider />
-          <Label>起點資訊</Label>
-          <BlodBlockText>{stopInfo.name}</BlodBlockText>
-          <AddressWrapper>{stopInfo.address}</AddressWrapper>
-          <Label>路線資訊</Label>
-          <RouteInfoWrapper row align="center">
+    <SwitchableMainContentLayout
+      switchMode={screen <= screenEnum.md}
+      leftContent={
+        <>
+          <Description>規劃完成，您的挑戰資訊如下</Description>
+          <Card>
+            <Label>挑戰名稱</Label>
             <BlodBlockText>{routeName}</BlodBlockText>
-            <StateLabel label={direction} />
-          </RouteInfoWrapper>
-          <StyledSteps direction="vertical">
-            <Steps.Step
-              icon={<Ellipse />}
-              title={<StepText> {start}</StepText>}
-              status="wait"
-            />
-            <Steps.Step icon={<Ellipse />} title={<StepText>{end}</StepText>} />
-          </StyledSteps>
-          <LenInfoWrapper row align="center">
-            <span>總長</span> <LenInfo>{routeLen}公里</LenInfo>
-          </LenInfoWrapper>
-        </Card>
-      </LeftSide>
-      <GMap
-        width="50%"
-        steps={geometry}
-        onMount={(_map, _maps) => {
-          setMap(_map);
-          setMaps(_maps);
-        }}
-      >
-        <BikeMarker lat={stopInfo.lat} lng={stopInfo.lng} />
-        {[
-          { ...geometry[0], Component: RouteStartMarker },
-          { ...geometry[geometry.length - 1], Component: RouteEndMarker },
-        ].map(({ lat, lng, Component }, id) => (
-          <Component lat={lat} lng={lng} key={id} />
-        ))}
-      </GMap>
-    </Container>
+            <HDivider />
+            <Label>起點資訊</Label>
+            <BlodBlockText>{stopInfo.name}</BlodBlockText>
+            <AddressWrapper>{stopInfo.address}</AddressWrapper>
+            <Label>路線資訊</Label>
+            <RouteInfoWrapper row align="center">
+              <BlodBlockText>{routeName}</BlodBlockText>
+              <StateLabel label={direction} />
+            </RouteInfoWrapper>
+            <StyledSteps direction="vertical">
+              <Steps.Step
+                icon={<Ellipse />}
+                title={<StepText> {start}</StepText>}
+                status="wait"
+              />
+              <Steps.Step
+                icon={<Ellipse />}
+                title={<StepText>{end}</StepText>}
+              />
+            </StyledSteps>
+            <LenInfoWrapper row align="center">
+              <span>總長</span> <LenInfo>{routeLen}公里</LenInfo>
+            </LenInfoWrapper>
+          </Card>{" "}
+        </>
+      }
+      rightContent={
+        <GMap
+          steps={geometry}
+          onMount={(_map, _maps) => {
+            setMap(_map);
+            setMaps(_maps);
+          }}
+        >
+          <BikeMarker lat={stopInfo.lat} lng={stopInfo.lng} />
+          {[
+            { ...geometry[0], Component: RouteStartMarker },
+            { ...geometry[geometry.length - 1], Component: RouteEndMarker },
+          ].map(({ lat, lng, Component }, id) => (
+            <Component lat={lat} lng={lng} key={id} />
+          ))}
+        </GMap>
+      }
+    />
   );
 }
 
