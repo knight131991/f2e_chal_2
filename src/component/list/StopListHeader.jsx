@@ -32,7 +32,7 @@ const UpdateTimeWrapper = styled(({ show, ...rest }) => <FlexBox {...rest} />)`
   color: #757575;
   font-size: 12px;
   cursor: pointer;
-  visibility: ${({ show }) => show};
+  visibility: ${({ show }) => (show ? "visible" : "hidden")};
 
   & > :not(:last-child) {
     margin-right: 12px;

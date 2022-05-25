@@ -1,15 +1,16 @@
 import React from "react";
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 import FlexBox from "./FlexBox";
 
-function NoDataHint() {
+function NoDataHint({ text }) {
   return (
     <FlexBox justify="center" align="center">
-      沒有尋找到相關路線
+      {text}
     </FlexBox>
   );
 }
 
-NoDataHint.propTypes = {};
+NoDataHint.defaultProps = { text: "沒有尋找到相關路線" };
+NoDataHint.propTypes = { text: PropTypes.string };
 
 export default NoDataHint;

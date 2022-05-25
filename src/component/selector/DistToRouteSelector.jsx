@@ -22,7 +22,7 @@ function DistanceSelector({ value, onSelect, prefixStr, ...rest }) {
     []
   );
   return (
-    <Select value={value} onSelect={onSelect} optionLabelProp="label" {...rest}>
+    <Select value={value} onSelect={onSelect} placeholder='與路線距離' optionLabelProp="label" {...rest}>
       {options.map(({ value, label }) => (
         <Option key={value} value={value} label={`${prefixStr}${label}`}>
           {label}

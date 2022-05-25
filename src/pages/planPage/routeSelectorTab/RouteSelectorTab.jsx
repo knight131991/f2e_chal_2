@@ -18,6 +18,7 @@ import FlexBox from "../../../component/FlexBox";
 import StopSelectorToolbar from "./StopSelectorToolbar";
 import youbikeList from "../../../constant/youbikeList";
 import Divider from "../../../component/toolbar/Divider";
+import { getDefaultYoubikeVerByCity } from "../../../component/selector/CityYoubikeSelector";
 
 function RouteSelectorTab({ onModeChange, curTabMode }) {
   const [curMode, setCurMode] = useState("route");
@@ -77,6 +78,7 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
           onCityChange={(val) => {
             setRouteCity(val);
             setStopCity(val);
+            setYoubikeVer(getDefaultYoubikeVerByCity(val));
           }}
           onRouteLenChange={setRouteLen}
           onDireactChange={setDirFilter}

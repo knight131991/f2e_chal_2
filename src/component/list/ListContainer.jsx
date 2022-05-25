@@ -13,11 +13,18 @@ const Container = styled(FlexBox)`
   }
 `;
 
-function ListContainer({ data }) {
-  return <Container>{data.length ? data : <NoDataHint />}</Container>;
+function ListContainer({ data, emptyText }) {
+  return (
+    <Container>
+      {data.length ? data : <NoDataHint text={emptyText} />}
+    </Container>
+  );
 }
 
-ListContainer.propTypes = { data: [] };
-ListContainer.propTypes = { data: PropTypes.array };
+ListContainer.propTypes = { data: [], emptyText: undefined };
+ListContainer.propTypes = {
+  data: PropTypes.array,
+  emptyText: PropTypes.string,
+};
 
 export default ListContainer;

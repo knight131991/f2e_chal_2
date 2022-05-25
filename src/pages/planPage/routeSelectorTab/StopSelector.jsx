@@ -135,7 +135,7 @@ function StopSelector({
 
   useEffect(() => {
     setSelectedStop();
-  }, [city, youbikeVer]);
+  }, [city, youbikeVer, distance]);
 
   return (
     <SwitchableMainContentLayout
@@ -154,18 +154,31 @@ function StopSelector({
             direction={direction}
           />
           <ListContainer
-            data={stops.map(({ StationName, StationAddress, Distance }, id) => (
-              <div key={id} ref={(ele) => (refEle.current.list[id] = ele)}>
-                <StopInfoCard
-                  title={StationName.Zh_tw}
-                  address={StationAddress.Zh_tw}
-                  distance={Distance}
-                  onClick={() => setSelectedStop(id)}
-                  checked={selectedStop === id}
-                  onClickBtn={() => {}}
-                />
-              </div>
-            ))}
+          emptyText='沒有尋找到相關站點'
+            data={stops.map(
+              (
+                { StationName, StationAddress, Distance, StationPosition },
+                id
+              ) => (
+                <div key={id} ref={(ele) => (refEle.current.list[id] = ele)}>
+                  <StopInfoCard
+                    title={StationName.Zh_tw}
+                    address={StationAddress.Zh_tw}
+                    distance={Distance}
+                    onClick={() => setSelectedStop(id)}
+                    checked={selectedStop === id}
+                    onClickBtn={() =>
+                      onSelectStop({
+                        lat: StationPosition.PositionLat,
+                        lng: StationPosition.PositionLon,
+                        name: StationName.Zh_tw,
+                        address: StationAddress.Zh_tw,
+                      })
+                    }
+                  />
+                </div>
+              )
+            )}
           />
         </>
       }

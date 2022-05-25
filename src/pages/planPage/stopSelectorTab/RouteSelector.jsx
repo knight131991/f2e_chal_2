@@ -8,7 +8,6 @@ import EmptyResultHint from "../../../component/EmptyResultHint";
 import BikeMarker from "../../../component/gMap/BikeMarker";
 import appendDistanceToRouteInfo from "../../../utils/appendDistanceToRouteInfo";
 import Button from "../../../component/Button";
-import NoDataHint from "../../../component/NoDataHint";
 import fitGMapBounds from "../../../utils/fitGMapBounds";
 import RouteListHeader from "../../../component/list/RouteListHeader";
 import RouteInfoCard from "../../../component/cards/RouteInfoCard";
@@ -18,6 +17,7 @@ import useRWD from "../../../hooks/useRWD";
 import screenEnum from "../../../constant/screenEnum";
 import useGetFilteredRouteInfo from "../../../hooks/useGetFilteredRouteInfo";
 import SelectableRouteMarks from "../../../component/gMap/SelectableRouteMarks";
+import ListContainer from "../../../component/list/ListContainer";
 
 const ListConainer = styled(FlexBox)`
   overflow: auto;
@@ -81,7 +81,6 @@ function RouteSelector({
     routeInfos
   );
 
-
   useEffect(() => {
     setSelectedRoute([]);
     setSelectedRouteId();
@@ -112,58 +111,54 @@ function RouteSelector({
               </StyleLink>
             }
           />
-          <ListConainer flex>
-            {filteredRouteInfos.length === 0 ? (
-              <NoDataHint />
-            ) : (
-              filteredRouteInfos
-                .sort((a, b) => a[sortBy] - b[sortBy])
-                .map(
-                  (
-                    {
-                      RouteName,
-                      CyclingLength,
-                      RoadSectionStart,
-                      RoadSectionEnd,
-                      Geometry,
-                      Direction,
-                      Distance,
-                    },
-                    id
-                  ) => {
-                    return (
-                      <div
-                        key={RouteName}
-                        ref={(ele) => (refEle.current.list[id] = ele)}
-                      >
-                        <RouteInfoCard
-                          checked={selectedRouteId === id}
-                          title={RouteName}
-                          distance={Distance}
-                          direction={Direction}
-                          length={CyclingLength}
-                          start={RoadSectionStart}
-                          end={RoadSectionEnd}
-                          onClickBtn={() =>
-                            onSelectRoute({
-                              name: RouteName,
-                              start: RoadSectionStart,
-                              end: RoadSectionEnd,
-                              length: CyclingLength,
-                              direction: Direction,
-                              geometry: Geometry,
-                            })
-                          }
-                          onClick={() =>
-                            handleSelectRoute(map, maps, Geometry, id)
-                          }
-                        />
-                      </div>
-                    );
-                  }
-                )
-            )}
-          </ListConainer>
+          <ListContainer
+            data={filteredRouteInfos
+              .sort((a, b) => a[sortBy] - b[sortBy])
+              .map(
+                (
+                  {
+                    RouteName,
+                    CyclingLength,
+                    RoadSectionStart,
+                    RoadSectionEnd,
+                    Geometry,
+                    Direction,
+                    Distance,
+                  },
+                  id
+                ) => {
+                  return (
+                    <div
+                      key={RouteName}
+                      ref={(ele) => (refEle.current.list[id] = ele)}
+                    >
+                      <RouteInfoCard
+                        checked={selectedRouteId === id}
+                        title={RouteName}
+                        distance={Distance}
+                        direction={Direction}
+                        length={CyclingLength}
+                        start={RoadSectionStart}
+                        end={RoadSectionEnd}
+                        onClickBtn={() =>
+                          onSelectRoute({
+                            name: RouteName,
+                            start: RoadSectionStart,
+                            end: RoadSectionEnd,
+                            length: CyclingLength,
+                            direction: Direction,
+                            geometry: Geometry,
+                          })
+                        }
+                        onClick={() =>
+                          handleSelectRoute(map, maps, Geometry, id)
+                        }
+                      />
+                    </div>
+                  );
+                }
+              )}
+          />
         </>
       }
       rightContent={

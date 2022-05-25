@@ -7,6 +7,39 @@ import { cityEnum } from "../../constant/cityList";
 import youbikeList from "../../constant/youbikeList";
 import styled from "styled-components";
 
+const cityTypeSwitch = (city, type1CB, type2CB, type3CB, defaultCB) => {
+  switch (city) {
+    case cityEnum.tpe.value:
+    case cityEnum.nwt.value:
+    case cityEnum.txg.value:
+      type1CB();
+      break;
+    case cityEnum.tyn.value:
+    case cityEnum.hsz.value:
+    case cityEnum.zmi.value:
+      type2CB();
+      break;
+    case cityEnum.cyi.value:
+    case cityEnum.khh.value:
+      type3CB();
+      break;
+    default:
+      defaultCB();
+  }
+};
+
+export const getDefaultYoubikeVerByCity = (city) => {
+  let result = 1;
+  cityTypeSwitch(
+    city,
+    () => (result = 1),
+    () => (result = 1),
+    () => (result = 2),
+    () => (result = 1)
+  );
+  return result;
+};
+
 const Container = styled(FlexBox)`
   & > *:not(:last-child) {
     margin-right: 8px;
@@ -21,29 +54,6 @@ function CityYoubikeSelector({
 }) {
   const [options, setOptions] = useState(youbikeList);
 
-  const cityTypeSwitch = useCallback(
-    (city, type1CB, type2CB, type3CB, defaultCB) => {
-      switch (city) {
-        case cityEnum.tpe.value:
-        case cityEnum.nwt.value:
-        case cityEnum.txg.value:
-          type1CB();
-          break;
-        case cityEnum.tyn.value:
-        case cityEnum.hsz.value:
-        case cityEnum.zmi.value:
-          type2CB();
-          break;
-        case cityEnum.cyi.value:
-        case cityEnum.khh.value:
-          type3CB();
-          break;
-        default:
-          defaultCB();
-      }
-    },
-    []
-  );
 
   /* 此useCallback與下方的useEffect做的事情很類似，但不能把他們合併，主要是因為
       1. options是在此元件內的state，所以此元件re-mount的時候options的狀態就會重置，所以每次mount此元件時，就要用useEffect來重新取得正確的options
@@ -61,7 +71,7 @@ function CityYoubikeSelector({
         () => onYoubikeChange()
       );
     },
-    [onCityChange, onYoubikeChange, youbikeVal, cityTypeSwitch]
+    [onCityChange, onYoubikeChange, youbikeVal]
   );
 
   useEffect(() => {
@@ -72,7 +82,7 @@ function CityYoubikeSelector({
       () => setOptions(youbikeList.filter((item) => item.value === 2)),
       () => setOptions([])
     );
-  }, [cityVal, onYoubikeChange, youbikeVal, cityTypeSwitch]);
+  }, [cityVal, onYoubikeChange, youbikeVal]);
 
   return (
     <Container row>
