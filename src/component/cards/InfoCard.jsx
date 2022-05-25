@@ -8,6 +8,10 @@ import FlexBox from "../FlexBox";
 import styled from "styled-components";
 import BlodBlockText from "../texts/BlodBlockText";
 
+const StyledBtn = styled(Button)`
+  padding: 12px 32px;
+`;
+
 function InfoCard({
   title,
   content,
@@ -18,6 +22,7 @@ function InfoCard({
   className,
   extraTitle,
   onClick,
+  hideBtn,
 }) {
   return (
     <Card
@@ -36,14 +41,16 @@ function InfoCard({
       </FlexBox>
       <FlexBox justify="flex-end" align="flex-end">
         {/* <Like onClick={onClickLike} /> */}
-        <Button
-          onClick={(e) => {
-            onClickBtn();
-            e.stopPropagation();
-          }}
-        >
-          {btnName}
-        </Button>
+        {!hideBtn && (
+          <StyledBtn
+            onClick={(e) => {
+              onClickBtn();
+              e.stopPropagation();
+            }}
+          >
+            {btnName}
+          </StyledBtn>
+        )}
       </FlexBox>
     </Card>
   );

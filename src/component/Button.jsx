@@ -17,6 +17,7 @@ Button.propTypes = {
 
 export default styled((props) => <Button {...props} />)`
   border-radius: 8px;
+  height: auto;
 
   ${({ type }) => {
     if (!type || type === "default") {

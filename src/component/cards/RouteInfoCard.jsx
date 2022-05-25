@@ -3,34 +3,22 @@ import PropTypes from "prop-types";
 import InfoCard from "./InfoCard";
 import StateLabel from "../StateLabel";
 import styled from "styled-components";
-import { ReactComponent as Start } from "../../images/icon/Type_Start.svg";
-import { ReactComponent as End } from "../../images/icon/Type_End.svg";
-import { ReactComponent as Bilateral } from "../../images/icon/Bilateral.svg";
-import { ReactComponent as Unidireaction } from "../../images/icon/Unidirection.svg";
-import FlexBox from "../FlexBox";
-import directionEnum from "../../constant/directionEnum";
 import BlodBlockText from "../texts/BlodBlockText";
+import StartEndStopInfo from "../StartEndStopInfo";
 
 const StyledStateLable = styled(StateLabel)`
   margin-left: 16px;
 `;
 
-const StopInfoWrapper = styled(FlexBox)`
-  margin-top: 20px;
-
-  & > *:not(:last-child) {
-    margin-right: 8px;
-  }
-`;
-
 const LengthWrapper = styled.span`
   color: #9e9e9e;
-  margin: 4px 0 32px;
+  margin-top: 4px;
   font-size: 14px;
   padding-left: 40px;
 `;
 
 const DistanceWrapper = styled.span`
+  margin-top: 32px;
   padding-bottom: 4px;
   font-size: 14px;
   color: #757575;
@@ -38,6 +26,10 @@ const DistanceWrapper = styled.span`
   & > *:not(:last-child) {
     margin-right: 12px;
   }
+`;
+
+const StyledStartEndStopInfo = styled(StartEndStopInfo)`
+  margin-top: 20px;
 `;
 
 function RouteInfoCard({
@@ -61,17 +53,7 @@ function RouteInfoCard({
       extraTitle={direction && <StyledStateLable label={direction} />}
       content={
         <>
-          <StopInfoWrapper row align="center">
-            <Start />
-            <span> {start}</span>
-            {direction === directionEnum.unidirection ? (
-              <Unidireaction />
-            ) : (
-              <Bilateral />
-            )}
-            <End />
-            <span>{end}</span>
-          </StopInfoWrapper>
+          <StyledStartEndStopInfo start={start} end={end} direction={direction} />
           {distance && <LengthWrapper> 距離 {distance} 公里</LengthWrapper>}
           <DistanceWrapper>
             <span> 總長</span> <BlodBlockText> {length} 公里</BlodBlockText>

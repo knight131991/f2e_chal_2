@@ -15,7 +15,14 @@ const ListTitle = styled.span`
   font-size: 16px;
 `;
 
-function RouteSelector({ routeInfos, onSelectRoute, loading, dirFilter }) {
+function RouteSelector({
+  routeInfos,
+  onSelectRoute,
+  loading,
+  dirFilter,
+  city,
+  routeLen,
+}) {
   const [map, setMap] = useState();
   const [maps, setMaps] = useState();
   const [selectedRoute, setSelectedRoute] = useState([]);
@@ -37,6 +44,11 @@ function RouteSelector({ routeInfos, onSelectRoute, loading, dirFilter }) {
   useEffect(() => {
     fitGMapBounds(map, maps, routeStartStops);
   }, [routeStartStops, map, maps]);
+
+  useEffect(() => {
+    setSelectedRoute([]);
+    setSelectedRouteId();
+  }, [dirFilter, city, routeLen]);
 
   return (
     <SwitchableMainContentLayout

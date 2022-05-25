@@ -5,7 +5,7 @@ import FlexBox from "../FlexBox";
 import styleParams from "../../constant/styleParams";
 
 function Card(props) {
-  return <FlexBox {...props} />;
+  return <FlexBox noShrink {...props} />;
 }
 
 Card.propTypes = {};

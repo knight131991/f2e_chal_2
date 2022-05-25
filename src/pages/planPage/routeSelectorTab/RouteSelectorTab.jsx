@@ -28,7 +28,8 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
   const [stopInfo, setStopInfo] = useState({});
   const [routeInfo, setRouteInfo] = useState({});
   const [dirFilter, setDirFilter] = useState([]);
-  const [searchKey, setSearchKey] = useState();
+  const [searchRoute, setSearchRoute] = useState();
+  const [searchStop, setSearchStop] = useState();
   const [youbikeVer, setYoubikeVer] = useState(youbikeList[0].value);
   const { getRoute, data, isLoading } = useGetRoute([]);
   const { screen } = useRWD();
@@ -37,10 +38,10 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
     getRoute(
       city,
       (routes) => appendDistanceToRouteInfo({ lat, lng: log }, routes),
-      searchKey,
+      searchRoute,
       routeLen
     );
-  }, [getRoute, city, lat, log, searchKey, routeLen]);
+  }, [getRoute, city, lat, log, searchRoute, routeLen]);
 
   const { component, toolbarComponent, secondToolbar, offsetTop } =
     useMemo(() => {
@@ -53,25 +54,27 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
       let secondToolbar = null;
       let offsetTop = 0;
 
-      const StopToolbar = ({ render }) => (
+      const StopToolbar = (render) => (
         <StopSelectorToolbar
           city={city}
           onCityChange={setCity}
           youbikeVer={youbikeVer}
           onYoubikeChange={setYoubikeVer}
-          onSearch={setSearchKey}
+          onSearch={setSearchStop}
+          searchKey={searchStop}
           render={render}
         />
       );
 
-      const RouteToolbar = ({ render }) => (
+      const RouteToolbar = (render) => (
         <RouteSelectorToolbar
           city={city}
           routeLen={routeLen}
           onCityChange={setCity}
           onRouteLenChange={setRouteLen}
           onDireactChange={setDirFilter}
-          onSearch={setSearchKey}
+          onSearch={setSearchRoute}
+          searchKey={searchRoute}
           render={render}
         />
       );
@@ -82,6 +85,7 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
             <StopSelector
               city={city}
               routeInfos={routeInfo}
+              searchKey={searchStop}
               onSelectCity={setCity}
               onClickReturn={() => setCurMode("route")}
               onSelectStop={(data) => {
@@ -93,28 +97,26 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
           toolbarComponent = screenGatherThanXl && (
             <>
               <Divider />
-              <StopToolbar />
+              {StopToolbar()}
             </>
           );
-          secondToolbar = !screenGatherThanXl && (
-            <StopToolbar
-              render={(whole, cityYoubikeSelect, distanceSelect, search) =>
-                screenGatherThanMd ? (
-                  <Toolbar height={subToolbarH}>{whole}</Toolbar>
-                ) : (
-                  <>
-                    <Toolbar height={subToolbarH}>{cityYoubikeSelect}</Toolbar>
-                    <Toolbar height={subToolbarH}>
-                      <FlexBox flex row justify="space-between">
-                        {distanceSelect}
-                        {search}
-                      </FlexBox>
-                    </Toolbar>
-                  </>
-                )
-              }
-            />
-          );
+          secondToolbar =
+            !screenGatherThanXl &&
+            StopToolbar((whole, cityYoubikeSelect, distanceSelect, search) =>
+              screenGatherThanMd ? (
+                <Toolbar height={subToolbarH}>{whole}</Toolbar>
+              ) : (
+                <>
+                  <Toolbar height={subToolbarH}>{cityYoubikeSelect}</Toolbar>
+                  <Toolbar height={subToolbarH}>
+                    <FlexBox flex row justify="space-between">
+                      {distanceSelect}
+                      {search}
+                    </FlexBox>
+                  </Toolbar>
+                </>
+              )
+            );
           offsetTop = screenGatherThanXl
             ? 0
             : screenGatherThanMd
@@ -125,6 +127,7 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
           component = (
             <RouteSelector
               city={city}
+              routeLen={routeLen}
               dirFilter={dirFilter}
               onSelectCity={setCity}
               routeInfos={data}
@@ -136,26 +139,24 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
               onSearch={(keyword) => getRoute(city, (resp) => resp, keyword)}
             />
           );
-          toolbarComponent = screenGatherThanXl && <RouteToolbar />;
-          secondToolbar = !screenGatherThanXl && (
-            <RouteToolbar
-              render={(whole, selectors, checkboxGroup, search) =>
-                screenGatherThanMd ? (
-                  <Toolbar height={subToolbarH}>{whole}</Toolbar>
-                ) : (
-                  <>
-                    <Toolbar height={subToolbarH}>{selectors}</Toolbar>
-                    <Toolbar height={subToolbarH}>
-                      <FlexBox row flex align="center" justify="space-between">
-                        {checkboxGroup}
-                        {search}
-                      </FlexBox>
-                    </Toolbar>
-                  </>
-                )
-              }
-            />
-          );
+          toolbarComponent = screenGatherThanXl && RouteToolbar();
+          secondToolbar =
+            !screenGatherThanXl &&
+            RouteToolbar((whole, selectors, checkboxGroup, search) =>
+              screenGatherThanMd ? (
+                <Toolbar height={subToolbarH}>{whole}</Toolbar>
+              ) : (
+                <>
+                  <Toolbar height={subToolbarH}>{selectors}</Toolbar>
+                  <Toolbar height={subToolbarH}>
+                    <FlexBox row flex align="center" justify="space-between">
+                      {checkboxGroup}
+                      {search}
+                    </FlexBox>
+                  </Toolbar>
+                </>
+              )
+            );
           offsetTop = screenGatherThanXl
             ? 0
             : screenGatherThanMd
@@ -179,7 +180,9 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
       routeLen,
       dirFilter,
       screen,
+      searchRoute,
       youbikeVer,
+      searchStop,
     ]);
 
   return (

@@ -70,6 +70,7 @@ export default function StopSeletorTab({ onModeChange, curTabMode }) {
               <Divider />
               <StopSelectorToolbar
                 city={city}
+                searchKey={searchStop}
                 onCityChange={setCity}
                 onYoubikeChange={setYoubikeVer}
                 youbikeVer={youbikeVer}
@@ -82,6 +83,7 @@ export default function StopSeletorTab({ onModeChange, curTabMode }) {
               <StopSelectorToolbar
                 city={city}
                 onCityChange={setCity}
+                searchKey={searchStop}
                 onYoubikeChange={setYoubikeVer}
                 youbikeVer={youbikeVer}
                 onSearch={setSearchStop}
@@ -113,6 +115,7 @@ export default function StopSeletorTab({ onModeChange, curTabMode }) {
                 onRouteChange={setRouteLen}
                 onDireactChange={setDirFilter}
                 onSearch={setSearchRoute}
+                searchKey={searchRoute}
               />
             </>
           );
@@ -122,6 +125,7 @@ export default function StopSeletorTab({ onModeChange, curTabMode }) {
               onRouteChange={setRouteLen}
               onDireactChange={setDirFilter}
               onSearch={setSearchRoute}
+              searchKey={searchRoute}
               render={(selectors, search) =>
                 screenGatherThanMd ? (
                   <Toolbar height={subToolbarH}>
@@ -167,6 +171,7 @@ export default function StopSeletorTab({ onModeChange, curTabMode }) {
       searchRoute,
       dirFilter,
       screen,
+      searchStop,
     ]);
 
   return (

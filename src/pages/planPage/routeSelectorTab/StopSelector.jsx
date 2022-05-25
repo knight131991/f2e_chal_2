@@ -1,30 +1,63 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import FlexBox from "../../../component/FlexBox";
-import DirectionCheckBox from "../../../component/DirectionCheckBox";
-import RouteOrderSelector from "../../../component/RouteOrderSelector";
-import { Input } from "antd";
 import getPos from "../../../utils/getPos";
 import GMap from "../../../component/gMap/GMap";
 import useGetBikeStopInfo from "../../../hooks/useGetBikeStopInfo";
 import directionEnum from "../../../constant/directionEnum";
 import Marker from "../../../component/gMap/Marker";
-import getCenterPos from "../../../utils/getCenterPos";
-import Button from "../../../component/Button";
 import EmptyResultHint from "../../../component/EmptyResultHint";
 import styled from "styled-components";
-import FlexSpin from "../../../component/FlexSpin";
+import SwitchableMainContentLayout from "../../../component/SwitchableMainContentLayout";
+import StopListHeader from "../../../component/list/StopListHeader";
+import StopInfoCard from "../../../component/cards/StopInfoCard";
+import ListContainer from "../../../component/list/ListContainer";
+import getDistanceFromLatLon from "../../../utils/getDistanceFromLatLon";
+import utcToTime from "../../../utils/utcToTime";
+import RouteStartMarker from "../../../component/gMap/RouteStartMark";
+import RouteEndMarker from "../../../component/gMap/RouteEndMark";
+import fitGMapBounds from "../../../utils/fitGMapBounds";
+import useRWD from "../../../hooks/useRWD";
+import screenEnum from "../../../constant/screenEnum";
 
 const StyledEmptyResultHint = styled(EmptyResultHint)`
   transform: translate(-50%, -50%);
 `;
-function StopSelector({ city, routeInfos, onClickReturn, onSelectStop }) {
+function StopSelector({
+  city,
+  routeInfos,
+  onClickReturn,
+  onSelectStop,
+  searchKey,
+}) {
   const { getBikeStopInfo, loading } = useGetBikeStopInfo();
   const [stops, setStops] = useState([]);
   const [showNoDataHint, setShowNoDataHint] = useState(false);
-  const [searchKey, setSearchKey] = useState();
+  const [refresh, setRefresh] = useState(false);
+  const [map, setMap] = useState();
+  const [maps, setMaps] = useState();
+  const { screen } = useRWD();
+
+  const {
+    start: startStop,
+    end: endStop,
+    name: routeName,
+    direction,
+    geometry,
+  } = routeInfos;
+
   useEffect(() => {
     const { direction, geometry } = routeInfos;
+    const addDistanceToStops = (stops, position) =>
+      stops.map((item) => {
+        const { PositionLat, PositionLon } = item.StationPosition;
+        return {
+          ...item,
+          Distance: getDistanceFromLatLon(position, {
+            lat: PositionLat,
+            lng: PositionLon,
+          }),
+        };
+      });
     if (direction === directionEnum.unidirection) {
       // 單車道起站位置
       const { lat, lng } = geometry[0];
@@ -35,7 +68,7 @@ function StopSelector({ city, routeInfos, onClickReturn, onSelectStop }) {
         search: searchKey,
         noSearchResultCB: () => setShowNoDataHint(true),
       }).then((resp) => {
-        setStops(resp);
+        setStops(addDistanceToStops(resp, geometry[0]));
         setShowNoDataHint(false);
       });
     } else if (direction === directionEnum.bilateral) {
@@ -54,82 +87,122 @@ function StopSelector({ city, routeInfos, onClickReturn, onSelectStop }) {
       ]).then((values) => {
         const [startStops, endStops] = values;
         setShowNoDataHint(startStops.length === 0 && endStops.length === 0);
-        const resultArr = [...startStops];
+        const resultArr = addDistanceToStops(startStops, geometry[0]);
         endStops.forEach((item) => {
           if (
             !resultArr
               .map(({ StationUID }) => StationUID)
               .includes(item.StationUID)
           ) {
-            resultArr.push(item);
+            resultArr.push(
+              addDistanceToStops([item], geometry[geometry.length - 1])[0]
+            );
           }
         });
+
         setStops(resultArr);
       });
     } else {
       console.error("非預期的單車道方線資訊");
     }
-  }, [getBikeStopInfo, routeInfos, city, searchKey]);
+  }, [getBikeStopInfo, routeInfos, city, searchKey, refresh]);
+
+  useEffect(() => {
+    fitGMapBounds(map, maps, [
+      geometry[0],
+      geometry[geometry.length - 1],
+      ...stops.map(({ StationPosition: { PositionLon, PositionLat } }) => ({
+        lat: PositionLat,
+        lng: PositionLon,
+      })),
+    ]);
+  }, [stops, geometry, map, maps]);
+
   return (
-    <FlexBox flex>
-      <FlexBox row>
-        {routeInfos.name}
-        <DirectionCheckBox />
-        <RouteOrderSelector />
-        <Input.Search onSearch={(val) => setSearchKey(val)} />
-      </FlexBox>
-      共 {stops.length} 個站點
-      <FlexSpin spinning={loading}>
+    <SwitchableMainContentLayout
+      loading={loading}
+      switchMode={screen <= screenEnum.md}
+      leftContent={
+        <>
+          <StopListHeader
+            routeName={routeName}
+            stopNum={stops.length}
+            start={startStop}
+            end={endStop}
+            updateTime={utcToTime(stops?.[0]?.UpdateTime)}
+            onClickReselect={onClickReturn}
+            onClickUpdateTime={() => setRefresh(!refresh)}
+            direction={direction}
+          />
+          <ListContainer
+            data={stops.map(({ StationName, StationAddress, Distance }, id) => (
+              <StopInfoCard
+                key={id}
+                title={StationName.Zh_tw}
+                address={StationAddress.Zh_tw}
+                distance={Distance}
+              />
+            ))}
+          />
+        </>
+      }
+      rightContent={
         <GMap
-          steps={routeInfos.geometry}
-          center={getCenterPos(
-            stops.map(({ StationPosition: { PositionLon, PositionLat } }) => ({
-              lat: PositionLat,
-              lng: PositionLon,
-            }))
-          )}
+          onMount={(_map, _maps) => {
+            setMap(_map);
+            setMaps(_maps);
+          }}
+          steps={geometry}
         >
           {showNoDataHint ? (
             <StyledEmptyResultHint />
           ) : (
-            stops.map((item, id) => {
-              const { lat, lng } = getPos(item);
-              const {
-                AvailableRentBikes,
-                AvailableReturnBikes,
-                StationAddress,
-                StationName,
-              } = item;
-              const name = StationName.Zh_tw;
-              const address = StationAddress.Zh_tw;
-              return (
-                <Marker
-                  key={id}
-                  lat={lat}
-                  lng={lng}
-                  num={AvailableRentBikes}
-                  avaRent={AvailableRentBikes}
-                  avaReturn={AvailableReturnBikes}
-                  name={name}
-                  btnText="選擇站點"
-                  showBtn
-                  showAvaInfo
-                  address={address}
-                  onClickInfoCardBtn={() =>
-                    onSelectStop({ lat, lng, name, address })
-                  }
-                />
-              );
-            })
+            stops
+              .map((item, id) => {
+                const { lat, lng } = getPos(item);
+                const {
+                  AvailableRentBikes,
+                  AvailableReturnBikes,
+                  StationAddress,
+                  StationName,
+                } = item;
+                const name = StationName.Zh_tw;
+                const address = StationAddress.Zh_tw;
+                return (
+                  <Marker
+                    key={id}
+                    lat={lat}
+                    lng={lng}
+                    num={AvailableRentBikes}
+                    avaRent={AvailableRentBikes}
+                    avaReturn={AvailableReturnBikes}
+                    name={name}
+                    btnText="選擇站點"
+                    showBtn
+                    showAvaInfo
+                    address={address}
+                    onClickInfoCardBtn={() =>
+                      onSelectStop({ lat, lng, name, address })
+                    }
+                  />
+                );
+              })
+              .concat([
+                <RouteStartMarker
+                  key="start"
+                  lat={geometry[0].lat}
+                  lng={geometry[0].lng}
+                />,
+                <RouteEndMarker
+                  key="end"
+                  lat={geometry[geometry.length - 1].lat}
+                  lng={geometry[geometry.length - 1].lng}
+                />,
+              ])
           )}
         </GMap>
-      </FlexSpin>
-      <FlexBox align="flex-end">
-        <Button type="link" onClick={onClickReturn}>
-          重新選擇自行車路線
-        </Button>
-      </FlexBox>
-    </FlexBox>
+      }
+    />
   );
 }
 
