@@ -44,7 +44,7 @@ function StopInfoCard({
           <LengthWrapper>
             距離 {(Math.round(distance * 100) / 100).toFixed(2)} 公里
           </LengthWrapper>
-          <StyledBtn>選擇站點</StyledBtn>
+          <StyledBtn onClick={onClickBtn}>選擇站點</StyledBtn>
         </>
       }
     />

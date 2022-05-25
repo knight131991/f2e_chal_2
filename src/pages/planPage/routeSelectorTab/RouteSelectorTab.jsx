@@ -23,25 +23,27 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
   const [curMode, setCurMode] = useState("route");
   const history = useHistory();
   const { lat, log } = queryString.parse(history.location.search);
-  const [city, setCity] = useState(cityList[0].value);
+  const [routeCity, setRouteCity] = useState(cityList[0].value);
+  const [stopCity, setStopCity] = useState(cityList[0].value);
   const [routeLen, setRouteLen] = useState();
   const [stopInfo, setStopInfo] = useState({});
   const [routeInfo, setRouteInfo] = useState({});
   const [dirFilter, setDirFilter] = useState([]);
   const [searchRoute, setSearchRoute] = useState();
   const [searchStop, setSearchStop] = useState();
+  const [distance, setDistance] = useState();
   const [youbikeVer, setYoubikeVer] = useState(youbikeList[0].value);
   const { getRoute, data, isLoading } = useGetRoute([]);
   const { screen } = useRWD();
 
   useEffect(() => {
     getRoute(
-      city,
+      routeCity,
       (routes) => appendDistanceToRouteInfo({ lat, lng: log }, routes),
       searchRoute,
       routeLen
     );
-  }, [getRoute, city, lat, log, searchRoute, routeLen]);
+  }, [getRoute, routeCity, lat, log, searchRoute, routeLen]);
 
   const { component, toolbarComponent, secondToolbar, offsetTop } =
     useMemo(() => {
@@ -56,11 +58,13 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
 
       const StopToolbar = (render) => (
         <StopSelectorToolbar
-          city={city}
-          onCityChange={setCity}
+          city={stopCity}
+          onCityChange={setStopCity}
+          distance={distance}
           youbikeVer={youbikeVer}
           onYoubikeChange={setYoubikeVer}
           onSearch={setSearchStop}
+          onDistanceChange={setDistance}
           searchKey={searchStop}
           render={render}
         />
@@ -68,9 +72,12 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
 
       const RouteToolbar = (render) => (
         <RouteSelectorToolbar
-          city={city}
+          city={routeCity}
           routeLen={routeLen}
-          onCityChange={setCity}
+          onCityChange={(val) => {
+            setRouteCity(val);
+            setStopCity(val);
+          }}
           onRouteLenChange={setRouteLen}
           onDireactChange={setDirFilter}
           onSearch={setSearchRoute}
@@ -83,10 +90,12 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
         case "stop":
           component = (
             <StopSelector
-              city={city}
+              city={stopCity}
+              youbikeVer={youbikeVer}
               routeInfos={routeInfo}
               searchKey={searchStop}
-              onSelectCity={setCity}
+              distance={distance}
+              onSelectCity={setStopCity}
               onClickReturn={() => setCurMode("route")}
               onSelectStop={(data) => {
                 setStopInfo(data);
@@ -126,17 +135,19 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
         case "route":
           component = (
             <RouteSelector
-              city={city}
+              city={routeCity}
               routeLen={routeLen}
               dirFilter={dirFilter}
-              onSelectCity={setCity}
+              onSelectCity={setRouteCity}
               routeInfos={data}
               loading={isLoading}
               onSelectRoute={(route) => {
                 setRouteInfo(route);
                 setCurMode("stop");
               }}
-              onSearch={(keyword) => getRoute(city, (resp) => resp, keyword)}
+              onSearch={(keyword) =>
+                getRoute(routeCity, (resp) => resp, keyword)
+              }
             />
           );
           toolbarComponent = screenGatherThanXl && RouteToolbar();
@@ -172,7 +183,7 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
     }, [
       curMode,
       data,
-      city,
+      routeCity,
       stopInfo,
       routeInfo,
       getRoute,
@@ -183,6 +194,8 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
       searchRoute,
       youbikeVer,
       searchStop,
+      stopCity,
+      distance,
     ]);
 
   return (

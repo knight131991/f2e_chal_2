@@ -2,12 +2,12 @@ import React, { useMemo } from "react";
 // import PropTypes from "prop-types";
 import Divider from "../../../component/toolbar/Divider";
 import CityYoubikeSelector from "../../../component/selector/CityYoubikeSelector";
-import Select from "../../../component/selector/Select";
 import FlexBox from "../../../component/FlexBox";
 import Search from "../../../component/Search";
 import styled from "styled-components";
+import DistToRouteSelector from "../../../component/selector/DistToRouteSelector";
 
-const StyledSelect = styled(Select)`
+const StyledSelect = styled(DistToRouteSelector)`
   margin-right: 8px;
 `;
 
@@ -15,7 +15,9 @@ function StopSelectorToolbar({
   city,
   onCityChange,
   youbikeVer,
+  distance,
   onYoubikeChange,
+  onDistanceChange,
   onSearch,
   searchKey,
   render,
@@ -32,7 +34,16 @@ function StopSelectorToolbar({
     [city, onCityChange, youbikeVer, onYoubikeChange]
   );
 
-  const distanceSelect = useMemo(() => <StyledSelect />, []);
+  const distanceSelect = useMemo(
+    () => (
+      <StyledSelect
+        value={distance}
+        onSelect={onDistanceChange}
+        prefixStr="與路線距離："
+      />
+    ),
+    [distance, onDistanceChange]
+  );
   const search = useMemo(
     () => (
       <Search

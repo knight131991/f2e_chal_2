@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import getPos from "../../../utils/getPos";
 import GMap from "../../../component/gMap/GMap";
@@ -28,14 +28,18 @@ function StopSelector({
   onClickReturn,
   onSelectStop,
   searchKey,
+  youbikeVer,
+  distance,
 }) {
   const { getBikeStopInfo, loading } = useGetBikeStopInfo();
   const [stops, setStops] = useState([]);
   const [showNoDataHint, setShowNoDataHint] = useState(false);
+  const [selectedStop, setSelectedStop] = useState();
   const [refresh, setRefresh] = useState(false);
   const [map, setMap] = useState();
   const [maps, setMaps] = useState();
   const { screen } = useRWD();
+  const refEle = useRef({ list: [] });
 
   const {
     start: startStop,
@@ -47,6 +51,7 @@ function StopSelector({
 
   useEffect(() => {
     const { direction, geometry } = routeInfos;
+    const apiRequestConfig = { city, search: searchKey, youbikeVer, distance };
     const addDistanceToStops = (stops, position) =>
       stops.map((item) => {
         const { PositionLat, PositionLon } = item.StationPosition;
@@ -64,9 +69,8 @@ function StopSelector({
       getBikeStopInfo({
         lat,
         lng,
-        city,
-        search: searchKey,
         noSearchResultCB: () => setShowNoDataHint(true),
+        ...apiRequestConfig,
       }).then((resp) => {
         setStops(addDistanceToStops(resp, geometry[0]));
         setShowNoDataHint(false);
@@ -80,10 +84,13 @@ function StopSelector({
         getBikeStopInfo({
           lat: startLat,
           lng: startLng,
-          city,
-          search: searchKey,
+          ...apiRequestConfig,
         }),
-        getBikeStopInfo({ lat: endLat, lng: endLng, city, search: searchKey }),
+        getBikeStopInfo({
+          lat: endLat,
+          lng: endLng,
+          ...apiRequestConfig,
+        }),
       ]).then((values) => {
         const [startStops, endStops] = values;
         setShowNoDataHint(startStops.length === 0 && endStops.length === 0);
@@ -105,7 +112,15 @@ function StopSelector({
     } else {
       console.error("非預期的單車道方線資訊");
     }
-  }, [getBikeStopInfo, routeInfos, city, searchKey, refresh]);
+  }, [
+    getBikeStopInfo,
+    routeInfos,
+    city,
+    searchKey,
+    refresh,
+    youbikeVer,
+    distance,
+  ]);
 
   useEffect(() => {
     fitGMapBounds(map, maps, [
@@ -116,7 +131,11 @@ function StopSelector({
         lng: PositionLon,
       })),
     ]);
-  }, [stops, geometry, map, maps]);
+  }, [stops, geometry, map, maps, distance]);
+
+  useEffect(() => {
+    setSelectedStop();
+  }, [city, youbikeVer]);
 
   return (
     <SwitchableMainContentLayout
@@ -136,12 +155,16 @@ function StopSelector({
           />
           <ListContainer
             data={stops.map(({ StationName, StationAddress, Distance }, id) => (
-              <StopInfoCard
-                key={id}
-                title={StationName.Zh_tw}
-                address={StationAddress.Zh_tw}
-                distance={Distance}
-              />
+              <div key={id} ref={(ele) => (refEle.current.list[id] = ele)}>
+                <StopInfoCard
+                  title={StationName.Zh_tw}
+                  address={StationAddress.Zh_tw}
+                  distance={Distance}
+                  onClick={() => setSelectedStop(id)}
+                  checked={selectedStop === id}
+                  onClickBtn={() => {}}
+                />
+              </div>
             ))}
           />
         </>
@@ -157,48 +180,60 @@ function StopSelector({
           {showNoDataHint ? (
             <StyledEmptyResultHint />
           ) : (
-            stops
-              .map((item, id) => {
-                const { lat, lng } = getPos(item);
-                const {
-                  AvailableRentBikes,
-                  AvailableReturnBikes,
-                  StationAddress,
-                  StationName,
-                } = item;
-                const name = StationName.Zh_tw;
-                const address = StationAddress.Zh_tw;
-                return (
-                  <Marker
-                    key={id}
-                    lat={lat}
-                    lng={lng}
-                    num={AvailableRentBikes}
-                    avaRent={AvailableRentBikes}
-                    avaReturn={AvailableReturnBikes}
-                    name={name}
-                    btnText="選擇站點"
-                    showBtn
-                    showAvaInfo
-                    address={address}
-                    onClickInfoCardBtn={() =>
-                      onSelectStop({ lat, lng, name, address })
-                    }
-                  />
-                );
-              })
-              .concat([
-                <RouteStartMarker
-                  key="start"
-                  lat={geometry[0].lat}
-                  lng={geometry[0].lng}
-                />,
-                <RouteEndMarker
-                  key="end"
-                  lat={geometry[geometry.length - 1].lat}
-                  lng={geometry[geometry.length - 1].lng}
-                />,
-              ])
+            [
+              <RouteStartMarker
+                key="start"
+                lat={geometry[0].lat}
+                lng={geometry[0].lng}
+              />,
+              <RouteEndMarker
+                key="end"
+                lat={geometry[geometry.length - 1].lat}
+                lng={geometry[geometry.length - 1].lng}
+              />,
+            ].concat(
+              stops
+                .map((item, id) => {
+                  const { lat, lng } = getPos(item);
+                  const {
+                    AvailableRentBikes,
+                    AvailableReturnBikes,
+                    StationAddress,
+                    StationName,
+                  } = item;
+                  const name = StationName.Zh_tw;
+                  const address = StationAddress.Zh_tw;
+                  return (
+                    <Marker
+                      key={id}
+                      lat={lat}
+                      lng={lng}
+                      num={AvailableRentBikes}
+                      avaRent={AvailableRentBikes}
+                      avaReturn={AvailableReturnBikes}
+                      name={name}
+                      onClick={() => {
+                        if (selectedStop === undefined) {
+                          setSelectedStop(id);
+                          refEle.current.list[id].scrollIntoView({
+                            behavior: "smooth",
+                          });
+                        }
+                      }}
+                      btnText="選擇站點"
+                      showBtn
+                      showAvaInfo
+                      address={address}
+                      onClickInfoCardBtn={() =>
+                        onSelectStop({ lat, lng, name, address })
+                      }
+                    />
+                  );
+                })
+                .filter((item, id) =>
+                  selectedStop === undefined ? true : selectedStop === id
+                )
+            )
           )}
         </GMap>
       }

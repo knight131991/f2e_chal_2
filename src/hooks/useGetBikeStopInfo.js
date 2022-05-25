@@ -18,20 +18,23 @@ export default function useGetBikeStopInfo() {
       onSuccess = () => {},
       top = "30",
       youbikeVer,
+      distance,
     }) =>
       new Promise((resolve, reject) => {
-        const posFilter = `$spatialFilter=nearby(${lat},${lng},600)`;
+        const posFilter = `$spatialFilter=nearby(${lat},${lng},${distance})`;
         const filters = `$filter=(contains(StationName/Zh_tw,'${search}') or contains(StationAddress/Zh_tw,'${search}')) ${
           youbikeVer ? `and ServiceType eq ${youbikeVer}` : ""
         }`;
-
+        console.log("distance", distance);
         setIsLoading(true);
         getStopInfos({
           api: axios.get(
             `https://ptx.transportdata.tw/MOTC/v2/Bike/Station/${
               city ? city : "NearBy"
             }?$top=${top}&$format=JSON&${filters}${
-              lat !== undefined && lng !== undefined ? `&${posFilter}` : ""
+              lat !== undefined && lng !== undefined && distance
+                ? `&${posFilter}`
+                : ""
             }`
           ),
           mapper: (resp) => resp.data,
