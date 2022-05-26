@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/f2e_chal_2/static/css/main.4be8e991.css",
-    "main.js": "/f2e_chal_2/static/js/main.810baf54.js",
+    "main.js": "/f2e_chal_2/static/js/main.98541700.js",
     "static/js/787.77b538d9.chunk.js": "/f2e_chal_2/static/js/787.77b538d9.chunk.js",
     "static/media/BG.jpg": "/f2e_chal_2/static/media/BG.6baa48388979b3e38c8d.jpg",
     "static/media/unsplash__ezqPPf8Cpk.jpg": "/f2e_chal_2/static/media/unsplash__ezqPPf8Cpk.4133b9168fe5fecc9c3b.jpg",
@@ -26,12 +26,14 @@
     "static/media/fb.svg": "/f2e_chal_2/static/media/fb.ca399fd0e08958d2b7046e7fc655a996.svg",
     "static/media/Youbike.svg": "/f2e_chal_2/static/media/Youbike.6c86f2539917205058833e795a51442b.svg",
     "static/media/Error.svg": "/f2e_chal_2/static/media/Error.ec94f1796eafda06ed4e66c037b72c31.svg",
+    "static/media/Bike.svg": "/f2e_chal_2/static/media/Bike.6e2bc9c5f4a3e287fe74dd7692ccea6a.svg",
     "static/media/arrow.svg": "/f2e_chal_2/static/media/arrow.79d7cdd8a25218e3c14797b17aa69d55.svg",
     "static/media/Step3.svg": "/f2e_chal_2/static/media/Step3.04e5fe0fa2a1772305518b66047bc26a.svg",
     "static/media/Down.svg": "/f2e_chal_2/static/media/Down.101707f2c1680db6ad0883de78e1dbca.svg",
     "static/media/White_List.svg": "/f2e_chal_2/static/media/White_List.f8ef71d72bbe2ab635f709831aa4d334.svg",
     "index.html": "/f2e_chal_2/index.html",
     "static/media/PositionName.svg": "/f2e_chal_2/static/media/PositionName.9069db6f18a4e41b9aff55fbd8c01743.svg",
+    "static/media/Local parking.svg": "/f2e_chal_2/static/media/Local parking.e32c39b9c6f7ebd9649b5f488ca4445c.svg",
     "static/media/White_Map.svg": "/f2e_chal_2/static/media/White_Map.164f1f0067cb4b2743a0141b5a5ce02c.svg",
     "static/media/Refresh.svg": "/f2e_chal_2/static/media/Refresh.ec32179234b362e364c3536772aede64.svg",
     "static/media/map_available.svg": "/f2e_chal_2/static/media/map_available.e4412455ac893b2398ab199c72a829e1.svg",
@@ -41,11 +43,11 @@
     "static/media/Ellipse.svg": "/f2e_chal_2/static/media/Ellipse.d3f0765b44029238f27a5e4d4f800016.svg",
     "static/media/Unidirection.svg": "/f2e_chal_2/static/media/Unidirection.7729db08c5041d675776af89cb2d571e.svg",
     "main.4be8e991.css.map": "/f2e_chal_2/static/css/main.4be8e991.css.map",
-    "main.810baf54.js.map": "/f2e_chal_2/static/js/main.810baf54.js.map",
+    "main.98541700.js.map": "/f2e_chal_2/static/js/main.98541700.js.map",
     "787.77b538d9.chunk.js.map": "/f2e_chal_2/static/js/787.77b538d9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.4be8e991.css",
-    "static/js/main.810baf54.js"
+    "static/js/main.98541700.js"
   ]
 }
