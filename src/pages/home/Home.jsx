@@ -43,6 +43,7 @@ const StyledButton = styled(({ isSmScreen, paddingRight, ...rest }) => (
   font-size: 20px;
   margin-top: 20px;
   margin-right: ${(props) => props.paddingRight};
+  transition: none;
 
   background-color: rgba(138, 138, 138, 0.6);
   color: #fff;

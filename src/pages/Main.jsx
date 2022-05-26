@@ -4,7 +4,7 @@ import initAxios from "../utils/initAxios";
 import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Home from "./home/Home";
-import NavHeader from "../component/navHeader/NavHeader";
+import NavHeader, { pageRouterEnum } from "../component/navHeader/NavHeader";
 import FlexBox from "../component/FlexBox";
 import BikeRoute from "./BikeRoute";
 import PlanPage from "./planPage/PlanPage";
@@ -19,6 +19,7 @@ const Container = styled(FlexBox)`
 function Main(props) {
   const { pathname } = useLocation();
   const [pos] = useGetUserPos();
+  const { planPage, bikeRoute, bikeStop } = pageRouterEnum;
 
   useEffect(() => {
     initAxios();
@@ -27,15 +28,15 @@ function Main(props) {
   const pages = useMemo(
     () => [
       { path: "/home", component: () => <Home /> },
-      { path: "/plan", component: () => <PlanPage /> },
-      { path: "/bike-spot", component: () => <BikeSpot /> },
-      { path: "/bike-route", component: () => <BikeRoute /> },
+      { path: planPage.router, component: () => <PlanPage /> },
+      { path: bikeStop.router, component: () => <BikeSpot /> },
+      { path: bikeRoute.router, component: () => <BikeRoute /> },
     ],
     []
   );
   return (
     <Container>
-      <NavHeader opaque={pathname !== "/home"} pos={pos} />
+      <NavHeader opaque={pathname !== "/home"} curRouter={pathname} pos={pos} />
       <Switch>
         {pages.map(({ path, component }) => (
           <Route key={path} path={path} render={component} />

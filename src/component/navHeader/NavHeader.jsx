@@ -13,6 +13,12 @@ import screenEnum from "../../constant/screenEnum";
 import Drawer from "./Drawer";
 import styleParams from "../../constant/styleParams";
 
+export const pageRouterEnum = {
+  planPage: { label: "規劃路線", router: "/plan" },
+  bikeStop: { label: "Youbike地圖", router: "/bike-spot" },
+  bikeRoute: { label: "自行車路線", router: "/bike-route" },
+};
+
 const Container = styled(({ opaque, paddingLeft, paddingRight, ...rest }) => (
   <FlexBox {...rest} />
 ))`
@@ -36,37 +42,74 @@ const StyledMenuIcon = styled(MenuIcon)`
   cursor: pointer;
 `;
 
-function NavHeader({ opaque, pos }) {
+const LinkBtn = styled(({ children, opaque, checked, ...rest }) => (
+  <Button type="link" {...rest}>
+    <BlackText>{children}</BlackText>
+  </Button>
+))`
+  font-weight: ${({ checked }) => (checked ? "bold" : undefined)};
+`;
+
+const DrawerBtn = styled.div`
+  margin: 32px 0;
+
+  & span {
+    font-size: 18px;
+    color: ${styleParams.mainColor};
+  }
+`;
+
+function NavHeader({ opaque, pos, curRouter }) {
   const [showDrawer, setShowDrawer] = useState(false);
   const history = useHistory();
   const { mainPadding } = useRWDStyleParams();
+  const { planPage, bikeRoute, bikeStop } = pageRouterEnum;
   const { paddingRight, screen } = useRWD(
     { paddingRight: "96px" },
     { l: { paddingRight: "54px" }, s: { paddingRight: "20px" } }
   );
 
-  const LinkBtn = useCallback(({ children, opaque, ...rest }) => {
-    return (
-      <Button type="link" {...rest}>
-        {opaque ? <PText>{children}</PText> : <BlackText>{children}</BlackText>}
-      </Button>
-    );
-  }, []);
-
   const btnList = useMemo(() => {
     const search = `lat=${pos.lat}&log=${pos.log}`;
     return [
       {
-        name: "規劃路線",
-        onClick: () => history.push({ search, pathname: "/plan" }),
+        name: planPage.label,
+        onClick: () => history.push({ search, pathname: planPage.router }),
+        router: planPage.router,
       },
-      { name: "Youbike地圖", onClick: () => history.push("/bike-spot") },
       {
-        name: "自行車路線",
-        onClick: () => history.push({ search, pathname: "/bike-route" }),
+        name: bikeStop.label,
+        onClick: () => history.push(bikeStop.router),
+        router: bikeStop.router,
+      },
+      {
+        name: bikeRoute.label,
+        onClick: () => history.push({ search, pathname: bikeRoute.router }),
+        router: bikeRoute.router,
       },
     ];
-  }, [history, pos]);
+  }, [history, pos, planPage, bikeRoute, bikeStop]);
+
+  const btnListCreator = useCallback(
+    (render, clickBC = () => {}) =>
+      btnList.map(({ name, onClick, router }) => {
+        const component = (
+          <LinkBtn
+            key={name}
+            onClick={() => {
+              onClick();
+              clickBC();
+            }}
+            checked={curRouter === router}
+          >
+            {name}
+          </LinkBtn>
+        );
+        return render ? render(component) : component;
+      }),
+    [curRouter, btnList]
+  );
+
   return (
     <Container
       align="center"
@@ -82,17 +125,24 @@ function NavHeader({ opaque, pos }) {
         <StyledMenuIcon onClick={() => setShowDrawer(true)} />
       ) : (
         <FlexBox row gap={33}>
-          {btnList.map(({ name, onClick }) => (
-            <LinkBtn key={name} opaque={opaque} onClick={onClick}>
-              {name}
-            </LinkBtn>
-          ))}
+          {btnListCreator()}
           <LinkBtn>
             <PText>註冊/登入</PText>
           </LinkBtn>
         </FlexBox>
       )}
-      <Drawer visible={showDrawer} onClose={() => setShowDrawer(false)} />
+      <Drawer
+        title={<Logo type="black-text" />}
+        visible={showDrawer}
+        onClose={() => setShowDrawer(false)}
+      >
+        {btnListCreator(
+          (origin) => (
+            <DrawerBtn>{origin}</DrawerBtn>
+          ),
+          () => setShowDrawer(false)
+        )}
+      </Drawer>
     </Container>
   );
 }

@@ -25,7 +25,6 @@ export default function useGetBikeStopInfo() {
         const filters = `$filter=(contains(StationName/Zh_tw,'${search}') or contains(StationAddress/Zh_tw,'${search}')) ${
           youbikeVer ? `and ServiceType eq ${youbikeVer}` : ""
         }`;
-        console.log("distance", distance);
         setIsLoading(true);
         getStopInfos({
           api: axios.get(
