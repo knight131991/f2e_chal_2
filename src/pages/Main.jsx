@@ -8,8 +8,8 @@ import NavHeader, { pageRouterEnum } from "../component/navHeader/NavHeader";
 import FlexBox from "../component/FlexBox";
 import BikeRoute from "./BikeRoute";
 import PlanPage from "./planPage/PlanPage";
+import BikeSpot from "./bikeSpot/BikeSpot";
 import useGetUserPos from "../hooks/useGetUserPos";
-import BikeSpot from "./BikeSpot";
 
 const Container = styled(FlexBox)`
   width: 100%;
@@ -32,7 +32,7 @@ function Main(props) {
       { path: bikeStop.router, component: () => <BikeSpot /> },
       { path: bikeRoute.router, component: () => <BikeRoute /> },
     ],
-    []
+    [planPage, bikeStop, bikeRoute]
   );
   return (
     <Container>

@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import { ReactComponent as AvailableMark } from "../../images/map_available.svg";
 import { ReactComponent as CloseIcon } from "../../images/Close/Default.svg";
 import { ReactComponent as ErrorIcon } from "../../images/icon/Error.svg";
+import { ReactComponent as BikeIcon } from "../../images/icon/Bike.svg";
+import { ReactComponent as ParkingIcon } from "../../images/icon/Local parking.svg";
 import FlexBox from "../FlexBox";
 import Button from "../Button";
 import styleParams from "../../constant/styleParams";
@@ -69,23 +71,45 @@ const TitleWrapper = styled.div`
 
 const AvaInfosContainer = styled(FlexBox)`
   padding: 16px 0;
+
+  & > div:first-child {
+    border-radius: 8px 0px 0px 8px;
+    border-right: 1px solid #757575;
+  }
+
+  & > div:last-child {
+    border-radius: 0px 8px 8px 0px;
+  }
 `;
 
-const AvaInfoBlock = styled(({ title, num, ...rest }) => (
+const AvaInfoBlock = styled(({ title, num, icon, ...rest }) => (
   <FlexBox {...rest}>
-    <span>{title}</span>
-    {num}
+    <FlexBox row align="center">
+      <span>{title}</span>
+      {icon}
+    </FlexBox>
+    <span>{num}</span>
   </FlexBox>
 ))`
-  background-color: ${(props) =>
-    props.num > 0 ? styleParams.mainColorDark : styleParams.errColor};
-  border-radius: 8px;
+  background-color: #f5f5f5;
   color: rgba(0, 0, 0, 0.6);
   padding: 8px 16px;
-  font-size: 24px;
+  font-size: 28px;
+  font-weight: bold;
+
+  & > div:first-child {
+    font-size: 16px;
+    white-space: nowrap;
+    font-weight: normal;
+    margin-bottom: 8px;
+
+    & > *:not(:last-child) {
+      margin-right: 8px;
+    }
+  }
 
   & > span {
-    font-size: 18px;
+    color: ${({ num }) => num === 0 && styleParams.errColor};
   }
 `;
 
@@ -134,18 +158,20 @@ function Marker({
           </InfoCardTitleBar>
           <div>{address}</div>
           {showAvaInfo && (
-            <AvaInfosContainer row gap={8}>
+            <AvaInfosContainer row>
               <AvaInfoBlock
                 justify="center"
                 align="center"
                 title="可租借車輛"
                 num={avaRent}
+                icon={<BikeIcon />}
               />
               <AvaInfoBlock
                 justify="center"
                 align="center"
                 title="可歸還車輛"
                 num={avaReturn}
+                icon={<ParkingIcon />}
               />
             </AvaInfosContainer>
           )}
