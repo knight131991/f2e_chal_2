@@ -6,7 +6,6 @@ import FinishPage from "./FinishPage";
 import cityList from "../../../constant/cityList";
 import youbikeList from "../../../constant/youbikeList";
 import useGetBikeStopInfo from "../../../hooks/useGetBikeStopInfo";
-import Toolbar from "../../../component/toolbar/Toolbar";
 import useRWD from "../../../hooks/useRWD";
 import screenEnum from "../../../constant/screenEnum";
 import StopSelectorToolbar from "./StopSelectorToolbar";
@@ -14,6 +13,7 @@ import Divider from "../../../component/toolbar/Divider";
 import RouteSelectorToolbar from "./RouteSelectorToolbar";
 import styleParams from "../../../constant/styleParams";
 import PlanPageLayout from "../../PlanPageLayout";
+import SubToolbar from "../../../component/toolbar/SubToolbar";
 
 export default function StopSeletorTab({ onModeChange, curTabMode }) {
   const [curMode, setCurMode] = useState("stop");
@@ -79,7 +79,7 @@ export default function StopSeletorTab({ onModeChange, curTabMode }) {
             </>
           );
           secondToolbar = !screenGatherThanLg && (
-            <Toolbar height={subToolbarH}>
+            <SubToolbar>
               <StopSelectorToolbar
                 city={city}
                 onCityChange={setCity}
@@ -88,7 +88,7 @@ export default function StopSeletorTab({ onModeChange, curTabMode }) {
                 youbikeVer={youbikeVer}
                 onSearch={setSearchStop}
               />
-            </Toolbar>
+            </SubToolbar>
           );
           offsetTop = screenGatherThanLg ? 0 : subToolbarH;
           break;
@@ -128,14 +128,14 @@ export default function StopSeletorTab({ onModeChange, curTabMode }) {
               searchKey={searchRoute}
               render={(selectors, search) =>
                 screenGatherThanMd ? (
-                  <Toolbar height={subToolbarH}>
+                  <SubToolbar>
                     {selectors}
                     {search}
-                  </Toolbar>
+                  </SubToolbar>
                 ) : (
                   <>
-                    <Toolbar height={subToolbarH}>{selectors}</Toolbar>
-                    <Toolbar height={subToolbarH}>{search}</Toolbar>
+                    <SubToolbar>{selectors}</SubToolbar>
+                    <SubToolbar>{search}</SubToolbar>
                   </>
                 )
               }

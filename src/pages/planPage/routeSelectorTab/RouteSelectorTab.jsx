@@ -12,13 +12,13 @@ import PlanPageLayout from "../../PlanPageLayout";
 import RouteSelectorToolbar from "./RouteSelectorToolbar";
 import useRWD from "../../../hooks/useRWD";
 import screenEnum from "../../../constant/screenEnum";
-import Toolbar from "../../../component/toolbar/Toolbar";
 import styleParams from "../../../constant/styleParams";
 import FlexBox from "../../../component/FlexBox";
 import StopSelectorToolbar from "./StopSelectorToolbar";
 import youbikeList from "../../../constant/youbikeList";
 import Divider from "../../../component/toolbar/Divider";
 import { getDefaultYoubikeVerByCity } from "../../../component/selector/CityYoubikeSelector";
+import SubToolbar from "../../../component/toolbar/SubToolbar";
 
 function RouteSelectorTab({ onModeChange, curTabMode }) {
   const [curMode, setCurMode] = useState("route");
@@ -115,16 +115,16 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
             !screenGatherThanXl &&
             StopToolbar((whole, cityYoubikeSelect, distanceSelect, search) =>
               screenGatherThanMd ? (
-                <Toolbar height={subToolbarH}>{whole}</Toolbar>
+                <SubToolbar>{whole}</SubToolbar>
               ) : (
                 <>
-                  <Toolbar height={subToolbarH}>{cityYoubikeSelect}</Toolbar>
-                  <Toolbar height={subToolbarH}>
+                  <SubToolbar>{cityYoubikeSelect}</SubToolbar>
+                  <SubToolbar>
                     <FlexBox flex row justify="space-between">
                       {distanceSelect}
                       {search}
                     </FlexBox>
-                  </Toolbar>
+                  </SubToolbar>
                 </>
               )
             );
@@ -157,16 +157,16 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
             !screenGatherThanXl &&
             RouteToolbar((whole, selectors, checkboxGroup, search) =>
               screenGatherThanMd ? (
-                <Toolbar height={subToolbarH}>{whole}</Toolbar>
+                <SubToolbar>{whole}</SubToolbar>
               ) : (
                 <>
-                  <Toolbar height={subToolbarH}>{selectors}</Toolbar>
-                  <Toolbar height={subToolbarH}>
+                  <SubToolbar>{selectors}</SubToolbar>
+                  <SubToolbar>
                     <FlexBox row flex align="center" justify="space-between">
                       {checkboxGroup}
                       {search}
                     </FlexBox>
-                  </Toolbar>
+                  </SubToolbar>
                 </>
               )
             );
