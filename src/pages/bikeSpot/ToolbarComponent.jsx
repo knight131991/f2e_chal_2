@@ -31,7 +31,13 @@ function ToolbarComponent({
   );
 
   const search = useMemo(
-    () => <StyledSearch value={searchKey} onPressEnter={onSearch} />,
+    () => (
+      <StyledSearch
+        value={searchKey}
+        onPressEnter={onSearch}
+        placeholder="站點搜尋"
+      />
+    ),
     [searchKey, onSearch]
   );
   return render ? (

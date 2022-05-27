@@ -2,18 +2,12 @@ import React, { useCallback, useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import GMap from "../../../component/gMap/GMap";
 import SwitchableMainContentLayout from "../../../component/SwitchableMainContentLayout";
-import ListContainer from "../../../component/list/ListContainer";
-import RouteInfoCard from "../../../component/cards/RouteInfoCard";
 import fitGMapBounds from "../../../utils/fitGMapBounds";
-import styled from "styled-components";
 import useGetFilteredRouteInfo from "../../../hooks/useGetFilteredRouteInfo";
 import SelectableRouteMarks from "../../../component/gMap/SelectableRouteMarks";
 import useRWD from "../../../hooks/useRWD";
 import screenEnum from "../../../constant/screenEnum";
-
-const ListTitle = styled.span`
-  font-size: 16px;
-`;
+import RouteInfoListGroup from "../../../component/custom/RouteInfoListGroup";
 
 function RouteSelector({
   routeInfos,
@@ -55,50 +49,15 @@ function RouteSelector({
       loading={loading}
       switchMode={screen <= screenEnum.md}
       leftContent={
-        <>
-          <ListTitle>共 {filteredRouteInfos.length} 條路線</ListTitle>
-          <ListContainer
-            data={filteredRouteInfos.map(
-              (
-                {
-                  RouteName,
-                  CyclingLength,
-                  RoadSectionStart,
-                  RoadSectionEnd,
-                  Geometry,
-                  Direction,
-                },
-                id
-              ) => (
-                <div
-                  key={RouteName}
-                  ref={(ele) => (refEle.current.list[id] = ele)}
-                >
-                  <RouteInfoCard
-                    key={RouteName}
-                    title={RouteName}
-                    direction={Direction}
-                    onClick={() => handleSelectRoute(map, maps, Geometry, id)}
-                    onClickBtn={() =>
-                      onSelectRoute({
-                        name: RouteName,
-                        start: RoadSectionStart,
-                        end: RoadSectionEnd,
-                        length: CyclingLength,
-                        direction: Direction,
-                        geometry: Geometry,
-                      })
-                    }
-                    length={CyclingLength}
-                    checked={selectedRouteId === id}
-                    start={RoadSectionStart}
-                    end={RoadSectionEnd}
-                  />
-                </div>
-              )
-            )}
-          />
-        </>
+        <RouteInfoListGroup
+          routInfos={filteredRouteInfos}
+          refEle={refEle}
+          selectedRouteId={selectedRouteId}
+          onClickCard={(Geometry, id) =>
+            handleSelectRoute(map, maps, Geometry, id)
+          }
+          onClickCardBtn={(infos) => onSelectRoute(infos)}
+        />
       }
       rightContent={
         <GMap

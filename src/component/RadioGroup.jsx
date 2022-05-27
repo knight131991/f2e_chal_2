@@ -45,7 +45,7 @@ RadioGroup.defaultProps = {
 RadioGroup.propTypes = {
   items: PropTypes.arrayOf(
     PropTypes.shape({
-      label: PropTypes.element,
+      label: PropTypes.node,
       icon: PropTypes.element,
       value: PropTypes.string,
     })

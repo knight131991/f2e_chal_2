@@ -105,7 +105,7 @@ function NavHeader({ opaque, pos, curRouter }) {
             {name}
           </LinkBtn>
         );
-        return render ? render(component) : component;
+        return render ? <span key={name}>{render(component)}</span> : component;
       }),
     [curRouter, btnList]
   );

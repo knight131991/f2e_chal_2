@@ -20,6 +20,7 @@ import ToolbarComponent from "./ToolbarComponent";
 import useRWD from "../../hooks/useRWD";
 import screenEnum from "../../constant/screenEnum";
 import SubToolbar from "../../component/toolbar/SubToolbar";
+import StyleParams from "../../constant/styleParams";
 
 const StyledEmptyResultHint = styled(EmptyResultHint)`
   transform: translate(-50%, -50%);
@@ -104,7 +105,9 @@ function BikeSpot(props) {
             {selector} {search}
           </SubToolbar>
         ))}
-      <MainContentContainer>
+      <MainContentContainer
+        offsetTop={!screengatherthanlg && StyleParams.secondToolbarHeight}
+      >
         <FlexSpin spinning={loading}>
           <GMap
             onMount={(_map, _maps) => {

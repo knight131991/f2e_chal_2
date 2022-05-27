@@ -42,6 +42,7 @@ function RouteInfoCard({
   start,
   end,
   distance,
+  hideBtn,
 }) {
   return (
     <InfoCard
@@ -50,10 +51,15 @@ function RouteInfoCard({
       onClickBtn={onClickBtn}
       onClick={onClick}
       checked={checked}
+      hideBtn={hideBtn}
       extraTitle={direction && <StyledStateLable label={direction} />}
       content={
         <>
-          <StyledStartEndStopInfo start={start} end={end} direction={direction} />
+          <StyledStartEndStopInfo
+            start={start}
+            end={end}
+            direction={direction}
+          />
           {distance && <LengthWrapper> 距離 {distance} 公里</LengthWrapper>}
           <DistanceWrapper>
             <span> 總長</span> <BlodBlockText> {length} 公里</BlodBlockText>

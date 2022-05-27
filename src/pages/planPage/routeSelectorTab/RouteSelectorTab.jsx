@@ -9,7 +9,7 @@ import FinishPage from "../stopSelectorTab/FinishPage";
 import { useHistory } from "react-router";
 import appendDistanceToRouteInfo from "../../../utils/appendDistanceToRouteInfo";
 import PlanPageLayout from "../../PlanPageLayout";
-import RouteSelectorToolbar from "./RouteSelectorToolbar";
+import RouteSelectorToolbar from "../../../component/custom/RouteSelectorToolbar";
 import useRWD from "../../../hooks/useRWD";
 import screenEnum from "../../../constant/screenEnum";
 import styleParams from "../../../constant/styleParams";

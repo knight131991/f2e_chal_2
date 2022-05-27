@@ -1,106 +1,144 @@
-import { Input } from "antd";
-import React, { useEffect, useMemo, useState } from "react";
-import styled from "styled-components";
-import DarkPad from "../component/DarkPad";
-import FlexBox from "../component/FlexBox";
-import FlexSpin from "../component/FlexSpin";
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+} from "react";
 import GMap from "../component/gMap/GMap";
-import InfoCard from "../component/cards/InfoCard";
-import NoDataHint from "../component/NoDataHint";
-import RouteFilters from "../component/RouteFilters";
-import { useOrderChange } from "../component/RouteOrderSelector";
 import cityList from "../constant/cityList";
 import useGetRoute from "../hooks/useGetRoute";
-import getCenterPos from "../utils/getCenterPos";
+import PageContainer from "../component/PageContainer";
+import Toolbar from "../component/toolbar/Toolbar";
+import RouteSelectorToolbar from "../component/custom/RouteSelectorToolbar";
+import MainContentContainer from "../component/MainContentContainer";
+import SwitchableMainContentLayout from "../component/SwitchableMainContentLayout";
+import RouteInfoListGroup from "../component/custom/RouteInfoListGroup";
+import fitGMapBounds from "../utils/fitGMapBounds";
+import useGetFilteredRouteInfo from "../hooks/useGetFilteredRouteInfo";
+import SelectableRouteMarks from "../component/gMap/SelectableRouteMarks";
+import useRWD from "../hooks/useRWD";
+import screenEnum from "../constant/screenEnum";
+import SubToolbar from "../component/toolbar/SubToolbar";
+import styleParams from "../constant/styleParams";
 // import PropTypes from "prop-types";
-
-const Container = styled(FlexBox)`
-  height: 0px;
-`;
-
-const ListConainer = styled(FlexBox)`
-  overflow: auto;
-`;
-
 function BikeRoute(props) {
-  const [selectedRoute, setSelectedRoute] = useState([]);
   const [city, setCity] = useState(cityList[0].value);
-  const [centerPos, setCenterPos] = useState();
   const [dirFilter, setDirFilter] = useState([]);
   const [searchKey, setSearchKey] = useState("");
+  const [routeLen, setRouteLen] = useState("");
+  const [selectedRouteId, setSelectedRouteId] = useState();
+  const [selectedRoute, setSelectedRoute] = useState([]);
+  const [map, setMap] = useState();
+  const [maps, setMaps] = useState();
   const { getRoute, data, isLoading } = useGetRoute([]);
-  const { handleSorterChange, sortBy } = useOrderChange();
+  const refEle = useRef({ list: [] });
+  const { screen } = useRWD();
 
   useEffect(() => {
-    getRoute(city, (val) => val, searchKey);
-  }, [getRoute, city, searchKey]);
+    getRoute(city, (val) => val, searchKey, routeLen);
+  }, [getRoute, city, searchKey, routeLen]);
 
-  const filterdRouteInfos = useMemo(() => {
-    if (dirFilter.length === 0) return data;
-    return data.filter(({ Direction }) => dirFilter.includes(Direction));
-  }, [dirFilter, data]);
+  const { filteredRouteInfos, routeStartStops } = useGetFilteredRouteInfo(
+    dirFilter,
+    data
+  );
+
+  useEffect(() => {
+    fitGMapBounds(map, maps, routeStartStops);
+  }, [routeStartStops, map, maps]);
+
+  useEffect(() => {
+    setSelectedRoute([]);
+    setSelectedRouteId();
+  }, [dirFilter, city, routeLen]);
+
+  const handleSelectRoute = useCallback((map, maps, geometry, id) => {
+    setSelectedRoute(geometry);
+    fitGMapBounds(map, maps, geometry);
+    setSelectedRouteId(id);
+  }, []);
+
+  const toolbarComponent = useCallback(
+    (render) => (
+      <RouteSelectorToolbar
+        city={city}
+        routeLen={routeLen}
+        onCityChange={setCity}
+        onRouteLenChange={setRouteLen}
+        onDireactChange={setDirFilter}
+        searchMarginLeft
+        onSearch={setSearchKey}
+        render={render}
+      />
+    ),
+    [city, routeLen]
+  );
+
+  const { screenGratherThanMd, offsetTop } = useMemo(() => {
+    const screenGratherThanMd = screen > screenEnum.md;
+    return {
+      screenGratherThanMd,
+      offsetTop: !screenGratherThanMd && styleParams.secondToolbarHeight,
+    };
+  }, [screen]);
 
   return (
-    <FlexBox flex>
-      自行車路線
-      <DarkPad flex>
-        <FlexBox row>
-          <RouteFilters
-            city={city}
-            onSelectCity={setCity}
-            onRouterOrderChange={handleSorterChange}
-            onDirectionChange={setDirFilter}
-          />
-          <Input.Search onSearch={setSearchKey} />
-        </FlexBox>
-        共 {filterdRouteInfos.length} 條路線
-        <Container row flex>
-          <FlexSpin spinning={isLoading}>
-            <ListConainer flex>
-              {filterdRouteInfos.length === 0 ? (
-                <NoDataHint />
-              ) : (
-                filterdRouteInfos
-                  .sort((a, b) => a[sortBy] - b[sortBy])
-                  .map(
-                    (
-                      {
-                        RouteName,
-                        CyclingLength,
-                        RoadSectionStart,
-                        RoadSectionEnd,
-                        Geometry,
-                        Direction,
-                      },
-                      id
-                    ) => (
-                      <InfoCard
-                        key={id}
-                        title={RouteName}
-                        onClick={() => {
-                          setSelectedRoute(Geometry);
-                          setCenterPos(getCenterPos(Geometry));
-                        }}
-                        content={
-                          <>
-                            <span>
-                              {RoadSectionStart} - {RoadSectionEnd}
-                            </span>
-                            <span>
-                              車道長度：{CyclingLength} 公里 {Direction}
-                            </span>
-                          </>
-                        }
-                      />
-                    )
-                  )
-              )}
-            </ListConainer>
-            <GMap steps={selectedRoute} center={centerPos} />
-          </FlexSpin>
-        </Container>
-      </DarkPad>
-    </FlexBox>
+    <PageContainer>
+      <Toolbar>
+        {toolbarComponent((whole, selectors) =>
+          screenGratherThanMd ? whole : selectors
+        )}
+      </Toolbar>
+      {!screenGratherThanMd &&
+        toolbarComponent((whole, selectors, checkboxGroup, search) => (
+          <SubToolbar>
+            {checkboxGroup} {search}
+          </SubToolbar>
+        ))}
+      <MainContentContainer offsetTop={offsetTop}>
+        <SwitchableMainContentLayout
+          switchMode={screen <= screenEnum.md}
+          leftContent={
+            <RouteInfoListGroup
+              refEle={refEle}
+              routInfos={filteredRouteInfos}
+              hideCardBtn
+              selectedRouteId={selectedRouteId}
+              onClickCard={(geometry, id) =>
+                handleSelectRoute(map, maps, geometry, id)
+              }
+            />
+          }
+          rightContent={
+            <GMap
+              steps={selectedRoute}
+              onMount={(_map, _maps) => {
+                setMap(_map);
+                setMaps(_maps);
+              }}
+            >
+              {SelectableRouteMarks({
+                selectedRoute: selectedRoute,
+                allRouteStartStops: routeStartStops,
+                onClickRouteMark: (id) => {
+                  handleSelectRoute(
+                    map,
+                    maps,
+                    filteredRouteInfos[id].Geometry,
+                    id
+                  );
+                  refEle.current.list[id].scrollIntoView({
+                    behavior: "smooth",
+                  });
+                },
+              })}
+            </GMap>
+          }
+          loading={isLoading}
+        />
+      </MainContentContainer>
+    </PageContainer>
   );
 }
 

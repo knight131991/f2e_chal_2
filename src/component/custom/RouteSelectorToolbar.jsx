@@ -1,18 +1,22 @@
 import React, { useMemo } from "react";
 import PropTypes from "prop-types";
-import Divider from "../../../component/toolbar/Divider";
-import CitySelector from "../../../component/selector/CitySelector";
-import DistanceSelector from "../../../component/selector/DistanceSelector";
-import CheckboxGroup from "../../../component/CheckboxGroup";
-import { directionList } from "../../../constant/directionEnum";
-import Search from "../../../component/Search";
-import FlexBox from "../../../component/FlexBox";
+import Divider from "../toolbar/Divider";
+import CitySelector from "../selector/CitySelector";
+import DistanceSelector from "../selector/DistanceSelector";
+import CheckboxGroup from "../CheckboxGroup";
+import { directionList } from "../../constant/directionEnum";
+import Search from "../Search";
+import FlexBox from "../FlexBox";
 import styled from "styled-components";
 
 const SelectorsContainer = styled(FlexBox)`
   .ant-select + .ant-select {
     margin-left: 8px;
   }
+`;
+
+const StyledSearch = styled(({ marginLeft, ...rest }) => <Search {...rest} />)`
+  ${({ marginLeft }) => marginLeft && "margin-left: 8px;"}
 `;
 
 function RouteSelectorToolbar({
@@ -23,6 +27,7 @@ function RouteSelectorToolbar({
   onDireactChange,
   onSearch,
   searchKey,
+  searchMarginLeft,
   render,
 }) {
   const selectors = useMemo(
@@ -48,13 +53,14 @@ function RouteSelectorToolbar({
 
   const search = useMemo(
     () => (
-      <Search
+      <StyledSearch
         value={searchKey}
         placeholder="路線 / 起、迄點搜尋"
         onPressEnter={onSearch}
+        marginLeft={searchMarginLeft}
       />
     ),
-    [onSearch, searchKey]
+    [onSearch, searchKey, searchMarginLeft]
   );
 
   const wholeComponent = useMemo(
