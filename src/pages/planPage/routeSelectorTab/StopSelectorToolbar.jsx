@@ -19,6 +19,7 @@ function StopSelectorToolbar({
   onYoubikeChange,
   onDistanceChange,
   onSearch,
+  onSearchChange,
   searchKey,
   render,
 }) {
@@ -50,9 +51,10 @@ function StopSelectorToolbar({
         value={searchKey}
         placeholder="站點搜尋"
         onPressEnter={onSearch}
+        onChange={onSearchChange}
       />
     ),
-    [onSearch, searchKey]
+    [onSearch, onSearchChange, searchKey]
   );
 
   const wholeComponent = useMemo(

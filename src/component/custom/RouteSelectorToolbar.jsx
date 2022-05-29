@@ -26,6 +26,7 @@ function RouteSelectorToolbar({
   onRouteLenChange,
   onDireactChange,
   onSearch,
+  onSearchChange,
   searchKey,
   searchMarginLeft,
   render,
@@ -57,10 +58,11 @@ function RouteSelectorToolbar({
         value={searchKey}
         placeholder="路線 / 起、迄點搜尋"
         onPressEnter={onSearch}
+        onChange={onSearchChange}
         marginLeft={searchMarginLeft}
       />
     ),
-    [onSearch, searchKey, searchMarginLeft]
+    [onSearch, onSearchChange, searchKey, searchMarginLeft]
   );
 
   const wholeComponent = useMemo(

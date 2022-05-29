@@ -4,11 +4,13 @@ import styled from "styled-components";
 import { Input } from "antd";
 import { ReactComponent as SearchIcon } from "../images/icon/Search.svg";
 
-export default styled(({ onPressEnter, ...rest }) => (
+export default styled(({ onPressEnter, onChange, ...rest }) => (
   <Input
     allowClear
+    enterkeyhint="search"
     prefix={<SearchIcon />}
-    onChange={(e) => onPressEnter(e.target.value)}
+    onPressEnter={(e) => onPressEnter(e.target.value)}
+    onChange={(e) => onChange(e.target.value)}
     {...rest}
   />
 ))`

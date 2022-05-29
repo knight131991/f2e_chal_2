@@ -15,6 +15,7 @@ function StopSelectorToolbar({
   onYoubikeChange,
   youbikeVer,
   onSearch,
+  onSearchChange,
   searchKey,
 }) {
   return (
@@ -29,6 +30,7 @@ function StopSelectorToolbar({
         value={searchKey}
         placeholder="站點搜尋"
         onPressEnter={onSearch}
+        onChange={onSearchChange}
       />
     </FlexBox>
   );

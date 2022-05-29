@@ -26,6 +26,7 @@ function BikeRoute(props) {
   const [city, setCity] = useState(cityList[0].value);
   const [dirFilter, setDirFilter] = useState([]);
   const [searchKey, setSearchKey] = useState("");
+  const [searchKeyVal, setSearchKeyVal] = useState("");
   const [routeLen, setRouteLen] = useState("");
   const [selectedRouteId, setSelectedRouteId] = useState();
   const [selectedRoute, setSelectedRoute] = useState([]);
@@ -64,15 +65,17 @@ function BikeRoute(props) {
       <RouteSelectorToolbar
         city={city}
         routeLen={routeLen}
+        searchKey={searchKeyVal}
         onCityChange={setCity}
         onRouteLenChange={setRouteLen}
         onDireactChange={setDirFilter}
         searchMarginLeft
         onSearch={setSearchKey}
+        onSearchChange={setSearchKeyVal}
         render={render}
       />
     ),
-    [city, routeLen]
+    [city, routeLen, searchKeyVal]
   );
 
   const { screenGratherThanMd, offsetTop } = useMemo(() => {

@@ -23,6 +23,8 @@ export default function StopSeletorTab({ onModeChange, curTabMode }) {
   const [routeInfo, setRouteInfo] = useState({});
   const [searchStop, setSearchStop] = useState("");
   const [searchRoute, setSearchRoute] = useState("");
+  const [searchStopVal, setSearchStopVal] = useState("");
+  const [searchRouteVal, setSearchRouteVal] = useState("");
   const [routeLen, setRouteLen] = useState();
   const [notFoundStop, setNotFoundStop] = useState(false);
   const [dirFilter, setDirFilter] = useState([]);
@@ -70,11 +72,12 @@ export default function StopSeletorTab({ onModeChange, curTabMode }) {
               <Divider />
               <StopSelectorToolbar
                 city={city}
-                searchKey={searchStop}
+                searchKey={searchStopVal}
                 onCityChange={setCity}
                 onYoubikeChange={setYoubikeVer}
                 youbikeVer={youbikeVer}
                 onSearch={setSearchStop}
+                onSearchChange={setSearchStopVal}
               />
             </>
           );
@@ -83,10 +86,11 @@ export default function StopSeletorTab({ onModeChange, curTabMode }) {
               <StopSelectorToolbar
                 city={city}
                 onCityChange={setCity}
-                searchKey={searchStop}
+                searchKey={searchStopVal}
                 onYoubikeChange={setYoubikeVer}
                 youbikeVer={youbikeVer}
                 onSearch={setSearchStop}
+                onSearchChange={setSearchStopVal}
               />
             </SubToolbar>
           );
@@ -115,7 +119,8 @@ export default function StopSeletorTab({ onModeChange, curTabMode }) {
                 onRouteChange={setRouteLen}
                 onDireactChange={setDirFilter}
                 onSearch={setSearchRoute}
-                searchKey={searchRoute}
+                onSearchChange={setSearchRouteVal}
+                searchKey={searchRouteVal}
               />
             </>
           );
@@ -125,7 +130,8 @@ export default function StopSeletorTab({ onModeChange, curTabMode }) {
               onRouteChange={setRouteLen}
               onDireactChange={setDirFilter}
               onSearch={setSearchRoute}
-              searchKey={searchRoute}
+              onSearchChange={setSearchRouteVal}
+              searchKey={searchRouteVal}
               render={(selectors, search) =>
                 screenGatherThanMd ? (
                   <SubToolbar>
@@ -171,7 +177,8 @@ export default function StopSeletorTab({ onModeChange, curTabMode }) {
       searchRoute,
       dirFilter,
       screen,
-      searchStop,
+      searchStopVal,
+      searchRouteVal,
     ]);
 
   return (

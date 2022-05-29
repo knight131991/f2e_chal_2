@@ -31,6 +31,7 @@ function BikeSpot(props) {
   const [youbikeVer, setYoubikeVer] = useState(youbikeList[0].value);
   const [curMode, setCurMode] = useState("rent");
   const [searchKey, setSearchKey] = useState("");
+  const [searchKeyVal, setSearchKeyVal] = useState("");
   const [selectedStop, setSelectedStop] = useState();
   const [map, setMap] = useState();
   const [maps, setMaps] = useState();
@@ -63,12 +64,13 @@ function BikeSpot(props) {
         onCityChange={setCity}
         youbikeVer={youbikeVer}
         onYoubikeChange={setYoubikeVer}
-        searchKey={searchKey}
+        searchKey={searchKeyVal}
         onSearch={setSearchKey}
+        onSearchChange={setSearchKeyVal}
         render={render}
       />
     ),
-    [city, setCity, youbikeVer, setYoubikeVer, searchKey, setSearchKey]
+    [city, setCity, youbikeVer, setYoubikeVer, searchKeyVal, setSearchKey]
   );
 
   const { screengatherthanlg } = useMemo(

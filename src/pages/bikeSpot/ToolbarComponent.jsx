@@ -16,6 +16,7 @@ function ToolbarComponent({
   onYoubikeChange,
   searchKey,
   onSearch,
+  onSearchChange,
   render,
 }) {
   const selector = useMemo(
@@ -35,10 +36,11 @@ function ToolbarComponent({
       <StyledSearch
         value={searchKey}
         onPressEnter={onSearch}
+        onChange={onSearchChange}
         placeholder="站點搜尋"
       />
     ),
-    [searchKey, onSearch]
+    [searchKey, onSearch, onSearchChange]
   );
   return render ? (
     render(selector, search)

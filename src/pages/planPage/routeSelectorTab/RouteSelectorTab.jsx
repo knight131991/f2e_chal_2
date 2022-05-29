@@ -32,6 +32,8 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
   const [dirFilter, setDirFilter] = useState([]);
   const [searchRoute, setSearchRoute] = useState();
   const [searchStop, setSearchStop] = useState();
+  const [searchRouteVal, setSearchRouteVal] = useState();
+  const [searchStopVal, setSearchStopVal] = useState();
   const [distance, setDistance] = useState();
   const [youbikeVer, setYoubikeVer] = useState(youbikeList[0].value);
   const { getRoute, data, isLoading } = useGetRoute([]);
@@ -65,8 +67,9 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
           youbikeVer={youbikeVer}
           onYoubikeChange={setYoubikeVer}
           onSearch={setSearchStop}
+          onSearchChange={setSearchStopVal}
           onDistanceChange={setDistance}
-          searchKey={searchStop}
+          searchKey={searchStopVal}
           render={render}
         />
       );
@@ -83,7 +86,8 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
           onRouteLenChange={setRouteLen}
           onDireactChange={setDirFilter}
           onSearch={setSearchRoute}
-          searchKey={searchRoute}
+          onSearchChange={setSearchRouteVal}
+          searchKey={searchRouteVal}
           render={render}
         />
       );
@@ -193,11 +197,12 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
       routeLen,
       dirFilter,
       screen,
-      searchRoute,
       youbikeVer,
       searchStop,
       stopCity,
       distance,
+      searchRouteVal, 
+      searchStopVal
     ]);
 
   return (
