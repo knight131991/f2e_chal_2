@@ -7,7 +7,13 @@ import { cityEnum } from "../../constant/cityList";
 import youbikeList from "../../constant/youbikeList";
 import styled from "styled-components";
 
-const cityTypeSwitch = (city, type1CB, type2CB, type3CB, defaultCB) => {
+const cityTypeSwitch = (
+  city,
+  type1CB,
+  type2CB,
+  type3CB,
+  defaultCB = () => {}
+) => {
   switch (city) {
     case cityEnum.tpe.value:
     case cityEnum.nwt.value:
@@ -29,13 +35,12 @@ const cityTypeSwitch = (city, type1CB, type2CB, type3CB, defaultCB) => {
 };
 
 export const getDefaultYoubikeVerByCity = (city) => {
-  let result = 1;
+  let result;
   cityTypeSwitch(
     city,
     () => (result = 1),
     () => (result = 1),
-    () => (result = 2),
-    () => (result = 1)
+    () => (result = 2)
   );
   return result;
 };
@@ -53,7 +58,6 @@ function CityYoubikeSelector({
   onYoubikeChange,
 }) {
   const [options, setOptions] = useState(youbikeList);
-
 
   /* 此useCallback與下方的useEffect做的事情很類似，但不能把他們合併，主要是因為
       1. options是在此元件內的state，所以此元件re-mount的時候options的狀態就會重置，所以每次mount此元件時，就要用useEffect來重新取得正確的options
