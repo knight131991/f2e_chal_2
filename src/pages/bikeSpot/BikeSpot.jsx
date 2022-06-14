@@ -14,7 +14,7 @@ import Toolbar from "../../component/toolbar/Toolbar";
 import ModeSelector from "../planPage/ModeSelector";
 import youbikeList from "../../constant/youbikeList";
 import Divider from "../../component/toolbar/Divider";
-import MainContentContainer from "../../component/MainContentContainer";
+import CollapsibleToolbarLayout from "../../component/toolbar/CollapsibleToolbarLayout";
 import fitGMapBounds from "../../utils/fitGMapBounds";
 import ToolbarComponent from "./ToolbarComponent";
 import useRWD from "../../hooks/useRWD";
@@ -83,78 +83,83 @@ function BikeSpot(props) {
 
   return (
     <PageContainer>
-      <Toolbar>
-        <ModeSelector
-          value={curMode}
-          onChange={setCurMode}
-          items={[
-            { value: "rent", label: "租借 Youbike" },
-            { value: "return", label: "歸還 Youbike" },
-          ]}
-        />
-        {screengatherthanlg && (
+      <CollapsibleToolbarLayout
+        toolbar={
           <>
-            <Divider />
-            <FlexBox flex row justify="space-between">
-              {toolbarComponent()}
-            </FlexBox>
+            <Toolbar>
+              <ModeSelector
+                value={curMode}
+                onChange={setCurMode}
+                items={[
+                  { value: "rent", label: "租借 Youbike" },
+                  { value: "return", label: "歸還 Youbike" },
+                ]}
+              />
+              {screengatherthanlg && (
+                <>
+                  <Divider />
+                  <FlexBox flex row justify="space-between">
+                    {toolbarComponent()}
+                  </FlexBox>
+                </>
+              )}
+            </Toolbar>
+            {!screengatherthanlg &&
+              toolbarComponent((selector, search) => (
+                <SubToolbar>
+                  {selector} {search}
+                </SubToolbar>
+              ))}
           </>
-        )}
-      </Toolbar>
-      {!screengatherthanlg &&
-        toolbarComponent((selector, search) => (
-          <SubToolbar>
-            {selector} {search}
-          </SubToolbar>
-        ))}
-      <MainContentContainer
-        offsetTop={!screengatherthanlg && StyleParams.secondToolbarHeight}
-      >
-        <FlexSpin spinning={loading}>
-          <GMap
-            onMount={(_map, _maps) => {
-              setMap(_map);
-              setMaps(_maps);
-            }}
-          >
-            {noData ? (
-              <StyledEmptyResultHint />
-            ) : (
-              data.map((item, id) => {
-                const { lat, lng } = getPos(item);
-                const {
-                  AvailableRentBikes,
-                  AvailableReturnBikes,
-                  StationAddress,
-                  StationName,
-                } = item;
-                const name = StationName.Zh_tw;
-                const address = StationAddress.Zh_tw;
-                return (
-                  <Marker
-                    key={id}
-                    lat={lat}
-                    lng={lng}
-                    num={
-                      curMode === "rent"
-                        ? AvailableRentBikes
-                        : AvailableReturnBikes
-                    }
-                    avaRent={AvailableRentBikes}
-                    avaReturn={AvailableReturnBikes}
-                    name={name}
-                    showAvaInfo
-                    showInfoCard={selectedStop === id}
-                    address={address}
-                    onClick={() => setSelectedStop(id)}
-                    onCloseInfoCard={() => setSelectedStop()}
-                  />
-                );
-              })
-            )}
-          </GMap>
-        </FlexSpin>
-      </MainContentContainer>
+        }
+        content={
+          <FlexSpin spinning={loading}>
+            <GMap
+              onMount={(_map, _maps) => {
+                setMap(_map);
+                setMaps(_maps);
+              }}
+            >
+              {noData ? (
+                <StyledEmptyResultHint />
+              ) : (
+                data.map((item, id) => {
+                  const { lat, lng } = getPos(item);
+                  const {
+                    AvailableRentBikes,
+                    AvailableReturnBikes,
+                    StationAddress,
+                    StationName,
+                  } = item;
+                  const name = StationName.Zh_tw;
+                  const address = StationAddress.Zh_tw;
+                  return (
+                    <Marker
+                      key={id}
+                      lat={lat}
+                      lng={lng}
+                      num={
+                        curMode === "rent"
+                          ? AvailableRentBikes
+                          : AvailableReturnBikes
+                      }
+                      avaRent={AvailableRentBikes}
+                      avaReturn={AvailableReturnBikes}
+                      name={name}
+                      showAvaInfo
+                      showInfoCard={selectedStop === id}
+                      address={address}
+                      onClick={() => setSelectedStop(id)}
+                      onCloseInfoCard={() => setSelectedStop()}
+                    />
+                  );
+                })
+              )}
+            </GMap>
+          </FlexSpin>
+        }
+        contentOffset={!screengatherthanlg && StyleParams.secondToolbarHeight}
+      />
     </PageContainer>
   );
 }

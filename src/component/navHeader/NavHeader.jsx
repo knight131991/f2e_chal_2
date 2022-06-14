@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import FlexBox from "../FlexBox";
 import Button from "../Button";
-import PText from "../texts/PText";
 import BlackText from "../texts/BlackText";
 import Logo from "../Logo";
 import useRWD, { useRWDStyleParams } from "../../hooks/useRWD";
@@ -126,9 +125,9 @@ function NavHeader({ opaque, pos, curRouter }) {
       ) : (
         <FlexBox row gap={33}>
           {btnListCreator()}
-          <LinkBtn>
+          {/* <LinkBtn>
             <PText>註冊/登入</PText>
-          </LinkBtn>
+          </LinkBtn> */}
         </FlexBox>
       )}
       <Drawer

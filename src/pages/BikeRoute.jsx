@@ -11,7 +11,6 @@ import useGetRoute from "../hooks/useGetRoute";
 import PageContainer from "../component/PageContainer";
 import Toolbar from "../component/toolbar/Toolbar";
 import RouteSelectorToolbar from "../component/custom/RouteSelectorToolbar";
-import MainContentContainer from "../component/MainContentContainer";
 import SwitchableMainContentLayout from "../component/SwitchableMainContentLayout";
 import RouteInfoListGroup from "../component/custom/RouteInfoListGroup";
 import fitGMapBounds from "../utils/fitGMapBounds";
@@ -21,6 +20,7 @@ import useRWD from "../hooks/useRWD";
 import screenEnum from "../constant/screenEnum";
 import SubToolbar from "../component/toolbar/SubToolbar";
 import styleParams from "../constant/styleParams";
+import CollapsibleToolbarLayout from "../component/toolbar/CollapsibleToolbarLayout";
 // import PropTypes from "prop-types";
 function BikeRoute(props) {
   const [city, setCity] = useState(cityList[0].value);
@@ -88,59 +88,67 @@ function BikeRoute(props) {
 
   return (
     <PageContainer>
-      <Toolbar>
-        {toolbarComponent((whole, selectors) =>
-          screenGratherThanMd ? whole : selectors
-        )}
-      </Toolbar>
-      {!screenGratherThanMd &&
-        toolbarComponent((whole, selectors, checkboxGroup, search) => (
-          <SubToolbar>
-            {checkboxGroup} {search}
-          </SubToolbar>
-        ))}
-      <MainContentContainer offsetTop={offsetTop}>
-        <SwitchableMainContentLayout
-          switchMode={screen <= screenEnum.md}
-          leftContent={
-            <RouteInfoListGroup
-              refEle={refEle}
-              routInfos={filteredRouteInfos}
-              hideCardBtn
-              selectedRouteId={selectedRouteId}
-              onClickCard={(geometry, id) =>
-                handleSelectRoute(map, maps, geometry, id)
-              }
-            />
-          }
-          rightContent={
-            <GMap
-              steps={selectedRoute}
-              onMount={(_map, _maps) => {
-                setMap(_map);
-                setMaps(_maps);
-              }}
-            >
-              {SelectableRouteMarks({
-                selectedRoute: selectedRoute,
-                allRouteStartStops: routeStartStops,
-                onClickRouteMark: (id) => {
-                  handleSelectRoute(
-                    map,
-                    maps,
-                    filteredRouteInfos[id].Geometry,
-                    id
-                  );
-                  refEle.current.list[id].scrollIntoView({
-                    behavior: "smooth",
-                  });
-                },
-              })}
-            </GMap>
-          }
-          loading={isLoading}
-        />
-      </MainContentContainer>
+      <CollapsibleToolbarLayout
+        toolbar={
+          <>
+            {" "}
+            <Toolbar>
+              {toolbarComponent((whole, selectors) =>
+                screenGratherThanMd ? whole : selectors
+              )}
+            </Toolbar>
+            {!screenGratherThanMd &&
+              toolbarComponent((whole, selectors, checkboxGroup, search) => (
+                <SubToolbar>
+                  {checkboxGroup} {search}
+                </SubToolbar>
+              ))}
+          </>
+        }
+        content={
+          <SwitchableMainContentLayout
+            switchMode={screen <= screenEnum.md}
+            leftContent={
+              <RouteInfoListGroup
+                refEle={refEle}
+                routInfos={filteredRouteInfos}
+                hideCardBtn
+                selectedRouteId={selectedRouteId}
+                onClickCard={(geometry, id) =>
+                  handleSelectRoute(map, maps, geometry, id)
+                }
+              />
+            }
+            rightContent={
+              <GMap
+                steps={selectedRoute}
+                onMount={(_map, _maps) => {
+                  setMap(_map);
+                  setMaps(_maps);
+                }}
+              >
+                {SelectableRouteMarks({
+                  selectedRoute: selectedRoute,
+                  allRouteStartStops: routeStartStops,
+                  onClickRouteMark: (id) => {
+                    handleSelectRoute(
+                      map,
+                      maps,
+                      filteredRouteInfos[id].Geometry,
+                      id
+                    );
+                    refEle.current.list[id].scrollIntoView({
+                      behavior: "smooth",
+                    });
+                  },
+                })}
+              </GMap>
+            }
+            loading={isLoading}
+          />
+        }
+        contentOffset={offsetTop}
+      />
     </PageContainer>
   );
 }

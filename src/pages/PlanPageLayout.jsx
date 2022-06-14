@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Toolbar from "../component/toolbar/Toolbar";
 import ModeSelector from "./planPage/ModeSelector";
-import MainContentContainer from "../component/MainContentContainer";
+import CollapsibleToolbarLayout from "../component/toolbar/CollapsibleToolbarLayout";
 
 function PlanPageLayout({
   onModeChange,
@@ -13,16 +13,19 @@ function PlanPageLayout({
   curMode,
 }) {
   return (
-    <>
-      <Toolbar>
-        <ModeSelector value={curMode} onChange={onModeChange} />
-        {toolbarComponent}
-      </Toolbar>
-      {secondToolbar}
-      <MainContentContainer offsetTop={offsetTop}>
-        {mainComponent}
-      </MainContentContainer>
-    </>
+    <CollapsibleToolbarLayout
+      toolbar={
+        <>
+          <Toolbar>
+            <ModeSelector value={curMode} onChange={onModeChange} />
+            {toolbarComponent}
+          </Toolbar>
+          {secondToolbar}
+        </>
+      }
+      content={mainComponent}
+      contentOffset={offsetTop}
+    />
   );
 }
 
