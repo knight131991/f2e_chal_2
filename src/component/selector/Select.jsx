@@ -104,7 +104,7 @@ const StyledSelect = styled(({ minW, fontSize, ...rest }) => (
 const Select = (props) => {
   const { minW, fontSize } = useRWD(
     { minW: 170, fontSize: 16 },
-    { m: { minW: 150 }, s: { minW: 50, fontSize: 14 } }
+    { m: { minW: 150 }, s: { minW: 100, fontSize: 14 } }
   );
   return (
     <StyledSelect
