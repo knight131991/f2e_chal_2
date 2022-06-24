@@ -19,15 +19,6 @@ import useGetFilteredRouteInfo from "../../../hooks/useGetFilteredRouteInfo";
 import SelectableRouteMarks from "../../../component/gMap/SelectableRouteMarks";
 import ListContainer from "../../../component/list/ListContainer";
 
-const ListConainer = styled(FlexBox)`
-  overflow: auto;
-  margin-top: 16px;
-  padding-right: 2px;
-  & > * {
-    margin-bottom: 16px;
-  }
-`;
-
 const StyledEmptyResultHint = styled(EmptyResultHint)`
   transform: translate(-50%, -50%);
 `;

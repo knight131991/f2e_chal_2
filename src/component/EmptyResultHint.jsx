@@ -8,7 +8,7 @@ function EmptyResultHint({ specificStr, ...rest }) {
   return (
     <FlexBox justify="center" align="center" {...rest}>
       <Error />
-      <div>無此{specificStr}，請嘗試其他關鍵字</div>
+      <div>無相關的{specificStr}</div>
     </FlexBox>
   );
 }

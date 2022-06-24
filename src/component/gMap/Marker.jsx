@@ -42,6 +42,7 @@ const InfoCardContainer = styled.div`
   background: #fff;
   max-width: 400px;
   border-radius: 8px;
+  transform: translateX(-50%);
 `;
 
 const InfoCardTitleBar = styled(FlexBox)`
