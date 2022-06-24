@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import PropTypes from "prop-types";
 import FlexBox from "./FlexBox";
 import styled from "styled-components";
@@ -69,6 +69,10 @@ function SwitchableMainContentLayout({
     }
     return { btnText: "顯示地圖", btnIcon: <Map /> };
   }, [showRightSide]);
+
+  useEffect(() => {
+    if (!switchMode) setShowRightSide(false);
+  }, [switchMode]);
 
   return (
     <Container row flex>
