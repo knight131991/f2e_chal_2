@@ -203,7 +203,8 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
       stopCity,
       distance,
       searchRouteVal, 
-      searchStopVal
+      searchStopVal,
+      searchRoute
     ]);
 
   return (
