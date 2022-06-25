@@ -145,6 +145,7 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
               routeLen={routeLen}
               dirFilter={dirFilter}
               onSelectCity={setRouteCity}
+              searchRoute={searchRoute}
               routeInfos={data}
               loading={isLoading}
               onSelectRoute={(route) => {

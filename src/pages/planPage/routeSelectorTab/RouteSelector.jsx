@@ -16,6 +16,7 @@ function RouteSelector({
   dirFilter,
   city,
   routeLen,
+  searchRoute,
 }) {
   const [map, setMap] = useState();
   const [maps, setMaps] = useState();
@@ -42,7 +43,7 @@ function RouteSelector({
   useEffect(() => {
     setSelectedRoute([]);
     setSelectedRouteId();
-  }, [dirFilter, city, routeLen]);
+  }, [dirFilter, city, routeLen, searchRoute]);
 
   return (
     <SwitchableMainContentLayout
@@ -88,6 +89,7 @@ RouteSelector.propTypes = {
   onSelectRoute: () => {},
   onSearch: () => {},
   dirFilter: [],
+  searchStop: "",
 };
 RouteSelector.propTypes = {
   city: PropTypes.string,
@@ -96,6 +98,7 @@ RouteSelector.propTypes = {
   onSelectRoute: PropTypes.func,
   onSearch: PropTypes.func,
   dirFilter: PropTypes.arrayOf(PropTypes.string),
+  searchStop: PropTypes.string,
 };
 
 export default RouteSelector;
