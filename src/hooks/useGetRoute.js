@@ -9,7 +9,7 @@ export default function useGetRoute(defaultVal) {
     (city, dataMapper = (val) => val, searchKey, routeLen) =>
       apiAdapter({
         api: axios.get(
-          `https://ptx.transportdata.tw/MOTC/v2/Cycling/Shape/${city}?$top=30&$filter=Direction ne null ${
+          `https://ptx.transportdata.tw/MOTC/v2/Cycling/Shape/${city}?$top=30&$filter=RoadSectionStart ne null and RoadSectionEnd ne null and Direction ne null ${
             searchKey ? `and contains(RouteName,'${searchKey}')` : ""
           } ${routeLen ? `and ${routeLen}` : ""} `
         ),
