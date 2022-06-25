@@ -5,7 +5,8 @@ import Button from "../../component/Button";
 import styled from "styled-components";
 import FlexBox from "../../component/FlexBox";
 import { useHistory } from "react-router-dom";
-import Bg from "../../images/BG.jpg";
+import BgSmall from "../../compressed-images/BG-small.webp";
+import Bg from "../../compressed-images/BG.webp";
 import ScrollHint from "./ScrollHint";
 import MainInfos from "./mainInfo/MainInfos";
 import MoreInfoBanner from "./mainInfo/MoreInfoBanner";
@@ -27,7 +28,7 @@ const Container = styled(PageContainer)`
 const FullHeightContent = styled(({ paddingLeft, isSmScreen, ...rest }) => (
   <FlexBox {...rest} />
 ))`
-  background-image: url("${Bg}");
+  background-image: url("${({ isSmScreen }) => (isSmScreen ? BgSmall : Bg)}");
   background-position: left;
   padding-left: ${({ paddingLeft }) => paddingLeft};
   color: #fff;

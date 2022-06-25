@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
 // import PropTypes from "prop-types";
 import { Col, Row } from "antd";
-import pic_col1 from "../../../images/pictures/unsplash_zn2aUVfbUrk.jpg";
-import pic_col2 from "../../../images/pictures/unsplash_HjSdOirGJu8.jpg";
-import pic_col3 from "../../../images/pictures/unsplash_BNry1F5aHAU.jpg";
-import pic_col4 from "../../../images/pictures/unsplash_x5nZzttn2_k.jpg";
+import pic_col1 from "../../../compressed-images/unsplash_zn2aUVfbUrk.webp";
+import pic_col2 from "../../../compressed-images/unsplash_HjSdOirGJu8.webp";
+import pic_col3 from "../../../compressed-images/unsplash_BNry1F5aHAU.webp";
+import pic_col4 from "../../../compressed-images/unsplash_x5nZzttn2_k.webp";
 import FlexBox from "../../../component/FlexBox";
 import styled from "styled-components";
 import useRWD from "../../../hooks/useRWD";

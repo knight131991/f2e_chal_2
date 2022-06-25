@@ -1,14 +1,18 @@
 import React, { useCallback, useMemo } from "react";
 // import PropTypes from "prop-types";
 import { Input, notification } from "antd";
-import banner from "../../../images/pictures/unsplash__ezqPPf8Cpk.jpg";
+import banner from "../../../compressed-images/unsplash__ezqPPf8Cpk.webp";
+import bannerSm from "../../../compressed-images/unsplash__ezqPPf8Cpk-small.webp";
 import FlexBox from "../../../component/FlexBox";
 import styled from "styled-components";
 import useRWD from "../../../hooks/useRWD";
 import screenEnum from "../../../constant/screenEnum";
 
-const Container = styled(({ isMdScreen, ...rest }) => <FlexBox {...rest} />)`
-  background-image: url("${banner}");
+const Container = styled(({ isMdScreen, isSmScreen, ...rest }) => (
+  <FlexBox {...rest} />
+))`
+  background-image: url("${({ isSmScreen }) =>
+    isSmScreen ? bannerSm : banner}");
   background-position: left;
   height: 400px;
   width: 100%;
@@ -51,11 +55,13 @@ function MoreInfoBanner(props) {
 
   const { screen } = useRWD();
   const isMdScreen = useMemo(() => screen <= screenEnum.md, [screen]);
+  const isSmScreen = useMemo(() => screen <= screenEnum.sm, [screen]);
 
   return (
     <Container
       justify="center"
       isMdScreen={isMdScreen}
+      isSmScreen={isSmScreen}
       gap={16}
       noShrink
       align={isMdScreen ? "center" : undefined}
