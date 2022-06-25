@@ -13,4 +13,5 @@ export default styled(RouteStopIcon)`
   width: 48px;
   height: 48px;
   transform: translate(-50%, -50%);
+  cursor: pointer;
 `;

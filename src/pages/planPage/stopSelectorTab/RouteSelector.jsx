@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
-import FlexBox from "../../../component/FlexBox";
 import GMap from "../../../component/gMap/GMap";
 import useGetRoute from "../../../hooks/useGetRoute";
 import styled from "styled-components";
