@@ -42,13 +42,7 @@ function GMap({
   }, [center, gMap]);
 
   return (
-    <div
-      style={{
-        // 如果設定高度設定100%,iphone會無法顯示地圖,尚未了解原因,所以先寫死高度
-        height: bpoint === "xs" ? "calc(100vh - 140px)" : "100%",
-        width,
-      }}
-    >
+    <div style={{ width }}>
       <GMapReact
         yesIWantToUseGoogleMapApiInternals
         // bootstrapURLKeys={{ key: "AIzaSyCnBX045s9vhUBtjDAGmdKlHAKIP42ljOI" }}
