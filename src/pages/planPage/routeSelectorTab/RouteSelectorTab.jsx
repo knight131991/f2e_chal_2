@@ -124,7 +124,7 @@ function RouteSelectorTab({ onModeChange, curTabMode }) {
                 <>
                   <SubToolbar>{cityYoubikeSelect}</SubToolbar>
                   <SubToolbar>
-                    <FlexBox flex row justify="space-between">
+                    <FlexBox noShrink flex row justify="space-between">
                       {distanceSelect}
                       {search}
                     </FlexBox>
