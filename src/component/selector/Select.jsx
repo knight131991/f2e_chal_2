@@ -35,10 +35,7 @@ const StyledDropdown = styled(({ component, ...rest }) => (
   }
 `;
 
-const StyledSelect = styled(({ minW, fontSize, ...rest }) => (
-  <AntSelect {...rest} />
-))`
-  min-width: ${({ minW }) => minW}px;
+const StyledSelect = styled(({ fontSize, ...rest }) => <AntSelect {...rest} />)`
   font-size: ${({ fontSize }) => fontSize}px;
   color: ${styleParams.grayText};
 
@@ -102,9 +99,9 @@ const StyledSelect = styled(({ minW, fontSize, ...rest }) => (
 `;
 
 const Select = (props) => {
-  const { minW, fontSize } = useRWD(
-    { minW: 170, fontSize: 16 },
-    { m: { minW: 150 }, s: { minW: 100, fontSize: 14 } }
+  const { fontSize } = useRWD(
+    { fontSize: 16 },
+    { s: { minW: 100, fontSize: 14 } }
   );
   return (
     <StyledSelect
@@ -114,7 +111,6 @@ const Select = (props) => {
       }}
       dropdownRender={(origin) => <StyledDropdown component={origin} />}
       suffixIcon={<SuffixIcon disabled={props.disabled} />}
-      minW={minW}
       fontSize={fontSize}
       {...props}
     />

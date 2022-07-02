@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Select from "./Select";
 import AntSelect from "antd/lib/select";
 
-function DistanceSelector({ value, onSelect, prefixStr, ...rest }) {
+function DistToRouteSelector({ value, onSelect, prefixStr, ...rest }) {
   const { Option } = AntSelect;
   const options = useMemo(
     () => [
@@ -32,15 +32,15 @@ function DistanceSelector({ value, onSelect, prefixStr, ...rest }) {
   );
 }
 
-DistanceSelector.propTypes = {
+DistToRouteSelector.propTypes = {
   value: undefined,
   onSelect: () => {},
   prefixStr: "",
 };
-DistanceSelector.propTypes = {
+DistToRouteSelector.propTypes = {
   value: PropTypes.string,
   onSelect: PropTypes.func,
   prefixStr: PropTypes.string,
 };
 
-export default DistanceSelector;
+export default DistToRouteSelector;

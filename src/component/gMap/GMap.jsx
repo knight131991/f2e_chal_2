@@ -42,7 +42,7 @@ function GMap({
   }, [center, gMap]);
 
   return (
-    <div style={{ width }}>
+    <div style={{ height: "100%", width }}>
       <GMapReact
         yesIWantToUseGoogleMapApiInternals
         // bootstrapURLKeys={{ key: "AIzaSyCnBX045s9vhUBtjDAGmdKlHAKIP42ljOI" }}
