@@ -17,6 +17,7 @@ import RouteStartMarker from "../../../component/gMap/RouteStartMark";
 import RouteEndMarker from "../../../component/gMap/RouteEndMark";
 import SwitchableMainContentLayout from "../../../component/SwitchableMainContentLayout";
 import screenEnum from "../../../constant/screenEnum";
+import Button from "../../../component/Button";
 
 const Description = styled(BlodBlockText)`
   margin-bottom: 16px;
@@ -74,6 +75,14 @@ const StyledSteps = styled(Steps)`
   }
 `;
 
+const StyleLink = styled(Button)`
+  color: #df9300;
+
+  &:hover {
+    color: #df9300;
+  }
+`;
+
 function FinishPage({
   stopInfo,
   routeInfo: {
@@ -106,9 +115,20 @@ function FinishPage({
             <Label>挑戰名稱</Label>
             <BlodBlockText>{routeName}</BlodBlockText>
             <HDivider />
-            <Label>起點資訊</Label>
-            <BlodBlockText>{stopInfo.name}</BlodBlockText>
-            <AddressWrapper>{stopInfo.address}</AddressWrapper>
+            <FlexBox row flex justify="space-between" align="center">
+              <FlexBox>
+                <Label>起點資訊</Label>
+                <BlodBlockText>{stopInfo.name}</BlodBlockText>
+                <AddressWrapper>{stopInfo.address}</AddressWrapper>
+              </FlexBox>
+              <StyleLink
+                type="link"
+                target="_blank"
+                href={`https://www.google.com/maps/dir/?api=1&destination=${stopInfo.lat},${stopInfo.lng}`}
+              >
+                導航至起點
+              </StyleLink>
+            </FlexBox>
             <Label>路線資訊</Label>
             <RouteInfoWrapper row align="center">
               <BlodBlockText>{routeName}</BlodBlockText>
@@ -128,7 +148,7 @@ function FinishPage({
             <LenInfoWrapper row align="center">
               <span>總長</span> <LenInfo>{routeLen}公里</LenInfo>
             </LenInfoWrapper>
-          </Card>{" "}
+          </Card>
         </>
       }
       rightContent={
