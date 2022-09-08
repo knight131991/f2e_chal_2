@@ -28,7 +28,7 @@ export default function useGetBikeStopInfo() {
         setIsLoading(true);
         getStopInfos({
           api: axios.get(
-            `https://ptx.transportdata.tw/MOTC/v2/Bike/Station/${
+            `https://ptx.transportdata.tw/MOTC/v2/Bike/Station/City/${
               city ? city : "NearBy"
             }?$top=${top}&$format=JSON&${filters}${
               lat !== undefined && lng !== undefined && distance
@@ -55,7 +55,7 @@ export default function useGetBikeStopInfo() {
 
             getAvaInfos({
               api: axios.get(
-                `https://ptx.transportdata.tw/MOTC/v2/Bike/Availability/${
+                `https://ptx.transportdata.tw/MOTC/v2/Bike/Availability/City/${
                   city ? city : "NearBy"
                 }?$top=300&$format=JSON&$filter=(${stationFilters}) ${
                   youbikeVer ? `and ServiceType eq ${youbikeVer}` : ""
