@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import getTDXAxios from "./getTDXAxios";
+import getTDXAxios from "../utils/getTDXAxios";
 import useApiAdapter from "./useApiAdapter";
 
 export default function useGetBikeStopInfo() {

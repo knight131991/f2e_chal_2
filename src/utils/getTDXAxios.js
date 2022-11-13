@@ -1,5 +1,5 @@
 import axios from "axios";
-import getToken from "../utils/getToken";
+import getToken from "./getToken";
 
 let instance;
 

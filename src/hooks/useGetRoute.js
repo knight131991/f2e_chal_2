@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import useApiAdapter from "./useApiAdapter";
-import getTDXAxios from "./getTDXAxios";
+import getTDXAxios from "../utils/getTDXAxios";
 import { stopCityMaptoRouteCity } from "../constant/cityList";
 
 export default function useGetRoute(defaultVal) {
