@@ -1,11 +1,8 @@
 import { useCallback, useState } from "react";
-import initAxios, { isAxiosInit } from "../utils/initAxios";
 
 export default function useApiAdapter(defaultData) {
   const [isLoading, setIsLoading] = useState();
   const [data, setData] = useState(defaultData);
-
-  if (!isAxiosInit) initAxios();
 
   const apiAdapter = useCallback(
     ({ api, onSuccess = () => {}, mapper = (resp) => resp.data }) => {

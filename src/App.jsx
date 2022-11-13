@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { HashRouter } from "react-router-dom";
 import styled from "styled-components";
 import Main from "./pages/Main";
-import initAxios from "./utils/initAxios";
 
 const RootContainer = styled.div`
   height: 100vh;
@@ -10,10 +9,6 @@ const RootContainer = styled.div`
 `;
 
 function App() {
-  useEffect(() => {
-    initAxios();
-  }, []);
-
   return (
     <RootContainer>
       <HashRouter>

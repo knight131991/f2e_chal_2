@@ -1,6 +1,5 @@
-import React, { useMemo, useEffect, Suspense } from "react";
+import React, { useMemo, Suspense } from "react";
 // import PropTypes from "prop-types";
-import initAxios from "../utils/initAxios";
 import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import NavHeader, { pageRouterEnum } from "../component/navHeader/NavHeader";
@@ -17,17 +16,13 @@ const Container = styled(FlexBox)`
 `;
 
 const LazyComp = ({ children }) => (
-  <Suspense fallback={<div>loading...</div>}>{children}</Suspense>
+  <Suspense fallback={<div> loading...</div>}>{children}</Suspense>
 );
 
 function Main(props) {
   const { pathname } = useLocation();
   const [pos] = useGetUserPos();
   const { planPage, bikeRoute, bikeStop } = pageRouterEnum;
-
-  useEffect(() => {
-    initAxios();
-  }, []);
 
   const pages = useMemo(
     () => [
@@ -66,6 +61,7 @@ function Main(props) {
     ],
     [planPage, bikeStop, bikeRoute]
   );
+  console.log("wwwww");
   return (
     <Container>
       <NavHeader opaque={pathname !== "/home"} curRouter={pathname} pos={pos} />

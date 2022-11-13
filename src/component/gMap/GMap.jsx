@@ -45,7 +45,7 @@ function GMap({
     <div style={{ height: "100%", width }}>
       <GMapReact
         yesIWantToUseGoogleMapApiInternals
-        // bootstrapURLKeys={{ key: "AIzaSyCnBX045s9vhUBtjDAGmdKlHAKIP42ljOI" }}
+        bootstrapURLKeys={{ key: "AIzaSyCnBX045s9vhUBtjDAGmdKlHAKIP42ljOI" }}
         defaultCenter={{
           lat: 25.048,
           lng: 121.516,
