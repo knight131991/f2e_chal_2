@@ -16,7 +16,6 @@ export default function getToken() {
     .then((resp) => {
       const token = resp?.data?.["access_token"];
       axios.defaults.headers.authorization = `Bearer ${token}`;
-      console.log("test");
       return token;
     });
 }

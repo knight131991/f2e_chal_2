@@ -61,7 +61,6 @@ function Main(props) {
     ],
     [planPage, bikeStop, bikeRoute]
   );
-  console.log("wwwww");
   return (
     <Container>
       <NavHeader opaque={pathname !== "/home"} curRouter={pathname} pos={pos} />
